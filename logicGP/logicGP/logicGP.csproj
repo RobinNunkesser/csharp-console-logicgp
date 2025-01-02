@@ -7,4 +7,8 @@
         <RootNamespace>Italbytz.Adapters.Algorithms.AI</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.ML" Version="4.0.0" />
+    </ItemGroup>
+
 </Project>
