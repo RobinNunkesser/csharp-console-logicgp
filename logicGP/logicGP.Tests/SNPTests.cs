@@ -1,4 +1,5 @@
 ﻿using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -10,11 +11,14 @@ public sealed class SNPTests
     [TestMethod]
     public void TestGPAS()
     {
+        var services = new ServiceCollection().AddServices();
+        var serviceProvider = services.BuildServiceProvider();
         var mlContext = new MLContext();
         var data = mlContext.Data.LoadFromTextFile<ModelInput>(
             $"/Users/nunkesser/repos/work/articles/snpprediction/data/accuracy/SNPglm_2.csv",
             ',', true, false);
-        var mlModel = new logicGPFLRWBinaryTrainer().Fit(data);
+        var trainer = serviceProvider.GetRequiredService<LogicGpFlrwBinaryTrainer>();
+        var mlModel = trainer.Fit(data);
         Assert.IsNotNull(mlModel);
         var testResults = mlModel.Transform(data);
         var trueValues = testResults.GetColumn<uint>("y").ToArray();

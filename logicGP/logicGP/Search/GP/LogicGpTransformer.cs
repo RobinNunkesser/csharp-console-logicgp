@@ -4,7 +4,7 @@ using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class logicGPTransformer : ITransformer
+public class LogicGpTransformer : ITransformer
 {
     public void Save(ModelSaveContext ctx)
     {
@@ -19,7 +19,7 @@ public class logicGPTransformer : ITransformer
     public IDataView Transform(IDataView input)
     {
         var mlContext = new MLContext();
-        var dummyData = new List<logicGPModelOutput>();
+        var dummyData = new List<LogicGpModelOutput>();
         
         // Create a cursor to iterate through the rows
         using (var cursor = input.GetRowCursor(input.Schema))
@@ -40,7 +40,7 @@ public class logicGPTransformer : ITransformer
                 var random = new Random();
                 var prediction =  0.4 + (random.NextDouble() * (1.0 - 0.4));
                 var score = y > 0 ? 1-prediction : prediction;
-                dummyData.Add(new logicGPModelOutput { Y = (uint)y,Score = new float[] { (float)score,(float)(1-score) } });
+                dummyData.Add(new LogicGpModelOutput { Y = (uint)y,Score = new float[] { (float)score,(float)(1-score) } });
             }
         }
         return mlContext.Data.LoadFromEnumerable(dummyData);

@@ -10,7 +10,3 @@ public interface IPopulationManager
 
     public IIndividualList GetPopulation();
 }
-
-public interface IInitialization
-{
-}
