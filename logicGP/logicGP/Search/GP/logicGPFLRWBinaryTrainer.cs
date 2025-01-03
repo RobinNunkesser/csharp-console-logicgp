@@ -6,6 +6,6 @@ public class logicGPFLRWBinaryTrainer : logicGPTrainerBase<ITransformer>
 {
     public override ITransformer Fit(IDataView input)
     {
-        throw new NotImplementedException();
+        return new logicGPTransformer();
     }
 }
