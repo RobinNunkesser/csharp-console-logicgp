@@ -2,15 +2,15 @@ using System.Text;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
-public class LogicGpLiteral : ILiteral
+public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 {
     private readonly bool[] _bitSet;
 
     private readonly string _label;
-    private readonly List<float> _orderedCategories;
+    private readonly List<TCategory> _orderedCategories;
 
-    public LogicGpLiteral(string label, HashSet<float> categories, int set,
-        List<float> trainingData)
+    public LogicGpLiteral(string label, HashSet<TCategory> categories, int set,
+        List<TCategory> trainingData)
     {
         _label = label;
         _orderedCategories = categories.OrderBy(c => c).ToList();
@@ -22,7 +22,7 @@ public class LogicGpLiteral : ILiteral
 
     public bool[] Predictions { get; set; }
 
-    private void GeneratePredictions(List<float> trainingData)
+    private void GeneratePredictions(List<TCategory> trainingData)
     {
         Predictions = new bool[trainingData.Count];
         for (var i = 0; i < trainingData.Count; i++)

@@ -11,7 +11,7 @@ public class LiteralRepository
 
     public static LiteralRepository Instance { get; } = new();
 
-    public List<ILiteral> Literals { get; set; }
+    public List<ILiteral<float>> Literals { get; set; }
 
     public void Initialize(IDataView gpTrainingData)
     {
@@ -31,11 +31,19 @@ public class LiteralRepository
             var powerSetCount = 1 << uniqueCount;
             for (var i = 1; i < powerSetCount - 1; i++)
             {
-                var literal = new LogicGpLiteral(column.Name, uniqueValues, i,
+                var literal = new LogicGpLiteral<float>(column.Name,
+                    uniqueValues, i,
                     columnData.ToList());
                 Console.WriteLine(literal);
                 Literals.Add(literal);
             }
         }
+    }
+
+    public ILiteral<float> GetRandomLiteral()
+    {
+        var random = new Random();
+        var index = random.Next(Literals.Count);
+        return Literals[index];
     }
 }
