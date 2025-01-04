@@ -8,4 +8,9 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
     }
 
     public List<IMonomial<TCategory>> Monomials { get; set; }
+
+    public override string ToString()
+    {
+        return string.Join(" + ", Monomials);
+    }
 }

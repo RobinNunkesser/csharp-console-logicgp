@@ -20,8 +20,8 @@ public class LogicGpFlrwBinaryTrainer(
         gp.TrainingData = input;
         gp.Initialization = randomInitialization;
         gp.SearchSpace = searchSpace;
-        gp.Run();
-
+        var individuals = gp.Run();
+        var individualsString = individuals.ToString();
         return new LogicGpTransformer();
     }
 }

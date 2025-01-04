@@ -10,4 +10,9 @@ public class Individual : IIndividual
     }
 
     public IGenotype Genotype { get; }
+
+    public override string ToString()
+    {
+        return Genotype.ToString() ?? string.Empty;
+    }
 }

@@ -5,19 +5,14 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.PopulationManager;
 
 public class DefaultPopulationManager : IPopulationManager
 {
-    private IIndividualList _population;
+    public IIndividualList Population { get; set; }
 
     public void InitPopulation(IInitialization initialization)
     {
-        _population = initialization.Process(null)[0];
+        Population = initialization.Process(null)[0];
     }
 
     public void CreateNewGeneration()
-    {
-        throw new NotImplementedException();
-    }
-
-    public IIndividualList GetPopulation()
     {
         throw new NotImplementedException();
     }

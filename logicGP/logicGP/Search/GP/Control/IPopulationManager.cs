@@ -4,9 +4,8 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 
 public interface IPopulationManager
 {
-    public void InitPopulation(IInitialization initialization); 
+    public IIndividualList Population { get; set; }
+    public void InitPopulation(IInitialization initialization);
 
     public void CreateNewGeneration();
-
-    public IIndividualList GetPopulation();
 }
