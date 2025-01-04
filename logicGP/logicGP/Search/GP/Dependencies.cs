@@ -12,6 +12,7 @@ public static class Dependencies
         this IServiceCollection services)
     {
         services.AddSingleton<IGeneticProgram, GeneticProgram>();
+        services.AddSingleton<LogicGpAlgorithm>();
         services.AddSingleton<LogicGpFlrwBinaryTrainer>();
         services.AddSingleton<RandomInitialization>();
         services.AddSingleton<DefaultPopulationManager>();

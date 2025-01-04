@@ -11,6 +11,11 @@ public class Population : IIndividualList
         _individuals.Add(individual);
     }
 
+    public IIndividual GetRandomIndividual()
+    {
+        return _individuals[new Random().Next(_individuals.Count)];
+    }
+
     public override string ToString()
     {
         return string.Join("\n", _individuals);
