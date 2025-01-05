@@ -20,6 +20,9 @@ public class LogicGpFlrwBinaryTrainer(
             var individuals = algorithm.Fit(fold.TrainSet);
             foreach (var individual in individuals)
             {
+                var fitness = new Accuracy();
+                var accuracy =
+                    fitness.Evaluate(individual.Genotype, fold.TestSet);
                 // TODO: First fitness than transformer from individual
 
 

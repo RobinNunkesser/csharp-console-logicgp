@@ -13,6 +13,8 @@ public class LogicGpGenotype : IGenotype
         _polynomial = new LogicGpPolynomial<float>(monomial);
     }
 
+    public float[][] Predictions => _polynomial.Predictions;
+
     public override string ToString()
     {
         return _polynomial.ToString() ?? string.Empty;
