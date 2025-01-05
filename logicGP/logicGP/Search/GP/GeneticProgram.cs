@@ -11,8 +11,10 @@ public class GeneticProgram : IGeneticProgram
 {
     public IDataView TrainingData { get; set; }
     public IIndividualList Population { get; set; }
+
     public IInitialization Initialization { get; set; }
-    public IFitnessFunction FitnessFunction { get; set; }
+
+    //public IFitnessFunction<TFitness> FitnessFunction { get; set; }
     public IPopulationManager PopulationManager { get; set; }
     public ISearchSpace SearchSpace { get; set; }
     public IStoppingCriterion[] StoppingCriteria { get; set; }

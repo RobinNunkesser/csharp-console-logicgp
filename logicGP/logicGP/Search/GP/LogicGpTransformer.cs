@@ -1,10 +1,10 @@
-using System.Data;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class LogicGpTransformer : ITransformer
+public class LogicGpTransformer(IIndividual model) : ITransformer
 {
     public void Save(ModelSaveContext ctx)
     {
@@ -20,13 +20,13 @@ public class LogicGpTransformer : ITransformer
     {
         var mlContext = new MLContext();
         var dummyData = new List<LogicGpModelOutput>();
-        
+
         // Create a cursor to iterate through the rows
         using (var cursor = input.GetRowCursor(input.Schema))
         {
             // Get column indices
             var yIndex = cursor.Schema["y"];
-            
+
             // Create delegates to access the values
             var yGetter = cursor.GetGetter<float>(yIndex);
 
@@ -38,11 +38,16 @@ public class LogicGpTransformer : ITransformer
             {
                 yGetter(ref y);
                 var random = new Random();
-                var prediction =  0.4 + (random.NextDouble() * (1.0 - 0.4));
-                var score = y > 0 ? 1-prediction : prediction;
-                dummyData.Add(new LogicGpModelOutput { Y = (uint)y,Score = new float[] { (float)score,(float)(1-score) } });
+                var prediction = 0.4 + random.NextDouble() * (1.0 - 0.4);
+                var score = y > 0 ? 1 - prediction : prediction;
+                dummyData.Add(new LogicGpModelOutput
+                {
+                    Y = (uint)y,
+                    Score = new[] { (float)score, (float)(1 - score) }
+                });
             }
         }
+
         return mlContext.Data.LoadFromEnumerable(dummyData);
     }
 

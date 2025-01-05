@@ -3,11 +3,14 @@ using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 
-public interface IFitnessFunction<TFitness>
+public class Accuracy : IStaticSingleObjectiveFitnessFunction<double>
 {
-    public TFitness Evaluate(IGenotype genotype, IDataView data,
+    public double Evaluate(IGenotype genotype, IDataView data,
         string labelColumnName = DefaultColumnNames.Label,
         string scoreColumnName = DefaultColumnNames.Score,
         string probabilityColumnName = DefaultColumnNames.Probability,
-        string predictedLabelColumnName = DefaultColumnNames.PredictedLabel);
+        string predictedLabelColumnName = DefaultColumnNames.PredictedLabel)
+    {
+        throw new NotImplementedException();
+    }
 }
