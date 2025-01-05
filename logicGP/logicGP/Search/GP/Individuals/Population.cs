@@ -1,3 +1,4 @@
+using System.Collections;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
@@ -14,6 +15,16 @@ public class Population : IIndividualList
     public IIndividual GetRandomIndividual()
     {
         return _individuals[new Random().Next(_individuals.Count)];
+    }
+
+    public IEnumerator<IIndividual> GetEnumerator()
+    {
+        return _individuals.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 
     public override string ToString()

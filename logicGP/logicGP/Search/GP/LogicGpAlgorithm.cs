@@ -13,15 +13,13 @@ public class LogicGpAlgorithm(
     DefaultPopulationManager populationManager,
     LogicGpSearchSpace searchSpace)
 {
-    public IIndividual Fit(IDataView input)
+    public IIndividualList Fit(IDataView input)
     {
         randomInitialization.Size = 2;
         gp.PopulationManager = populationManager;
         gp.TrainingData = input;
         gp.Initialization = randomInitialization;
         gp.SearchSpace = searchSpace;
-        var individuals = gp.Run();
-        var individualsString = individuals.ToString();
-        return individuals.GetRandomIndividual();
+        return gp.Run();
     }
 }
