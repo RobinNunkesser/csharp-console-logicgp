@@ -18,6 +18,7 @@ public interface IGeneticProgram
     public ISearchSpace SearchSpace { get; set; }
 
     public IStoppingCriterion[] StoppingCriteria { get; set; }
+    int Generation { get; set; }
 
     public void InitPopulation();
     public IIndividualList Run();

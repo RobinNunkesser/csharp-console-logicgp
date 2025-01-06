@@ -18,6 +18,7 @@ public class GeneticProgram : IGeneticProgram
     public IPopulationManager PopulationManager { get; set; }
     public ISearchSpace SearchSpace { get; set; }
     public IStoppingCriterion[] StoppingCriteria { get; set; }
+    public int Generation { get; set; }
 
     public void InitPopulation()
     {
@@ -27,6 +28,26 @@ public class GeneticProgram : IGeneticProgram
     public IIndividualList Run()
     {
         InitPopulation();
+        var stop = false;
+        while (!stop)
+        {
+            /*foreach (var individual in Population)
+            {
+                var fitness =
+                    PopulationManager.FitnessFunction.Evaluate(individual,
+                        TrainingData);
+                individual.Fitness = fitness;
+            }*/
+
+            stop = StoppingCriteria.Any(sc => sc.IsMet());
+            if (!stop)
+            {
+                /* PopulationManager.Select();
+                 PopulationManager.Crossover();
+                 PopulationManager.Mutate();*/
+            }
+        }
+
         return PopulationManager.Population;
     }
 }

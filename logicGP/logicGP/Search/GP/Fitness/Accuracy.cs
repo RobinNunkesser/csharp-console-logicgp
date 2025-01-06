@@ -6,10 +6,7 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 public class Accuracy : IStaticSingleObjectiveFitnessFunction<double>
 {
     public double Evaluate(IGenotype genotype, IDataView data,
-        string labelColumnName = DefaultColumnNames.Label,
-        string scoreColumnName = DefaultColumnNames.Score,
-        string probabilityColumnName = DefaultColumnNames.Probability,
-        string predictedLabelColumnName = DefaultColumnNames.PredictedLabel)
+        string labelColumnName = DefaultColumnNames.Label)
     {
         throw new NotImplementedException();
     }

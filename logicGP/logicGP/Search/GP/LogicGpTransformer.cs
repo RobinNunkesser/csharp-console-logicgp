@@ -60,5 +60,5 @@ public class LogicGpTransformer(IIndividual model) : ITransformer
         throw new NotImplementedException();
     }
 
-    public bool IsRowToRowMapper { get; }
+    public bool IsRowToRowMapper => false;
 }

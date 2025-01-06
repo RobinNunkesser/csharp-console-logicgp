@@ -20,17 +20,21 @@ public class LogicGpFlrwBinaryTrainer(
             var individuals = algorithm.Fit(fold.TrainSet);
             foreach (var individual in individuals)
             {
-                /*var fitness = new Accuracy();
+                var fitness = new Accuracy();
                 var accuracy =
-                    fitness.Evaluate(individual.Genotype, fold.TestSet);*/
+                    fitness.Evaluate(individual.Genotype, fold.TestSet);
                 // TODO: First fitness than transformer from individual
 
-                var model = new LogicGpTransformer(individual);
+/*                var pipeline =
+                    mlContext.Transforms.CustomMapping(mapping, "mapping");
+                var transformedData = pipeline.Fit(fold.TestSet)
+                    .Transform(fold.TestSet);*/
+                /*var model = new LogicGpTransformer(individual);
                 var predictions = model.Transform(fold.TestSet);
                 var metrics =
                     mlContext.MulticlassClassification.Evaluate(predictions,
                         "y");
-                var accuracy = metrics.MacroAccuracy;
+                var accuracy = metrics.MacroAccuracy;*/
                 //var metrics = mlContext.BinaryClassification.Evaluate(predictions);
                 // if (metrics.Accuracy > bestAccuracy)
                 // {
