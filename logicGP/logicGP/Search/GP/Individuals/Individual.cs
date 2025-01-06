@@ -10,6 +10,7 @@ public class Individual : IIndividual
     }
 
     public IGenotype Genotype { get; }
+    public double[]? LatestKnownFitness { get; set; }
 
     public override string ToString()
     {

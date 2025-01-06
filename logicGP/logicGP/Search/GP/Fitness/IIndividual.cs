@@ -5,4 +5,5 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 public interface IIndividual
 {
     public IGenotype Genotype { get; }
+    public double[]? LatestKnownFitness { get; set; }
 }

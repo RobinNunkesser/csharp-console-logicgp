@@ -14,17 +14,20 @@ public interface IGeneticProgram
     public IMutation[] Mutations { get; set; }
     public ICrossover[] Crossovers { get; set; }
     public IDataView TrainingData { get; set; }
-    public IIndividualList Population { get; set; }
+    public IIndividualList Population { get; }
 
     public IInitialization Initialization { get; set; }
 
-    //public IFitnessFunction<TFitness> FitnessFunction { get; set; }
+
     public IPopulationManager PopulationManager { get; set; }
     public ISearchSpace SearchSpace { get; set; }
-    public ISelection Selection { get; set; }
+    public ISelection SelectionForOperator { get; set; }
+
+    public ISelection SelectionForSurvival { get; set; }
 
     public IStoppingCriterion[] StoppingCriteria { get; set; }
     int Generation { get; set; }
+    IFitnessFunction FitnessFunction { get; set; }
 
     public void InitPopulation();
     public IIndividualList Run();

@@ -15,17 +15,21 @@ public class LogicGpAlgorithm(
     DefaultPopulationManager populationManager,
     LogicGpSearchSpace searchSpace,
     GenerationStoppingCriterion generationStoppingCriterion,
-    UniformSelection selection)
+    UniformSelection selection,
+    ParetoFrontSelection paretoFrontSelection,
+    IFitnessFunction fitnessFunction)
 {
     public IIndividualList Fit(IDataView input)
     {
         randomInitialization.Size = 2;
         generationStoppingCriterion.Limit = 10000;
         selection.Size = 6;
-        gp.Selection = selection;
+        gp.SelectionForOperator = selection;
+        gp.SelectionForSurvival = paretoFrontSelection;
         gp.PopulationManager = populationManager;
         gp.TrainingData = input;
         gp.Initialization = randomInitialization;
+        gp.FitnessFunction = fitnessFunction;
         gp.SearchSpace = searchSpace;
         gp.StoppingCriteria = new IStoppingCriterion[]
             { generationStoppingCriterion };

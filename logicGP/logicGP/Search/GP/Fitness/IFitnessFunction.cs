@@ -3,8 +3,10 @@ using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 
-public interface IFitnessFunction<TFitness>
+public interface IFitnessFunction
 {
-    public TFitness Evaluate(IGenotype genotype, IDataView data,
+    public int NumberOfObjectives { get; }
+
+    public double[] Evaluate(IGenotype genotype, IDataView data,
         string labelColumnName = DefaultColumnNames.Label);
 }

@@ -1,3 +1,4 @@
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Initialization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.PopulationManager;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
@@ -21,6 +22,8 @@ public static class Dependencies
         services.AddSingleton<RandomInitialization>();
         services.AddSingleton<GenerationStoppingCriterion>();
         services.AddSingleton<UniformSelection>();
+        services.AddSingleton<ParetoFrontSelection>();
+        services.AddSingleton<IFitnessFunction, LogicGpPareto>();
         services.AddSingleton<DefaultPopulationManager>();
         services.AddSingleton<LogicGpSearchSpace>();
         return services;

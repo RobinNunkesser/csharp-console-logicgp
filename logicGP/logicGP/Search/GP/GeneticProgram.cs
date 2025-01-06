@@ -12,15 +12,15 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
 public class GeneticProgram : IGeneticProgram
 {
-    public ISelection Selection { get; set; }
+    public IFitnessFunction FitnessFunction { get; set; }
+    public ISelection SelectionForOperator { get; set; }
+    public ISelection SelectionForSurvival { get; set; }
     public IMutation[] Mutations { get; set; }
     public ICrossover[] Crossovers { get; set; }
     public IDataView TrainingData { get; set; }
-    public IIndividualList Population { get; set; }
+    public IIndividualList Population => PopulationManager.Population;
 
     public IInitialization Initialization { get; set; }
-
-    //public IFitnessFunction<TFitness> FitnessFunction { get; set; }
     public IPopulationManager PopulationManager { get; set; }
     public ISearchSpace SearchSpace { get; set; }
     public IStoppingCriterion[] StoppingCriteria { get; set; }
@@ -50,23 +50,38 @@ public class GeneticProgram : IGeneticProgram
             {
                 foreach (var crossover in Crossovers)
                 {
-                    Selection.Size = 2;
-                    var selected = Selection.Process(Population);
+                    SelectionForOperator.Size = 2;
+                    var selected = SelectionForOperator.Process(Population);
                     var children = crossover.Process(selected);
                 }
 
                 foreach (var mutation in Mutations)
                 {
-                    Selection.Size = 1;
-                    var selected = Selection.Process(Population);
+                    SelectionForOperator.Size = 1;
+                    var selected = SelectionForOperator.Process(Population);
                     var mutated = mutation.Process(selected);
                 }
 
+                UpdatePopulationFitness();
 
+                var newGeneration = SelectionForSurvival.Process(Population);
+                PopulationManager.Population = newGeneration;
                 Generation++;
             }
         }
 
         return PopulationManager.Population;
+    }
+
+    private void UpdatePopulationFitness()
+    {
+        foreach (var individual in Population)
+        {
+            if (individual.LatestKnownFitness != null) continue;
+            var fitness =
+                FitnessFunction.Evaluate(individual.Genotype,
+                    TrainingData);
+            individual.LatestKnownFitness = fitness;
+        }
     }
 }
