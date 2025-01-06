@@ -7,6 +7,8 @@ public class Population : IIndividualList
 {
     private readonly List<IIndividual> _individuals = [];
 
+    public IIndividual this[int index] => _individuals[index];
+
     public void AddIndividual(IIndividual individual)
     {
         _individuals.Add(individual);

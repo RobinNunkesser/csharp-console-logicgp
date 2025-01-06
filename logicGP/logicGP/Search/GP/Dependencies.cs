@@ -1,6 +1,7 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Initialization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.PopulationManager;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.StoppingCriterion;
 using logicGP.Search.GP;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ public static class Dependencies
         services.AddSingleton<LogicGpFlrwBinaryTrainer>();
         services.AddSingleton<RandomInitialization>();
         services.AddSingleton<GenerationStoppingCriterion>();
+        services.AddSingleton<UniformSelection>();
         services.AddSingleton<DefaultPopulationManager>();
         services.AddSingleton<LogicGpSearchSpace>();
         return services;

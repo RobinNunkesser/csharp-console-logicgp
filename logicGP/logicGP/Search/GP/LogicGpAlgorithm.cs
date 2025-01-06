@@ -2,6 +2,7 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Initialization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.PopulationManager;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.StoppingCriterion;
 using logicGP.Search.GP;
 using Microsoft.ML;
@@ -13,12 +14,15 @@ public class LogicGpAlgorithm(
     RandomInitialization randomInitialization,
     DefaultPopulationManager populationManager,
     LogicGpSearchSpace searchSpace,
-    GenerationStoppingCriterion generationStoppingCriterion)
+    GenerationStoppingCriterion generationStoppingCriterion,
+    UniformSelection selection)
 {
     public IIndividualList Fit(IDataView input)
     {
         randomInitialization.Size = 2;
         generationStoppingCriterion.Limit = 10000;
+        selection.Size = 6;
+        gp.Selection = selection;
         gp.PopulationManager = populationManager;
         gp.TrainingData = input;
         gp.Initialization = randomInitialization;
