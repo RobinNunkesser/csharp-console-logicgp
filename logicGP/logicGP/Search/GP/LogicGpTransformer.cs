@@ -40,10 +40,14 @@ public class LogicGpTransformer(IIndividual model) : ITransformer
                 var random = new Random();
                 var prediction = 0.4 + random.NextDouble() * (1.0 - 0.4);
                 var score = y > 0 ? 1 - prediction : prediction;
+
+
                 dummyData.Add(new LogicGpModelOutput
                 {
                     Y = (uint)y,
-                    Score = new[] { (float)score, (float)(1 - score) }
+
+                    Score = new[] { (float)score, (float)(1 - score) },
+                    PredictedLabel = score > 0.5 ? 0 : 1
                 });
             }
         }
