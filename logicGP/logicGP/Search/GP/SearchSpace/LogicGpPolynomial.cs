@@ -2,13 +2,22 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
 public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 {
-    public LogicGpPolynomial(LogicGpMonomial<TCategory> monomial)
+    public LogicGpPolynomial(IEnumerable<LogicGpMonomial<TCategory>> monomials)
     {
-        Monomials = [monomial];
+        Monomials = [..monomials];
         UpdatePredictions();
     }
 
     public float[][] Predictions { get; set; }
+
+    public IPolynomial<TCategory> Clone()
+    {
+        var monomials =
+            (IEnumerable<LogicGpMonomial<TCategory>>)Monomials.Select(
+                monomial => monomial.Clone());
+        return new LogicGpPolynomial<TCategory>(monomials);
+    }
+
     public List<IMonomial<TCategory>> Monomials { get; set; }
 
     private void UpdatePredictions()

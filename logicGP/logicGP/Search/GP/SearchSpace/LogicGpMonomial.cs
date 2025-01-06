@@ -6,9 +6,10 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 {
     private readonly int _classes;
 
-    public LogicGpMonomial(ILiteral<TCategory> literal, int classes)
+    public LogicGpMonomial(IEnumerable<ILiteral<TCategory>> literals,
+        int classes)
     {
-        Literals = [literal];
+        Literals = literals.ToList();
         _classes = classes;
         Weights = new float[_classes];
         Weights[_classes - 1] = 1;
@@ -16,6 +17,14 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
     }
 
     public float[][] Predictions { get; set; }
+
+    public IMonomial<TCategory> Clone()
+    {
+        return new LogicGpMonomial<TCategory>(Literals, _classes)
+        {
+            Weights = Weights
+        };
+    }
 
     public List<ILiteral<TCategory>> Literals { get; set; }
     public float[] Weights { get; set; }

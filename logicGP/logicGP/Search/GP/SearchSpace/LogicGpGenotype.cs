@@ -9,11 +9,22 @@ public class LogicGpGenotype : IGenotype
     public LogicGpGenotype(int classes)
     {
         var literal = LiteralRepository.Instance.GetRandomLiteral();
-        var monomial = new LogicGpMonomial<float>(literal, classes);
-        _polynomial = new LogicGpPolynomial<float>(monomial);
+        var monomial = new LogicGpMonomial<float>([literal], classes);
+        _polynomial = new LogicGpPolynomial<float>([monomial]);
     }
 
+    private LogicGpGenotype(IPolynomial<float> polynomial)
+    {
+        _polynomial = polynomial;
+    }
+
+
     public float[][] Predictions => _polynomial.Predictions;
+
+    public IGenotype Clone()
+    {
+        return new LogicGpGenotype(_polynomial.Clone());
+    }
 
     public override string ToString()
     {
