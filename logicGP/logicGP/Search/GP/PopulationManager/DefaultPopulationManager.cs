@@ -9,7 +9,7 @@ public class DefaultPopulationManager : IPopulationManager
 
     public void InitPopulation(IInitialization initialization)
     {
-        Population = initialization.Process(null)[0];
+        Population = initialization.Process(null);
     }
 
     public void CreateNewGeneration()

@@ -9,13 +9,12 @@ public class RandomInitialization(IGeneticProgram gp) : IInitialization
 {
     public int Size { get; set; }
 
-    public IIndividualList[] Process(IIndividualList[] individuals)
+    public IIndividualList Process(IIndividualList individuals)
     {
-        var result = new IIndividualList[1];
-        result[0] = new Population();
+        var result = new Population();
         var searchSpace = gp.SearchSpace;
         for (var i = 0; i < Size; i++)
-            result[0]
+            result
                 .AddIndividual(new Individual(searchSpace.GetRandomGenotype(),
                     null));
         return result;

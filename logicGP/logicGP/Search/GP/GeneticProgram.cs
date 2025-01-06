@@ -51,14 +51,14 @@ public class GeneticProgram : IGeneticProgram
                 foreach (var crossover in Crossovers)
                 {
                     Selection.Size = 2;
-                    var selected = Selection.Process(new[] { Population });
+                    var selected = Selection.Process(Population);
                     var children = crossover.Process(selected);
                 }
 
                 foreach (var mutation in Mutations)
                 {
                     Selection.Size = 1;
-                    var selected = Selection.Process(new[] { Population });
+                    var selected = Selection.Process(Population);
                     var mutated = mutation.Process(selected);
                 }
 
