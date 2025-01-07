@@ -138,4 +138,14 @@ public class LogicGpGenotype : IGenotype
         _polynomial.UpdatePredictions();
         UpdatePredictedClasses();
     }
+
+    public bool IsLiterallyEqual(LogicGpGenotype other)
+    {
+        var literals = _polynomial.GetAllLiterals();
+        var otherLiterals = other._polynomial.GetAllLiterals();
+        if (literals.Count != otherLiterals.Count) return false;
+
+        return !literals.Except(otherLiterals).Any() &&
+               !otherLiterals.Except(literals).Any();
+    }
 }

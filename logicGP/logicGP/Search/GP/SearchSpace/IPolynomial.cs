@@ -7,4 +7,5 @@ public interface IPolynomial<TCategory> : ICloneable
     int Size { get; }
     IMonomial<TCategory> GetRandomMonomial();
     void UpdatePredictions();
+    List<ILiteral<TCategory>> GetAllLiterals();
 }

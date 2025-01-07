@@ -42,6 +42,11 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
                     a.Zip(b, (c, d) => c + d).ToArray());
     }
 
+    public List<ILiteral<TCategory>> GetAllLiterals()
+    {
+        return Monomials.SelectMany(monomial => monomial.Literals).ToList();
+    }
+
     public override string ToString()
     {
         return string.Join(" + ", Monomials);

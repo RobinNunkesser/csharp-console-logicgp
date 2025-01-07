@@ -33,6 +33,19 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         }
     }
 
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((LogicGpLiteral<TCategory>)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_bitSet, _orderedCategories, Label);
+    }
+
     public override string ToString()
     {
         var sb = new StringBuilder();
