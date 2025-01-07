@@ -11,7 +11,7 @@ public class LogicGpSearchSpace(IGeneticProgram gp) : ISearchSpace
     public IGenotype GetRandomGenotype()
     {
         if (_initialized) return new LogicGpGenotype(Classes);
-        LiteralRepository.Instance.Initialize(gp.TrainingData);
+        DataFactory.Instance.Initialize(gp.TrainingData, "y");
         _initialized = true;
 
         return new LogicGpGenotype(Classes);

@@ -6,4 +6,6 @@ public interface IIndividual : ICloneable
 {
     public IGenotype Genotype { get; }
     public double[]? LatestKnownFitness { get; set; }
+    int Size { get; }
+    bool IsDominating(IIndividual otherIndividual);
 }

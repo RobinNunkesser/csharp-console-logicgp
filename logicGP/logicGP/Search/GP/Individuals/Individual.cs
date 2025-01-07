@@ -10,7 +10,24 @@ public class Individual : IIndividual
     }
 
     public IGenotype Genotype { get; }
-    public double[]? LatestKnownFitness { get; set; }
+
+    public double[]? LatestKnownFitness
+    {
+        get => Genotype.LatestKnownFitness;
+        set => Genotype.LatestKnownFitness = value;
+    }
+
+    public int Size => Genotype.Size;
+
+    public bool IsDominating(IIndividual otherIndividual)
+    {
+        var fitness = LatestKnownFitness;
+        var otherFitness = otherIndividual.LatestKnownFitness;
+        if (fitness == null || otherFitness == null)
+            throw new InvalidOperationException("Fitness not set");
+
+        return !fitness.Where((t, i) => t > otherFitness[i]).Any();
+    }
 
     public object Clone()
     {

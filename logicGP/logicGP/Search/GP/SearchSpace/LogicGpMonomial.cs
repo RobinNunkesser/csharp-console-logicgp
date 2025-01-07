@@ -18,6 +18,8 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
     public float[][] Predictions { get; set; }
 
+    public int Size => Literals.Count;
+
     public void RandomizeWeights()
     {
         var random = new Random();

@@ -10,6 +10,11 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 
     public float[][] Predictions { get; set; }
 
+    public int Size
+    {
+        get { return Monomials.Sum(monomial => monomial.Size); }
+    }
+
     public IMonomial<TCategory> GetRandomMonomial()
     {
         var random = new Random();

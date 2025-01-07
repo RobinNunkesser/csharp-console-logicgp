@@ -5,10 +5,11 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 public class LogicGpGenotype : IGenotype
 {
     private readonly IPolynomial<float> _polynomial;
+    private float[]? _predictedClasses;
 
     public LogicGpGenotype(int classes)
     {
-        var literal = LiteralRepository.Instance.GetRandomLiteral();
+        var literal = DataFactory.Instance.GetRandomLiteral();
         var monomial = new LogicGpMonomial<float>([literal], classes);
         _polynomial = new LogicGpPolynomial<float>([monomial]);
     }
@@ -18,17 +19,43 @@ public class LogicGpGenotype : IGenotype
         _polynomial = polynomial;
     }
 
+    public float[] PredictedClasses
+    {
+        get
+        {
+            if (_predictedClasses == null) UpdatePredictedClasses();
+            return _predictedClasses;
+        }
+        set => _predictedClasses = value;
+    }
+
 
     public float[][] Predictions => _polynomial.Predictions;
 
+    public double[]? LatestKnownFitness { get; set; }
+
+    public int Size => _polynomial.Size;
+
     public void UpdatePredictions()
     {
+        LatestKnownFitness = null;
         _polynomial.UpdatePredictions();
+        UpdatePredictedClasses();
     }
 
     public object Clone()
     {
         return new LogicGpGenotype((IPolynomial<float>)_polynomial.Clone());
+    }
+
+    private void UpdatePredictedClasses()
+    {
+        _predictedClasses = new float[Predictions.Length];
+        for (var i = 0; i < Predictions.Length; i++)
+        {
+            var maxIndex = Array.IndexOf(Predictions[i], Predictions[i].Max());
+            _predictedClasses[i] = DataFactory.Instance.Labels[maxIndex];
+        }
     }
 
     public override string ToString()
@@ -81,7 +108,7 @@ public class LogicGpGenotype : IGenotype
     public void InsertRandomLiteral()
     {
         var monomial = GetRandomMonomial();
-        monomial.Literals.Add(LiteralRepository.Instance.GetRandomLiteral());
+        monomial.Literals.Add(DataFactory.Instance.GetRandomLiteral());
         monomial.UpdatePredictions();
         UpdatePredictions();
     }
@@ -90,8 +117,8 @@ public class LogicGpGenotype : IGenotype
     {
         _polynomial.Monomials.Add(new LogicGpMonomial<float>(
             new List<ILiteral<float>>
-                { LiteralRepository.Instance.GetRandomLiteral() },
-            _polynomial.Monomials[0].Predictions.Length));
+                { DataFactory.Instance.GetRandomLiteral() },
+            _polynomial.Monomials[0].Weights.Length));
         UpdatePredictions();
     }
 
@@ -99,7 +126,7 @@ public class LogicGpGenotype : IGenotype
     {
         var monomial = GetRandomMonomial();
         monomial.Literals[new Random().Next(monomial.Literals.Count)] =
-            LiteralRepository.Instance.GetRandomLiteral();
+            DataFactory.Instance.GetRandomLiteral();
         monomial.UpdatePredictions();
         UpdatePredictions();
     }
