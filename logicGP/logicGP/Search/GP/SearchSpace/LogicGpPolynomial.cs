@@ -29,6 +29,7 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 
     public void UpdatePredictions()
     {
+        if (Monomials.Count == 0) return;
         Predictions = new float[Monomials[0].Literals[0].Predictions.Length][];
         for (var i = 0; i < Predictions.Length; i++)
             Predictions[i] = Monomials
