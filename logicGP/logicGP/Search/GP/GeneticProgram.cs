@@ -53,6 +53,8 @@ public class GeneticProgram : IGeneticProgram
                     SelectionForOperator.Size = 2;
                     var selected = SelectionForOperator.Process(Population);
                     var children = crossover.Process(selected);
+                    foreach (var child in children)
+                        PopulationManager.Population.Add(child);
                 }
 
                 foreach (var mutation in Mutations)
@@ -79,7 +81,7 @@ public class GeneticProgram : IGeneticProgram
         {
             if (individual.LatestKnownFitness != null) continue;
             var fitness =
-                FitnessFunction.Evaluate(individual.Genotype,
+                FitnessFunction.Evaluate(individual,
                     TrainingData);
             individual.LatestKnownFitness = fitness;
         }

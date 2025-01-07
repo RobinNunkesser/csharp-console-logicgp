@@ -1,5 +1,7 @@
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Crossover;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Initialization;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Mutation;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.PopulationManager;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
@@ -29,6 +31,12 @@ public class LogicGpAlgorithm(
         gp.PopulationManager = populationManager;
         gp.TrainingData = input;
         gp.Initialization = randomInitialization;
+        gp.Crossovers = [new LogicGpCrossover()];
+        gp.Mutations =
+        [
+            new ChangeWeights(), new DeleteLiteral(), new InsertLiteral(),
+            new InsertMonomial(), new ReplaceLiteral(), new DeleteMonomial()
+        ];
         gp.FitnessFunction = fitnessFunction;
         gp.SearchSpace = searchSpace;
         gp.StoppingCriteria = new IStoppingCriterion[]

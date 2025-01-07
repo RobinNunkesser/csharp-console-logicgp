@@ -21,13 +21,29 @@ public class LogicGpGenotype : IGenotype
 
     public float[][] Predictions => _polynomial.Predictions;
 
-    public IGenotype Clone()
+    public void UpdatePredictions()
     {
-        return new LogicGpGenotype(_polynomial.Clone());
+        _polynomial.UpdatePredictions();
+    }
+
+    public object Clone()
+    {
+        return new LogicGpGenotype((IPolynomial<float>)_polynomial.Clone());
     }
 
     public override string ToString()
     {
         return _polynomial.ToString() ?? string.Empty;
+    }
+
+    public IMonomial<float> GetRandomMonomial()
+    {
+        return _polynomial.GetRandomMonomial();
+    }
+
+    public void InsertMonomial(IMonomial<float> monomial)
+    {
+        _polynomial.Monomials.Add(monomial);
+        UpdatePredictions();
     }
 }

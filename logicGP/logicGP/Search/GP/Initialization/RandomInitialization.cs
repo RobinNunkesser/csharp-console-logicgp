@@ -15,7 +15,7 @@ public class RandomInitialization(IGeneticProgram gp) : IInitialization
         var searchSpace = gp.SearchSpace;
         for (var i = 0; i < Size; i++)
             result
-                .AddIndividual(new Individual(searchSpace.GetRandomGenotype(),
+                .Add(new Individual(searchSpace.GetRandomGenotype(),
                     null));
         return result;
     }

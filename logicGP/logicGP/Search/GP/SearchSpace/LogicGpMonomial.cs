@@ -18,7 +18,7 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
     public float[][] Predictions { get; set; }
 
-    public IMonomial<TCategory> Clone()
+    public object Clone()
     {
         return new LogicGpMonomial<TCategory>(Literals, _classes)
         {

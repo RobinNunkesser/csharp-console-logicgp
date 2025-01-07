@@ -22,7 +22,7 @@ public class LogicGpFlrwBinaryTrainer(
             {
                 var fitness = new Accuracy();
                 var accuracy =
-                    ((IFitnessFunction)fitness).Evaluate(individual.Genotype,
+                    ((IFitnessFunction)fitness).Evaluate(individual,
                         fold.TestSet);
                 // TODO: First fitness than transformer from individual
 

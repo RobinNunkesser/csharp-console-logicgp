@@ -9,7 +9,7 @@ public class Population : IIndividualList
 
     public IIndividual this[int index] => _individuals[index];
 
-    public void AddIndividual(IIndividual individual)
+    public void Add(IIndividual individual)
     {
         _individuals.Add(individual);
     }

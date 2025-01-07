@@ -12,6 +12,11 @@ public class Individual : IIndividual
     public IGenotype Genotype { get; }
     public double[]? LatestKnownFitness { get; set; }
 
+    public object Clone()
+    {
+        return new Individual((IGenotype)Genotype.Clone(), null);
+    }
+
     public override string ToString()
     {
         return Genotype.ToString() ?? string.Empty;

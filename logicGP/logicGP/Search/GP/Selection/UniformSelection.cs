@@ -12,7 +12,7 @@ public class UniformSelection : ISelection
         var result = new Population();
         var population = individuals;
         for (var i = 0; i < Size; i++)
-            result.AddIndividual(population.GetRandomIndividual());
+            result.Add(population.GetRandomIndividual());
         return result;
     }
 }

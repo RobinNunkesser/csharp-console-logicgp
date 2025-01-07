@@ -1,4 +1,3 @@
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
@@ -7,6 +6,6 @@ public interface IFitnessFunction
 {
     public int NumberOfObjectives { get; }
 
-    public double[] Evaluate(IGenotype genotype, IDataView data,
+    public double[] Evaluate(IIndividual individual, IDataView data,
         string labelColumnName = DefaultColumnNames.Label);
 }
