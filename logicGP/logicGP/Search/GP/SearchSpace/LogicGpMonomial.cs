@@ -30,7 +30,7 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
     {
         return new LogicGpMonomial<TCategory>(Literals, _classes)
         {
-            Weights = Weights
+            Weights = new float[_classes].Select((_, i) => Weights[i]).ToArray()
         };
     }
 

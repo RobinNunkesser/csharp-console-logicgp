@@ -1,6 +1,7 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Crossover;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Mutation;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
@@ -47,13 +48,16 @@ public class GeneticProgram : IGeneticProgram
 
             stop = StoppingCriteria.Any(sc => sc.IsMet());
             if (stop) continue;
+            var newPopulation = new Population();
+            foreach (var individual in PopulationManager.Population)
+                newPopulation.Add(individual);
             foreach (var crossover in Crossovers)
             {
                 SelectionForOperator.Size = 2;
                 var selected = SelectionForOperator.Process(Population);
                 var children = crossover.Process(selected);
                 foreach (var child in children)
-                    PopulationManager.Population.Add(child);
+                    newPopulation.Add(child);
             }
 
             foreach (var mutation in Mutations)
@@ -61,7 +65,11 @@ public class GeneticProgram : IGeneticProgram
                 SelectionForOperator.Size = 1;
                 var selected = SelectionForOperator.Process(Population);
                 var mutated = mutation.Process(selected);
+                foreach (var mutant in mutated)
+                    newPopulation.Add(mutant);
             }
+
+            PopulationManager.Population = newPopulation;
 
             UpdatePopulationFitness();
 
