@@ -130,4 +130,11 @@ public class LogicGpGenotype : IGenotype
         monomial.UpdatePredictions();
         UpdatePredictions();
     }
+
+    public void UpdatePredictionsRecursively()
+    {
+        foreach (var monomial in _polynomial.Monomials)
+            monomial.UpdatePredictions();
+        _polynomial.UpdatePredictions();
+    }
 }

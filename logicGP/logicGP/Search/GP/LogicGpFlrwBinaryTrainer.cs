@@ -1,5 +1,7 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
@@ -18,12 +20,18 @@ public class LogicGpFlrwBinaryTrainer(
         foreach (var fold in cvResults)
         {
             var individuals = algorithm.Fit(fold.TrainSet);
+            foreach (var literal in DataFactory.Instance.Literals)
+                literal.GeneratePredictions(
+                    fold.TestSet.GetColumn<float>(literal.Label).ToList());
+            var fitness = new LogicGpPareto();
             foreach (var individual in individuals)
             {
-                var fitness = new Accuracy();
-                var accuracy =
+                ((LogicGpGenotype)individual.Genotype)
+                    .UpdatePredictionsRecursively();
+                individual.LatestKnownFitness =
                     ((IFitnessFunction)fitness).Evaluate(individual,
-                        fold.TestSet);
+                        fold.TestSet, "y");
+
                 // TODO: First fitness than transformer from individual
 
 /*                var pipeline =

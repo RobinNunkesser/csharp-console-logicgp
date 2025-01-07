@@ -8,10 +8,13 @@ public class ParetoFrontSelection : ISelection
     public IIndividualList Process(IIndividualList individuals)
     {
         var individualList = individuals.ToList();
+        var maxGeneration =
+            individualList.Max(individual => individual.Generation);
         var i = 0;
         while (i < individualList.Count)
         {
             var individual = individualList[i];
+            if (individual.Generation < maxGeneration) break;
             var j = i + 1;
             while (j < individualList.Count)
             {

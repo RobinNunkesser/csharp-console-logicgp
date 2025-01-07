@@ -5,14 +5,12 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 {
     private readonly bool[] _bitSet;
-
-    private readonly string _label;
     private readonly List<TCategory> _orderedCategories;
 
     public LogicGpLiteral(string label, HashSet<TCategory> categories, int set,
         List<TCategory> trainingData)
     {
-        _label = label;
+        Label = label;
         _orderedCategories = categories.OrderBy(c => c).ToList();
         _bitSet = new bool[_orderedCategories.Count];
         for (var i = 0; i < _orderedCategories.Count; i++)
@@ -20,14 +18,16 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         GeneratePredictions(trainingData);
     }
 
+    public string Label { get; set; }
+
     public bool[] Predictions { get; set; }
 
-    private void GeneratePredictions(List<TCategory> trainingData)
+    public void GeneratePredictions(List<TCategory> data)
     {
-        Predictions = new bool[trainingData.Count];
-        for (var i = 0; i < trainingData.Count; i++)
+        Predictions = new bool[data.Count];
+        for (var i = 0; i < data.Count; i++)
         {
-            var category = trainingData[i];
+            var category = data[i];
             var index = _orderedCategories.IndexOf(category);
             Predictions[i] = _bitSet[index];
         }
@@ -36,7 +36,7 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append($"({_label} ∈ {{");
+        sb.Append($"({Label} ∈ {{");
         for (var j = 0; j < _orderedCategories.Count; j++)
             if (_bitSet[j])
                 sb.Append(_orderedCategories[j] + ",");

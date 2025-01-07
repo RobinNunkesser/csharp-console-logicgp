@@ -24,7 +24,8 @@ public class LogicGpAlgorithm(
     public IIndividualList Fit(IDataView input)
     {
         randomInitialization.Size = 2;
-        generationStoppingCriterion.Limit = 10000;
+        //generationStoppingCriterion.Limit = 10000;
+        generationStoppingCriterion.Limit = 100;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;

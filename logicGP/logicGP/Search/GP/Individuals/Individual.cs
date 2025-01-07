@@ -18,6 +18,7 @@ public class Individual : IIndividual
     }
 
     public int Size => Genotype.Size;
+    public int Generation { get; set; }
 
     public bool IsDominating(IIndividual otherIndividual)
     {
@@ -36,6 +37,8 @@ public class Individual : IIndividual
 
     public override string ToString()
     {
-        return Genotype.ToString() ?? string.Empty;
+        return Genotype + $" Gen {Generation} " +
+               $"Fitness {string.Join(",", LatestKnownFitness ?? Array.Empty<double>())}" ??
+               string.Empty;
     }
 }

@@ -38,19 +38,9 @@ public class GeneticProgram : IGeneticProgram
         var stop = false;
         while (!stop)
         {
-            /*foreach (var individual in Population)
-            {
-                var fitness =
-                    PopulationManager.FitnessFunction.Evaluate(individual,
-                        TrainingData);
-                individual.Fitness = fitness;
-            }*/
-
             stop = StoppingCriteria.Any(sc => sc.IsMet());
             if (stop) continue;
             var newPopulation = new Population();
-            foreach (var individual in PopulationManager.Population)
-                newPopulation.Add(individual);
             foreach (var crossover in Crossovers)
             {
                 SelectionForOperator.Size = 2;
@@ -69,13 +59,17 @@ public class GeneticProgram : IGeneticProgram
                     newPopulation.Add(mutant);
             }
 
+            Generation++;
+            foreach (var individual in newPopulation)
+                individual.Generation = Generation;
+            foreach (var individual in PopulationManager.Population)
+                newPopulation.Add(individual);
             PopulationManager.Population = newPopulation;
 
             UpdatePopulationFitness();
 
             var newGeneration = SelectionForSurvival.Process(Population);
             PopulationManager.Population = newGeneration;
-            Generation++;
         }
 
         return PopulationManager.Population;

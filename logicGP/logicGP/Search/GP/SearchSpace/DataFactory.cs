@@ -42,7 +42,6 @@ public class DataFactory
                 var literal = new LogicGpLiteral<float>(column.Name,
                     uniqueValues, i,
                     columnData.ToList());
-                Console.WriteLine(literal);
                 Literals.Add(literal);
             }
         }
