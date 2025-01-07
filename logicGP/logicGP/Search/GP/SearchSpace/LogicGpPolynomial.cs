@@ -20,9 +20,9 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
     {
         var monomials =
             Monomials.Select(
-                monomial => monomial.Clone());
+                monomial => (IMonomial<TCategory>)monomial.Clone());
         return new LogicGpPolynomial<TCategory>(
-            (IEnumerable<IMonomial<TCategory>>)monomials);
+            monomials);
     }
 
     public List<IMonomial<TCategory>> Monomials { get; set; }
