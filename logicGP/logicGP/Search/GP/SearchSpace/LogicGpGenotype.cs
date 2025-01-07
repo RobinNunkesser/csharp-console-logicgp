@@ -136,5 +136,6 @@ public class LogicGpGenotype : IGenotype
         foreach (var monomial in _polynomial.Monomials)
             monomial.UpdatePredictions();
         _polynomial.UpdatePredictions();
+        UpdatePredictedClasses();
     }
 }
