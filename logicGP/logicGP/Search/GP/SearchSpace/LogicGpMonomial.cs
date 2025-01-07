@@ -18,6 +18,14 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
     public float[][] Predictions { get; set; }
 
+    public void RandomizeWeights()
+    {
+        var random = new Random();
+        for (var i = 0; i < Weights.Length; i++)
+            Weights[i] = (float)random.NextDouble();
+        UpdatePredictions();
+    }
+
     public object Clone()
     {
         return new LogicGpMonomial<TCategory>(Literals, _classes)
@@ -29,7 +37,7 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
     public List<ILiteral<TCategory>> Literals { get; set; }
     public float[] Weights { get; set; }
 
-    private void UpdatePredictions()
+    public void UpdatePredictions()
     {
         var literalPredictions = Literals[0].Predictions;
         if (Literals.Count > 1)

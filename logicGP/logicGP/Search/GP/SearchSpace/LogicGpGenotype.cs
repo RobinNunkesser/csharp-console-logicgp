@@ -46,4 +46,61 @@ public class LogicGpGenotype : IGenotype
         _polynomial.Monomials.Add(monomial);
         UpdatePredictions();
     }
+
+    public void RandomizeAMonomialWeight()
+    {
+        var monomial = GetRandomMonomial();
+        monomial.RandomizeWeights();
+        UpdatePredictions();
+    }
+
+    public void DeleteRandomLiteral()
+    {
+        var monomial = GetRandomMonomial();
+        monomial.Literals.RemoveAt(new Random().Next(monomial.Literals.Count));
+        if (monomial.Literals.Count == 0)
+            _polynomial.Monomials.Remove(monomial);
+        else
+            monomial.UpdatePredictions();
+        UpdatePredictions();
+    }
+
+    public bool IsEmpty()
+    {
+        return _polynomial.Monomials.Count == 0;
+    }
+
+    public void DeleteRandomMonomial()
+    {
+        _polynomial.Monomials.RemoveAt(
+            new Random().Next(_polynomial.Monomials.Count));
+        if (_polynomial.Monomials.Count > 0)
+            UpdatePredictions();
+    }
+
+    public void InsertRandomLiteral()
+    {
+        var monomial = GetRandomMonomial();
+        monomial.Literals.Add(LiteralRepository.Instance.GetRandomLiteral());
+        monomial.UpdatePredictions();
+        UpdatePredictions();
+    }
+
+    public void InsertRandomMonomial()
+    {
+        _polynomial.Monomials.Add(new LogicGpMonomial<float>(
+            new List<ILiteral<float>>
+                { LiteralRepository.Instance.GetRandomLiteral() },
+            _polynomial.Monomials[0].Predictions.Length));
+        UpdatePredictions();
+    }
+
+    public void ReplaceRandomLiteral()
+    {
+        var monomial = GetRandomMonomial();
+        monomial.Literals[new Random().Next(monomial.Literals.Count)] =
+            LiteralRepository.Instance.GetRandomLiteral();
+        monomial.UpdatePredictions();
+        UpdatePredictions();
+    }
 }

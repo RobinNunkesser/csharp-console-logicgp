@@ -46,30 +46,28 @@ public class GeneticProgram : IGeneticProgram
             }*/
 
             stop = StoppingCriteria.Any(sc => sc.IsMet());
-            if (!stop)
+            if (stop) continue;
+            foreach (var crossover in Crossovers)
             {
-                foreach (var crossover in Crossovers)
-                {
-                    SelectionForOperator.Size = 2;
-                    var selected = SelectionForOperator.Process(Population);
-                    var children = crossover.Process(selected);
-                    foreach (var child in children)
-                        PopulationManager.Population.Add(child);
-                }
-
-                foreach (var mutation in Mutations)
-                {
-                    SelectionForOperator.Size = 1;
-                    var selected = SelectionForOperator.Process(Population);
-                    var mutated = mutation.Process(selected);
-                }
-
-                UpdatePopulationFitness();
-
-                var newGeneration = SelectionForSurvival.Process(Population);
-                PopulationManager.Population = newGeneration;
-                Generation++;
+                SelectionForOperator.Size = 2;
+                var selected = SelectionForOperator.Process(Population);
+                var children = crossover.Process(selected);
+                foreach (var child in children)
+                    PopulationManager.Population.Add(child);
             }
+
+            foreach (var mutation in Mutations)
+            {
+                SelectionForOperator.Size = 1;
+                var selected = SelectionForOperator.Process(Population);
+                var mutated = mutation.Process(selected);
+            }
+
+            UpdatePopulationFitness();
+
+            var newGeneration = SelectionForSurvival.Process(Population);
+            PopulationManager.Population = newGeneration;
+            Generation++;
         }
 
         return PopulationManager.Population;
