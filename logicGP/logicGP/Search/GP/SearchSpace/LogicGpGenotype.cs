@@ -14,7 +14,7 @@ public class LogicGpGenotype : IGenotype
         _polynomial = new LogicGpPolynomial<float>([monomial]);
     }
 
-    private LogicGpGenotype(IPolynomial<float> polynomial)
+    public LogicGpGenotype(IPolynomial<float> polynomial)
     {
         _polynomial = polynomial;
     }
@@ -137,6 +137,13 @@ public class LogicGpGenotype : IGenotype
             monomial.UpdatePredictions();
         _polynomial.UpdatePredictions();
         UpdatePredictedClasses();
+    }
+
+    public string LiteralSignature()
+    {
+        var literals = _polynomial.GetAllLiterals();
+        literals.Sort();
+        return string.Join(" ", literals);
     }
 
     public bool IsLiterallyEqual(LogicGpGenotype other)

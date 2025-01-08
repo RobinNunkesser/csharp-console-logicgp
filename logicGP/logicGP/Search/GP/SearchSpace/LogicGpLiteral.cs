@@ -4,19 +4,22 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
 public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 {
-    private readonly bool[] _bitSet;
     private readonly List<TCategory> _orderedCategories;
+    public readonly bool[] BitSet;
 
     public LogicGpLiteral(string label, HashSet<TCategory> categories, int set,
         List<TCategory> trainingData)
     {
         Label = label;
+        Set = set;
         _orderedCategories = categories.OrderBy(c => c).ToList();
-        _bitSet = new bool[_orderedCategories.Count];
+        BitSet = new bool[_orderedCategories.Count];
         for (var i = 0; i < _orderedCategories.Count; i++)
-            _bitSet[i] = (set & (1 << i)) != 0;
+            BitSet[i] = (set & (1 << i)) != 0;
         GeneratePredictions(trainingData);
     }
+
+    public int Set { get; }
 
     public string Label { get; set; }
 
@@ -29,9 +32,29 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         {
             var category = data[i];
             var index = _orderedCategories.IndexOf(category);
-            Predictions[i] = _bitSet[index];
+            Predictions[i] = BitSet[index];
         }
     }
+
+    public int CompareTo(ILiteral<TCategory>? other)
+    {
+        return Compare(this, other);
+    }
+
+    private static int Compare(ILiteral<TCategory>? x, ILiteral<TCategory>? y)
+    {
+        if (x is null && y is null) return 0;
+        if (x is not LogicGpLiteral<TCategory> literal1) return -1;
+        if (y is not LogicGpLiteral<TCategory> literal2) return 1;
+        if (x.Label != y.Label)
+            return string.Compare(x.Label, y.Label, StringComparison.Ordinal);
+        if (literal1.Set !=
+            literal2.Set)
+            return literal1.Set.CompareTo(
+                literal2.Set);
+        return 0;
+    }
+
 
     public override bool Equals(object? obj)
     {
@@ -43,7 +66,7 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(_bitSet, _orderedCategories, Label);
+        return HashCode.Combine(BitSet, _orderedCategories, Label);
     }
 
     public override string ToString()
@@ -51,7 +74,7 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         var sb = new StringBuilder();
         sb.Append($"({Label} ∈ {{");
         for (var j = 0; j < _orderedCategories.Count; j++)
-            if (_bitSet[j])
+            if (BitSet[j])
                 sb.Append(_orderedCategories[j] + ",");
         sb.Remove(sb.Length - 1, 1);
         sb.Append("})");

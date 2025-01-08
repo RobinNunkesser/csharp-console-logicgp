@@ -19,6 +19,11 @@ public class Population : IIndividualList
         return _individuals[new Random().Next(_individuals.Count)];
     }
 
+    public List<IIndividual> ToList()
+    {
+        return [.._individuals];
+    }
+
     public IEnumerator<IIndividual> GetEnumerator()
     {
         return _individuals.GetEnumerator();

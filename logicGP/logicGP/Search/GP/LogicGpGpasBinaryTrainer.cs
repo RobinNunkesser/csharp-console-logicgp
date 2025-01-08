@@ -6,7 +6,7 @@ using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class LogicGpFlrwBinaryTrainer(
+public class LogicGpGpasBinaryTrainer(
     LogicGpAlgorithm algorithm)
     : LogicGpTrainerBase<ITransformer>
 {
@@ -17,9 +17,15 @@ public class LogicGpFlrwBinaryTrainer(
         var cvResults = mlContext.Data.CrossValidationSplit(input, k);
         IIndividual chosenIndividual = null;
         double bestAccuracy = 0;
+        var candidates = new IIndividualList[k];
+        var foldIndex = 0;
 
         foreach (var fold in cvResults)
         {
+            if (foldIndex > 0)
+                foreach (var literal in DataFactory.Instance.Literals)
+                    literal.GeneratePredictions(
+                        fold.TrainSet.GetColumn<float>(literal.Label).ToList());
             var individuals = algorithm.Fit(fold.TrainSet);
             foreach (var literal in DataFactory.Instance.Literals)
                 literal.GeneratePredictions(
@@ -41,8 +47,18 @@ public class LogicGpFlrwBinaryTrainer(
             }
 
             var selection = new ParetoFrontSelection();
-            var selectedIndividuals = selection.Process(individuals);
+            candidates[foldIndex++] = selection.Process(individuals);
         }
+
+        var allCandidates = candidates.SelectMany(i => i).ToList();
+
+
+        /*var allCandidates = new List<IIndividual>();
+        foreach (var candidate in candidates)
+            allCandidates =
+                (List<IIndividual>)allCandidates.Concat(candidate.ToList());*/
+        var result = allCandidates
+            .GroupBy(i => ((LogicGpGenotype)i.Genotype).LiteralSignature());
 
         // TODO: First fitness than transformer from individual
 
