@@ -143,7 +143,7 @@ public class LogicGpGenotype : IGenotype
     {
         var literals = _polynomial.GetAllLiterals();
         literals.Sort();
-        return string.Join(" ", literals);
+        return string.Join(" ", literals.Select(literal => literal.Label));
     }
 
     public bool IsLiterallyEqual(LogicGpGenotype other)

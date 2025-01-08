@@ -1,6 +1,5 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -44,8 +43,9 @@ public class LogicGpGpasBinaryTrainer(
                     new[] { accuracy, fitnessValue[^1] };
             }
 
-            var selection = new ParetoFrontSelection();
-            candidates[foldIndex++] = selection.Process(individuals);
+            candidates[foldIndex++] = individuals;
+            /*var selection = new ParetoFrontSelection();
+            candidates[foldIndex++] = selection.Process(individuals);*/
         }
 
         var allCandidates = candidates.SelectMany(i => i).ToList();

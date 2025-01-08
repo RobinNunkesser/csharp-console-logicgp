@@ -7,6 +7,8 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
 public class LogicGpTransformer(IIndividual model) : ITransformer
 {
+    public IIndividual Model { get; } = model;
+
     public void Save(ModelSaveContext ctx)
     {
         throw new NotImplementedException();
@@ -22,13 +24,13 @@ public class LogicGpTransformer(IIndividual model) : ITransformer
         foreach (var literal in DataFactory.Instance.Literals)
             literal.GeneratePredictions(
                 input.GetColumn<float>(literal.Label).ToList());
-        ((LogicGpGenotype)model.Genotype)
+        ((LogicGpGenotype)Model.Genotype)
             .UpdatePredictionsRecursively();
 
         var mlContext = new MLContext();
         var predictionData = new List<LogicGpModelOutput>();
         var predictedClasses =
-            ((LogicGpGenotype)model.Genotype).PredictedClasses;
+            ((LogicGpGenotype)Model.Genotype).PredictedClasses;
 
         // Create a cursor to iterate through the rows
         using (var cursor = input.GetRowCursor(input.Schema))
