@@ -25,7 +25,7 @@ public class LogicGpAlgorithm(
     {
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 100000;
+        generationStoppingCriterion.Limit = 1000;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;
@@ -35,7 +35,7 @@ public class LogicGpAlgorithm(
         gp.Crossovers = [new LogicGpCrossover()];
         gp.Mutations =
         [
-            new ChangeWeights(), new DeleteLiteral(), new InsertLiteral(),
+            new DeleteLiteral(), new InsertLiteral(),
             new InsertMonomial(), new ReplaceLiteral(), new DeleteMonomial()
         ];
         gp.FitnessFunction = fitnessFunction;

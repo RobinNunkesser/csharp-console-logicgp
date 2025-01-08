@@ -1,4 +1,5 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -18,8 +19,16 @@ public class LogicGpTransformer(IIndividual model) : ITransformer
 
     public IDataView Transform(IDataView input)
     {
+        foreach (var literal in DataFactory.Instance.Literals)
+            literal.GeneratePredictions(
+                input.GetColumn<float>(literal.Label).ToList());
+        ((LogicGpGenotype)model.Genotype)
+            .UpdatePredictionsRecursively();
+
         var mlContext = new MLContext();
-        var dummyData = new List<LogicGpModelOutput>();
+        var predictionData = new List<LogicGpModelOutput>();
+        var predictedClasses =
+            ((LogicGpGenotype)model.Genotype).PredictedClasses;
 
         // Create a cursor to iterate through the rows
         using (var cursor = input.GetRowCursor(input.Schema))
@@ -33,26 +42,27 @@ public class LogicGpTransformer(IIndividual model) : ITransformer
             // Variables to hold the values
             float y = 0;
 
+            var index = 0;
             // Iterate through the rows
             while (cursor.MoveNext())
             {
                 yGetter(ref y);
-                var random = new Random();
-                var prediction = 0.4 + random.NextDouble() * (1.0 - 0.4);
-                var score = y > 0 ? 1 - prediction : prediction;
+                var predictedClass = predictedClasses[index];
+                var score = predictedClass > 0 ? 0 : 1;
 
 
-                dummyData.Add(new LogicGpModelOutput
+                predictionData.Add(new LogicGpModelOutput
                 {
                     Y = (uint)y,
 
-                    Score = new[] { (float)score, (float)(1 - score) },
-                    PredictedLabel = score > 0.5 ? 0 : 1
+                    Score = new[] { score, (float)(1 - score) },
+                    PredictedLabel = predictedClass
                 });
+                index++;
             }
         }
 
-        return mlContext.Data.LoadFromEnumerable(dummyData);
+        return mlContext.Data.LoadFromEnumerable(predictionData);
     }
 
     public IRowToRowMapper GetRowToRowMapper(DataViewSchema inputSchema)

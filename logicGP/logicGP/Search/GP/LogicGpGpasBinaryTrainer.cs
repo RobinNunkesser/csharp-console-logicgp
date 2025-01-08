@@ -15,8 +15,6 @@ public class LogicGpGpasBinaryTrainer(
         var k = 5; // Number of folds
         var mlContext = new MLContext();
         var cvResults = mlContext.Data.CrossValidationSplit(input, k);
-        IIndividual chosenIndividual = null;
-        double bestAccuracy = 0;
         var candidates = new IIndividualList[k];
         var foldIndex = 0;
 
@@ -51,34 +49,23 @@ public class LogicGpGpasBinaryTrainer(
         }
 
         var allCandidates = candidates.SelectMany(i => i).ToList();
+        var groups = allCandidates
+            .GroupBy(i => ((LogicGpGenotype)i.Genotype).LiteralSignature())
+            .OrderByDescending(group => group.Count());
+        var size = groups.FirstOrDefault()!.Count();
+        var bestGroups = groups.Where(group => group.Count() == size);
+        var bestGroup = bestGroups.First();
+        var bestFitness = 0.0;
+        foreach (var group in bestGroups)
+        {
+            var accumulatedFitness =
+                group.Sum(element => element.LatestKnownFitness[0]);
+            if (!(accumulatedFitness < bestFitness)) continue;
+            bestFitness = accumulatedFitness;
+            bestGroup = group;
+        }
 
-
-        /*var allCandidates = new List<IIndividual>();
-        foreach (var candidate in candidates)
-            allCandidates =
-                (List<IIndividual>)allCandidates.Concat(candidate.ToList());*/
-        var result = allCandidates
-            .GroupBy(i => ((LogicGpGenotype)i.Genotype).LiteralSignature());
-
-        // TODO: First fitness than transformer from individual
-
-/*                var pipeline =
-                    mlContext.Transforms.CustomMapping(mapping, "mapping");
-                var transformedData = pipeline.Fit(fold.TestSet)
-                    .Transform(fold.TestSet);*/
-        /*var model = new LogicGpTransformer(individual);
-        var predictions = model.Transform(fold.TestSet);
-        var metrics =
-            mlContext.MulticlassClassification.Evaluate(predictions,
-                "y");
-        var accuracy = metrics.MacroAccuracy;*/
-        //var metrics = mlContext.BinaryClassification.Evaluate(predictions);
-        // if (metrics.Accuracy > bestAccuracy)
-        // {
-        //     bestAccuracy = metrics.Accuracy;
-        //     bestModel = model;
-        // }
-
+        var chosenIndividual = bestGroup.First();
         return new LogicGpTransformer(chosenIndividual);
     }
 }

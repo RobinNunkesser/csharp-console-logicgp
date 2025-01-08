@@ -29,6 +29,7 @@ public class GeneticProgram : IGeneticProgram
 
     public void InitPopulation()
     {
+        Generation = 0;
         PopulationManager.InitPopulation(Initialization);
     }
 
