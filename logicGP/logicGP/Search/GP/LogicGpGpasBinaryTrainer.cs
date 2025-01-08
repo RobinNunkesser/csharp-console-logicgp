@@ -17,7 +17,7 @@ public class LogicGpGpasBinaryTrainer(
         var cvResults = mlContext.Data.CrossValidationSplit(input, k);
         var candidates = new IIndividualList[k];
         var foldIndex = 0;
-
+        DataFactory.Instance.Initialize(cvResults[0].TrainSet, "y");
         foreach (var fold in cvResults)
         {
             if (foldIndex > 0)

@@ -6,8 +6,6 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 
 public class LogicGpPareto : IStaticMultiObjectiveFitnessFunction
 {
-    public IDataView LiteralData { get; set; }
-
     public int NumberOfObjectives { get; set; }
 
     public double[] Evaluate(IIndividual individual, IDataView data,
