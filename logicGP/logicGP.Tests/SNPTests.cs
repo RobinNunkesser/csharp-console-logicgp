@@ -6,7 +6,7 @@ using Microsoft.ML.Data;
 
 namespace logicGP.Tests;
 
-//[TestClass]
+[TestClass]
 public sealed class SNPTests
 {
     private readonly IDataView _data;
@@ -15,7 +15,7 @@ public sealed class SNPTests
     {
         var mlContext = new MLContext();
         _data = mlContext.Data.LoadFromTextFile<ModelInput>(
-            "/Users/nunkesser/repos/work/articles/snpprediction/data/accuracy/SNPglm_2.csv",
+            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s500_o15_p0225_n44/SNPglm_2.csv",
             ',', true);
     }
 
