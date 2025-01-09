@@ -8,8 +8,14 @@ public class InsertMonomial : IMutation
 {
     public IIndividualList Process(IIndividualList individuals)
     {
-        var mutant = (IIndividual)individuals[0].Clone();
-        ((LogicGpGenotype)mutant.Genotype).InsertRandomMonomial();
-        return new Population { mutant };
+        var newPopulation = new Population();
+        foreach (var individual in individuals)
+        {
+            var mutant = (IIndividual)individual.Clone();
+            ((LogicGpGenotype)mutant.Genotype).InsertRandomMonomial();
+            newPopulation.Add(mutant);
+        }
+
+        return newPopulation;
     }
 }

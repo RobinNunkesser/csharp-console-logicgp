@@ -8,10 +8,15 @@ public class DeleteLiteral : IMutation
 {
     public IIndividualList Process(IIndividualList individuals)
     {
-        var mutant = (IIndividual)individuals[0].Clone();
-        ((LogicGpGenotype)mutant.Genotype).DeleteRandomLiteral();
-        return ((LogicGpGenotype)mutant.Genotype).IsEmpty()
-            ? []
-            : new Population { mutant };
+        var newPopulation = new Population();
+        foreach (var individual in individuals)
+        {
+            var mutant = (IIndividual)individual.Clone();
+            ((LogicGpGenotype)mutant.Genotype).DeleteRandomLiteral();
+            if (!((LogicGpGenotype)mutant.Genotype).IsEmpty())
+                newPopulation.Add(mutant);
+        }
+
+        return newPopulation;
     }
 }

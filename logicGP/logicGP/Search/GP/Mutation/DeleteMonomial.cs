@@ -8,10 +8,15 @@ public class DeleteMonomial : IMutation
 {
     public IIndividualList Process(IIndividualList individuals)
     {
-        var mutant = (IIndividual)individuals[0].Clone();
-        ((LogicGpGenotype)mutant.Genotype).DeleteRandomMonomial();
-        return ((LogicGpGenotype)mutant.Genotype).IsEmpty()
-            ? []
-            : new Population { mutant };
+        var newPopulation = new Population();
+        foreach (var individual in individuals)
+        {
+            var mutant = (IIndividual)individual.Clone();
+            ((LogicGpGenotype)mutant.Genotype).DeleteRandomMonomial();
+            if (!((LogicGpGenotype)mutant.Genotype).IsEmpty())
+                newPopulation.Add(mutant);
+        }
+
+        return newPopulation;
     }
 }

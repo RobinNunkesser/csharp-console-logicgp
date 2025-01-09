@@ -20,10 +20,10 @@ public class LogicGpPareto : IStaticMultiObjectiveFitnessFunction
         {
             if (!(Math.Abs(predictions[i] - labels[i]) < 0.01)) continue;
             var index = DataFactory.Instance.Labels.IndexOf(labels[i]);
-            objectives[index]--;
+            objectives[index]++;
         }
 
-        objectives[^1] = individual.Size;
+        objectives[^1] = -individual.Size;
 
         individual.LatestKnownFitness = objectives;
         return objectives;

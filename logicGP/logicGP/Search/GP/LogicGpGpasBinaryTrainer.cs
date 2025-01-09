@@ -1,5 +1,6 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -40,12 +41,12 @@ public class LogicGpGpasBinaryTrainer(
                 for (var i = 0; i < fitnessValue.Length - 1; i++)
                     accuracy += fitnessValue[i];
                 individual.LatestKnownFitness =
-                    new[] { accuracy, fitnessValue[^1] };
+                    [accuracy, fitnessValue[^1]];
             }
 
-            candidates[foldIndex++] = individuals;
-            /*var selection = new ParetoFrontSelection();
-            candidates[foldIndex++] = selection.Process(individuals);*/
+            //candidates[foldIndex++] = individuals;
+            var selection = new ParetoFrontSelection();
+            candidates[foldIndex++] = selection.Process(individuals);
         }
 
         var allCandidates = candidates.SelectMany(i => i).ToList();
@@ -53,14 +54,14 @@ public class LogicGpGpasBinaryTrainer(
             .GroupBy(i => ((LogicGpGenotype)i.Genotype).LiteralSignature())
             .OrderByDescending(group => group.Count());
         var size = groups.FirstOrDefault()!.Count();
-        var bestGroups = groups.Where(group => group.Count() == size);
+        var bestGroups = groups.Where(group => group.Count() > 1);
         var bestGroup = bestGroups.First();
         var bestFitness = 0.0;
         foreach (var group in bestGroups)
         {
             var accumulatedFitness =
-                group.Sum(element => element.LatestKnownFitness[0]);
-            if (!(accumulatedFitness < bestFitness)) continue;
+                group.Average(element => element.LatestKnownFitness[0]);
+            if (!(accumulatedFitness > bestFitness)) continue;
             bestFitness = accumulatedFitness;
             bestGroup = group;
         }

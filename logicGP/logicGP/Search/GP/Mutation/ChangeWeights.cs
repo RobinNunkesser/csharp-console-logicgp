@@ -8,8 +8,14 @@ public class ChangeWeights : IMutation
 {
     public IIndividualList Process(IIndividualList individuals)
     {
-        var mutant = (IIndividual)individuals[0].Clone();
-        ((LogicGpGenotype)mutant.Genotype).RandomizeAMonomialWeight();
-        return new Population { mutant };
+        var newPopulation = new Population();
+        foreach (var individual in individuals)
+        {
+            var mutant = (IIndividual)individual.Clone();
+            ((LogicGpGenotype)mutant.Genotype).RandomizeAMonomialWeight();
+            newPopulation.Add(mutant);
+        }
+
+        return newPopulation;
     }
 }
