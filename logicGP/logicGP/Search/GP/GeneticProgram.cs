@@ -41,10 +41,13 @@ public class GeneticProgram : IGeneticProgram
         {
             stop = StoppingCriteria.Any(sc => sc.IsMet());
             if (stop) continue;
+            var oldPopulationSize = Population.ToList().Count;
             var newPopulation = new Population();
             foreach (var crossover in Crossovers)
             {
-                SelectionForOperator.Size = 2;
+                SelectionForOperator.Size =
+                    Math.Max((int)Math.Ceiling(oldPopulationSize / 100.0), 2);
+                //SelectionForOperator.Size = 2;
                 var selected = SelectionForOperator.Process(Population);
                 var children = crossover.Process(selected);
                 foreach (var child in children)
@@ -53,7 +56,9 @@ public class GeneticProgram : IGeneticProgram
 
             foreach (var mutation in Mutations)
             {
-                SelectionForOperator.Size = 1;
+                SelectionForOperator.Size =
+                    (int)Math.Ceiling(oldPopulationSize / 100.0);
+                //SelectionForOperator.Size = 1;
                 var selected = SelectionForOperator.Process(Population);
                 var mutated = mutation.Process(selected);
                 foreach (var mutant in mutated)

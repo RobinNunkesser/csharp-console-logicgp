@@ -14,6 +14,7 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 public class LogicGpAlgorithm(
     IGeneticProgram gp,
     RandomInitialization randomInitialization,
+    CompleteInitialization completeInitialization,
     DefaultPopulationManager populationManager,
     LogicGpSearchSpace searchSpace,
     GenerationStoppingCriterion generationStoppingCriterion,
@@ -25,13 +26,13 @@ public class LogicGpAlgorithm(
     {
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 1000;
+        generationStoppingCriterion.Limit = 10000;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;
         gp.PopulationManager = populationManager;
         gp.TrainingData = input;
-        gp.Initialization = randomInitialization;
+        gp.Initialization = completeInitialization;
         gp.Crossovers = [new LogicGpCrossover()];
         gp.Mutations =
         [

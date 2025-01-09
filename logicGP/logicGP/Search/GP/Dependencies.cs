@@ -20,6 +20,7 @@ public static class Dependencies
         services.AddSingleton<LogicGpAlgorithm>();
         services.AddSingleton<LogicGpGpasBinaryTrainer>();
         services.AddSingleton<RandomInitialization>();
+        services.AddSingleton<CompleteInitialization>();
         services.AddSingleton<GenerationStoppingCriterion>();
         services.AddSingleton<UniformSelection>();
         services.AddSingleton<ParetoFrontSelection>();
