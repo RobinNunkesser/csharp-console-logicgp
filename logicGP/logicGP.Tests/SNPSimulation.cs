@@ -12,9 +12,9 @@ public sealed class SNPSimulation
     public void GPASSimulation()
     {
         using var logWriter = new StreamWriter(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s500_o15_p0225_n44/logicgpgpasacc_log.txt");
+            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s2000_o15_p0225_n4/logicgpgpasacc_log.txt");
         using var writer = new StreamWriter(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s500_o15_p0225_n44/logicgpgpasacc.txt");
+            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s2000_o15_p0225_n4/logicgpgpasacc.txt");
         var mlContext = new MLContext();
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
@@ -24,13 +24,13 @@ public sealed class SNPSimulation
         for (var j = 1; j < 99; j++)
         {
             var trainDataPath =
-                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s500_o15_p0225_n44/SNPglm_{j}.csv";
+                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s2000_o15_p0225_n4/SNPglm_{j}.csv";
             logWriter.WriteLine($"Training on {trainDataPath}");
             var trainData = mlContext.Data.LoadFromTextFile<ModelInput>(
                 trainDataPath,
                 ',', true);
             var testDataPath =
-                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s500_o15_p0225_n44/SNPglm_{j + 1}.csv";
+                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s2000_o15_p0225_n4/SNPglm_{j + 1}.csv";
             logWriter.WriteLine($"Testing on {testDataPath}");
             var testData = mlContext.Data.LoadFromTextFile<ModelInput>(
                 testDataPath,

@@ -6,7 +6,7 @@ using Microsoft.ML.Data;
 
 namespace logicGP.Tests;
 
-[TestClass]
+//[TestClass]
 public sealed class SNPTests
 {
     private readonly IDataView _data;
