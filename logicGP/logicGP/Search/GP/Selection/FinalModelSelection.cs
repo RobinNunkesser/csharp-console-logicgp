@@ -11,7 +11,7 @@ public class FinalModelSelection : ISelection
         var allCandidates = individuals.ToList();
         var groups = allCandidates
             .GroupBy(i => ((LogicGpGenotype)i.Genotype).LiteralSignature())
-            .Where(group => group.Count() > 1)
+            .Where(group => group.Count() > 0)
             .OrderByDescending(group => group.FirstOrDefault().Size);
         var largestSize = groups.FirstOrDefault()!.FirstOrDefault().Size;
 
@@ -65,7 +65,15 @@ public class FinalModelSelection : ISelection
             bestAccuracy = accumulatedFitness;
         }
 
-        return new Population { chosenGroup.First() };
+        var bestFitnessInChosenGroup = chosenGroup.Max(element =>
+            element.LatestKnownFitness[0]
+        );
+        var chosenIndividual = chosenGroup.Where(element =>
+            element.LatestKnownFitness[0] == bestFitnessInChosenGroup
+        ).ToList().FirstOrDefault();
+
+
+        return new Population { chosenIndividual };
     }
 
     public int Size { get; set; }

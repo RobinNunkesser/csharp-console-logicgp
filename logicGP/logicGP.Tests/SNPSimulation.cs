@@ -1,3 +1,4 @@
+using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
@@ -11,26 +12,27 @@ public sealed class SNPSimulation
     [TestMethod]
     public void GPASSimulation()
     {
+        const string folder = "standard";
         using var logWriter = new StreamWriter(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s2000_o15_p0225_n4/logicgpgpasacc_log.txt");
+            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_log.txt");
         using var writer = new StreamWriter(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s2000_o15_p0225_n4/logicgpgpasacc.txt");
+            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc.csv");
         var mlContext = new MLContext();
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
         var trainer =
             serviceProvider.GetRequiredService<LogicGpGpasBinaryTrainer>();
 
-        for (var j = 1; j < 99; j++)
+        for (var j = 1; j < 100; j++)
         {
             var trainDataPath =
-                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s2000_o15_p0225_n4/SNPglm_{j}.csv";
+                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/SNPglm_{j}.csv";
             logWriter.WriteLine($"Training on {trainDataPath}");
             var trainData = mlContext.Data.LoadFromTextFile<ModelInput>(
                 trainDataPath,
                 ',', true);
             var testDataPath =
-                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s2000_o15_p0225_n4/SNPglm_{j + 1}.csv";
+                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/SNPglm_{j + 1}.csv";
             logWriter.WriteLine($"Testing on {testDataPath}");
             var testData = mlContext.Data.LoadFromTextFile<ModelInput>(
                 testDataPath,
@@ -51,7 +53,7 @@ public sealed class SNPSimulation
 
             mcr /= predictedValues.Length;
             var acc = 1.0 - mcr;
-            writer.WriteLine($"{acc}");
+            writer.WriteLine(acc.ToString(CultureInfo.InvariantCulture));
             writer.Flush();
             logWriter.WriteLine($"Accuracy: {acc}");
             logWriter.Flush();
