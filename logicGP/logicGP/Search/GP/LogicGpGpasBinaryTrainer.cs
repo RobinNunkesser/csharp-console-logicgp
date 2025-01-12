@@ -11,7 +11,7 @@ public class LogicGpGpasBinaryTrainer(
     LogicGpAlgorithm algorithm)
     : LogicGpTrainerBase<ITransformer>
 {
-    public override ITransformer Fit(IDataView input)
+    protected override ITransformer ConcreteFit(IDataView input, string label)
     {
         // Split data into k folds
         const int k = 5; // Number of folds
@@ -19,7 +19,7 @@ public class LogicGpGpasBinaryTrainer(
         var cvResults = mlContext.Data.CrossValidationSplit(input);
         var candidates = new IIndividualList[k];
         var foldIndex = 0;
-        DataFactory.Instance.Initialize(cvResults[0].TrainSet, "y");
+        DataFactory.Instance.Initialize(cvResults[0].TrainSet, label);
         foreach (var fold in cvResults)
         {
             // Training
@@ -40,7 +40,7 @@ public class LogicGpGpasBinaryTrainer(
                 individual.Generation = 0;
                 var fitnessValue = ((IFitnessFunction)fitness).Evaluate(
                     individual,
-                    fold.TestSet, "y");
+                    fold.TestSet, label);
                 var accuracy = 0.0;
                 for (var i = 0; i < fitnessValue.Length - 1; i++)
                     accuracy += fitnessValue[i];

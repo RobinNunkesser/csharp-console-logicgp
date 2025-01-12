@@ -26,7 +26,7 @@ public class LogicGpAlgorithm(
     {
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 10000;
+        generationStoppingCriterion.Limit = 10;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;

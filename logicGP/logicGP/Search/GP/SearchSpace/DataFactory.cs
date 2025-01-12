@@ -16,9 +16,12 @@ public class DataFactory
 
     public List<float> Labels { get; set; }
 
+    public string Label { get; set; }
+
     public void Initialize(IDataView gpTrainingData,
         string labelColumnName = DefaultColumnNames.Label)
     {
+        Label = labelColumnName;
         Literals = [];
 
 

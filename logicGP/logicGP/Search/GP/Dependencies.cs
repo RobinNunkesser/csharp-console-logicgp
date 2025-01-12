@@ -19,6 +19,7 @@ public static class Dependencies
                 GeneticProgram>();
         services.AddSingleton<LogicGpAlgorithm>();
         services.AddSingleton<LogicGpGpasBinaryTrainer>();
+        services.AddSingleton<LogicGpFlrwMulticlassTrainer>();
         services.AddSingleton<RandomInitialization>();
         services.AddSingleton<CompleteInitialization>();
         services.AddSingleton<GenerationStoppingCriterion>();

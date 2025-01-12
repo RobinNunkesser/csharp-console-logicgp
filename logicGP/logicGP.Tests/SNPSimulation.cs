@@ -12,29 +12,33 @@ public sealed class SNPSimulation
     [TestMethod]
     public void GPASSimulation()
     {
-        const string folder = "standard";
+        //const string folder = "standard";
+        //const string folder = "laumain_s1000_o15_p0225_n14";
+        //const string folder = "laumain_s1000_o15_p0225_n44";
+        const string folder = "lauinteraction_s1000_o15_p0225_n45_i14";
         using var logWriter = new StreamWriter(
             $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_log.txt");
         using var writer = new StreamWriter(
             $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc.csv");
+        writer.WriteLine("\"x\"");
         var mlContext = new MLContext();
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
         var trainer =
             serviceProvider.GetRequiredService<LogicGpGpasBinaryTrainer>();
-
+        trainer.Label = "y";
         for (var j = 1; j < 100; j++)
         {
             var trainDataPath =
                 $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/SNPglm_{j}.csv";
             logWriter.WriteLine($"Training on {trainDataPath}");
-            var trainData = mlContext.Data.LoadFromTextFile<ModelInput>(
+            var trainData = mlContext.Data.LoadFromTextFile<SNPModelInput>(
                 trainDataPath,
                 ',', true);
             var testDataPath =
                 $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/SNPglm_{j + 1}.csv";
             logWriter.WriteLine($"Testing on {testDataPath}");
-            var testData = mlContext.Data.LoadFromTextFile<ModelInput>(
+            var testData = mlContext.Data.LoadFromTextFile<SNPModelInput>(
                 testDataPath,
                 ',', true);
 
