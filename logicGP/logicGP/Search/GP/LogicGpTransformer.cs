@@ -5,7 +5,8 @@ using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class LogicGpTransformer(IIndividual model) : ITransformer
+public class LogicGpTransformer(IIndividual model, DataFactory data)
+    : ITransformer
 {
     public IIndividual Model { get; } = model;
 
@@ -21,7 +22,7 @@ public class LogicGpTransformer(IIndividual model) : ITransformer
 
     public IDataView Transform(IDataView input)
     {
-        foreach (var literal in DataFactory.Instance.Literals)
+        foreach (var literal in data.Literals)
             literal.GeneratePredictions(
                 input.GetColumn<float>(literal.Label).ToList());
         ((LogicGpGenotype)Model.Genotype)

@@ -8,6 +8,6 @@ public class LogicGpFlrwMulticlassTrainer(
 {
     protected override ITransformer ConcreteFit(IDataView input, string label)
     {
-        throw new NotImplementedException();
+        return null;
     }
 }

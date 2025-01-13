@@ -27,12 +27,13 @@ public sealed class SNPTests
     [TestMethod]
     public void TestLiteralSignatureEquality()
     {
-        DataFactory.Instance.Initialize(_data, "y");
-        var literal1 = DataFactory.Instance.GetRandomLiteral();
-        var literal2 = DataFactory.Instance.GetRandomLiteral();
-        var literal3 = DataFactory.Instance.GetRandomLiteral();
-        var literal4 = DataFactory.Instance.GetRandomLiteral();
-        var literal5 = DataFactory.Instance.GetRandomLiteral();
+        var data = new DataFactory();
+        data.Initialize(_data, "y");
+        var literal1 = data.GetRandomLiteral();
+        var literal2 = data.GetRandomLiteral();
+        var literal3 = data.GetRandomLiteral();
+        var literal4 = data.GetRandomLiteral();
+        var literal5 = data.GetRandomLiteral();
         var monomial1 = new LogicGpMonomial<float>([literal1, literal2], 2);
         var monomial2 =
             new LogicGpMonomial<float>([literal3, literal4, literal5], 2);
@@ -46,10 +47,10 @@ public sealed class SNPTests
         var polynomial2 = new LogicGpPolynomial<float>([monomial3, monomial4]);
         var polynomial3 = new LogicGpPolynomial<float>([monomial5]);
         var polynomial4 = new LogicGpPolynomial<float>([monomial1, monomial3]);
-        var genotype1 = new LogicGpGenotype(polynomial1);
-        var genotype2 = new LogicGpGenotype(polynomial2);
-        var genotype3 = new LogicGpGenotype(polynomial3);
-        var genotype4 = new LogicGpGenotype(polynomial4);
+        var genotype1 = new LogicGpGenotype(polynomial1, data);
+        var genotype2 = new LogicGpGenotype(polynomial2, data);
+        var genotype3 = new LogicGpGenotype(polynomial3, data);
+        var genotype4 = new LogicGpGenotype(polynomial4, data);
         var signature1 = genotype1.LiteralSignature();
         var signature2 = genotype2.LiteralSignature();
         var signature3 = genotype3.LiteralSignature();
@@ -65,12 +66,13 @@ public sealed class SNPTests
     [TestMethod]
     public void TestLiteralEquality()
     {
-        DataFactory.Instance.Initialize(_data, "y");
-        var literal1 = DataFactory.Instance.GetRandomLiteral();
-        var literal2 = DataFactory.Instance.GetRandomLiteral();
-        var literal3 = DataFactory.Instance.GetRandomLiteral();
-        var literal4 = DataFactory.Instance.GetRandomLiteral();
-        var literal5 = DataFactory.Instance.GetRandomLiteral();
+        var data = new DataFactory();
+        data.Initialize(_data, "y");
+        var literal1 = data.GetRandomLiteral();
+        var literal2 = data.GetRandomLiteral();
+        var literal3 = data.GetRandomLiteral();
+        var literal4 = data.GetRandomLiteral();
+        var literal5 = data.GetRandomLiteral();
         var monomial1 = new LogicGpMonomial<float>([literal1, literal2], 2);
         var monomial2 =
             new LogicGpMonomial<float>([literal3, literal4, literal5], 2);
@@ -84,10 +86,10 @@ public sealed class SNPTests
         var polynomial2 = new LogicGpPolynomial<float>([monomial3, monomial4]);
         var polynomial3 = new LogicGpPolynomial<float>([monomial5]);
         var polynomial4 = new LogicGpPolynomial<float>([monomial1, monomial3]);
-        var genotype1 = new LogicGpGenotype(polynomial1);
-        var genotype2 = new LogicGpGenotype(polynomial2);
-        var genotype3 = new LogicGpGenotype(polynomial3);
-        var genotype4 = new LogicGpGenotype(polynomial4);
+        var genotype1 = new LogicGpGenotype(polynomial1, data);
+        var genotype2 = new LogicGpGenotype(polynomial2, data);
+        var genotype3 = new LogicGpGenotype(polynomial3, data);
+        var genotype4 = new LogicGpGenotype(polynomial4, data);
         Assert.IsTrue(genotype1.IsLiterallyEqual(genotype2));
         Assert.IsTrue(genotype2.IsLiterallyEqual(genotype3));
         Assert.IsTrue(genotype3.IsLiterallyEqual(genotype1));

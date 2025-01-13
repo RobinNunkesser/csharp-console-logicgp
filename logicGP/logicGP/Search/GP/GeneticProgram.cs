@@ -86,7 +86,7 @@ public class GeneticProgram : IGeneticProgram
             if (individual.LatestKnownFitness != null) continue;
             var fitness =
                 FitnessFunction.Evaluate(individual,
-                    TrainingData, DataFactory.Instance.Label);
+                    TrainingData);
             individual.LatestKnownFitness = fitness;
         }
     }

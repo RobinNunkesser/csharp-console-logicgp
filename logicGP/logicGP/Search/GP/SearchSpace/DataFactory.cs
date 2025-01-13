@@ -6,12 +6,6 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
 public class DataFactory
 {
-    private DataFactory()
-    {
-    }
-
-    public static DataFactory Instance { get; } = new();
-
     public List<ILiteral<float>> Literals { get; set; }
 
     public List<float> Labels { get; set; }

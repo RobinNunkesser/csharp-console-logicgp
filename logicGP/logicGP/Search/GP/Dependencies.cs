@@ -28,6 +28,7 @@ public static class Dependencies
         services.AddScoped<IFitnessFunction, LogicGpPareto>();
         services.AddScoped<DefaultPopulationManager>();
         services.AddScoped<LogicGpSearchSpace>();
+        services.AddScoped<DataFactory>();
         return services;
     }
 }

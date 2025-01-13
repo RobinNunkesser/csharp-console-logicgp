@@ -6,6 +6,7 @@ public interface IFitnessFunction
 {
     public int NumberOfObjectives { get; }
 
-    public double[] Evaluate(IIndividual individual, IDataView data,
-        string labelColumnName = DefaultColumnNames.Label);
+    public string LabelColumnName { get; set; }
+
+    public double[] Evaluate(IIndividual individual, IDataView data);
 }

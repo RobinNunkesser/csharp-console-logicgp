@@ -20,7 +20,8 @@ public class LogicGpAlgorithm(
     GenerationStoppingCriterion generationStoppingCriterion,
     UniformSelection selection,
     ParetoFrontSelection paretoFrontSelection,
-    IFitnessFunction fitnessFunction)
+    IFitnessFunction fitnessFunction,
+    DataFactory data)
 {
     public IIndividualList Fit(IDataView input)
     {
@@ -39,10 +40,11 @@ public class LogicGpAlgorithm(
             new DeleteLiteral(), new InsertLiteral(),
             new InsertMonomial(), new ReplaceLiteral(), new DeleteMonomial()
         ];
+        fitnessFunction.LabelColumnName = data.Label;
+        ((LogicGpPareto)fitnessFunction).Labels = data.Labels;
         gp.FitnessFunction = fitnessFunction;
         gp.SearchSpace = searchSpace;
-        gp.StoppingCriteria = new IStoppingCriterion[]
-            { generationStoppingCriterion };
+        gp.StoppingCriteria = [generationStoppingCriterion];
         return gp.Run();
     }
 }

@@ -8,7 +8,8 @@ using Microsoft.ML.Data;
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
 public class LogicGpGpasBinaryTrainer(
-    LogicGpAlgorithm algorithm)
+    LogicGpAlgorithm algorithm,
+    DataFactory data)
     : LogicGpTrainerBase<ITransformer>
 {
     protected override ITransformer ConcreteFit(IDataView input, string label)
@@ -19,20 +20,24 @@ public class LogicGpGpasBinaryTrainer(
         var cvResults = mlContext.Data.CrossValidationSplit(input);
         var candidates = new IIndividualList[k];
         var foldIndex = 0;
-        DataFactory.Instance.Initialize(cvResults[0].TrainSet, label);
+        data.Initialize(cvResults[0].TrainSet, label);
         foreach (var fold in cvResults)
         {
             // Training
             if (foldIndex > 0)
-                foreach (var literal in DataFactory.Instance.Literals)
+                foreach (var literal in data.Literals)
                     literal.GeneratePredictions(
                         fold.TrainSet.GetColumn<float>(literal.Label).ToList());
             var individuals = algorithm.Fit(fold.TrainSet);
             // Testing
-            foreach (var literal in DataFactory.Instance.Literals)
+            foreach (var literal in data.Literals)
                 literal.GeneratePredictions(
                     fold.TestSet.GetColumn<float>(literal.Label).ToList());
-            var fitness = new LogicGpPareto();
+            var fitness = new LogicGpPareto
+            {
+                LabelColumnName = label,
+                Labels = data.Labels
+            };
             foreach (var individual in individuals)
             {
                 ((LogicGpGenotype)individual.Genotype)
@@ -40,7 +45,7 @@ public class LogicGpGpasBinaryTrainer(
                 individual.Generation = 0;
                 var fitnessValue = ((IFitnessFunction)fitness).Evaluate(
                     individual,
-                    fold.TestSet, label);
+                    fold.TestSet);
                 var accuracy = 0.0;
                 for (var i = 0; i < fitnessValue.Length - 1; i++)
                     accuracy += fitnessValue[i];
@@ -62,6 +67,6 @@ public class LogicGpGpasBinaryTrainer(
             candidatePopulation.Add(candidate);
         var chosenIndividual = bestSelection.Process(candidatePopulation)[0];
 
-        return new LogicGpTransformer(chosenIndividual);
+        return new LogicGpTransformer(chosenIndividual, data);
     }
 }

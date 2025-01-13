@@ -4,25 +4,26 @@ using logicGP.Search.GP;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
-public class LogicGpSearchSpace(IGeneticProgram gp) : ISearchSpace
+public class LogicGpSearchSpace(IGeneticProgram gp, DataFactory data)
+    : ISearchSpace
 {
     public int Classes { get; set; } = 2;
 
     public IGenotype GetRandomGenotype()
     {
-        return new LogicGpGenotype(Classes);
+        return new LogicGpGenotype(Classes, data);
     }
 
     public IIndividualList GetAStartingPopulation()
     {
-        var literals = DataFactory.Instance.Literals;
         var result = new Population();
-        foreach (var polynomial in literals
+        foreach (var polynomial in data.Literals
                      .Select(
                          literal => new LogicGpMonomial<float>([literal], 2))
                      .Select(monomial =>
                          new LogicGpPolynomial<float>([monomial])))
-            result.Add(new Individual(new LogicGpGenotype(polynomial), null));
+            result.Add(new Individual(new LogicGpGenotype(polynomial, data),
+                null));
 
         return result;
     }

@@ -17,9 +17,9 @@ public sealed class SNPSimulation
         //const string folder = "laumain_s1000_o15_p0225_n44";
         const string folder = "lauinteraction_s1000_o15_p0225_n45_i14";
         using var logWriter = new StreamWriter(
-            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_log.txt");
+            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_test_log.txt");
         using var writer = new StreamWriter(
-            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc.csv");
+            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_test.csv");
         writer.WriteLine("\"x\"");
         var mlContext = new MLContext();
         var services = new ServiceCollection().AddServices();
@@ -27,7 +27,7 @@ public sealed class SNPSimulation
         var trainer =
             serviceProvider.GetRequiredService<LogicGpGpasBinaryTrainer>();
         trainer.Label = "y";
-        for (var j = 1; j < 100; j++)
+        for (var j = 1; j < 2; j++)
         {
             var trainDataPath =
                 $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/SNPglm_{j}.csv";
