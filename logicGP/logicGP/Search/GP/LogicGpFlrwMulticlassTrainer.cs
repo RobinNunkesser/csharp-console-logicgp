@@ -22,6 +22,6 @@ public class LogicGpFlrwMulticlassTrainer(
     {
         logicGpAlgorithm.UseFullInitialization = true;
         logicGpAlgorithm.WeightMutationToUse =
-            LogicGpAlgorithm.WeightMutation.Restricted;
+            LogicGpAlgorithm.WeightMutation.None;
     }
 }

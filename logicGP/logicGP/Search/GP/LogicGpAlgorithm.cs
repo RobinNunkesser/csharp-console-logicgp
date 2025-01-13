@@ -37,11 +37,12 @@ public class LogicGpAlgorithm(
     public WeightMutation WeightMutationToUse { get; set; } =
         WeightMutation.None;
 
-    public IIndividualList Fit(IDataView input)
+    public IIndividualList Fit(IDataView input,
+        string labelColumnName = DefaultColumnNames.Label)
     {
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 1000;
+        generationStoppingCriterion.Limit = 100;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;
@@ -70,6 +71,8 @@ public class LogicGpAlgorithm(
         fitnessFunction.LabelColumnName = data.Label;
         ((LogicGpPareto)fitnessFunction).Labels = data.Labels;
         gp.FitnessFunction = fitnessFunction;
+        searchSpace.OutputColumn =
+            input.GetColumnAsString(labelColumnName).ToList();
         gp.SearchSpace = searchSpace;
         gp.StoppingCriteria = [generationStoppingCriterion];
         return gp.Run();

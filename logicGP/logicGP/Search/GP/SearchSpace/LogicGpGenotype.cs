@@ -9,20 +9,36 @@ public class LogicGpGenotype : IGenotype
     private readonly IPolynomial<string> _polynomial;
     private string[]? _predictedClasses;
 
-    public LogicGpGenotype(int classes, DataManager data)
+    public LogicGpGenotype(int classes, DataManager data,
+        List<string>? outputColumn, List<string> labels)
     {
+        ArgumentNullException.ThrowIfNull(outputColumn);
+        ArgumentNullException.ThrowIfNull(labels);
+        Labels = labels;
+        OutputColumn = outputColumn;
         _data = data;
         var literal = data.GetRandomLiteral();
-        var monomial = new LogicGpMonomial<string>([literal], classes);
+        var monomial =
+            new LogicGpMonomial<string>([literal], classes, OutputColumn,
+                Labels);
         _polynomial = new LogicGpPolynomial<string>([monomial]);
     }
 
     public LogicGpGenotype(IPolynomial<string> polynomial,
-        DataManager data)
+        DataManager data,
+        List<string>? outputColumn, List<string> labels)
     {
+        ArgumentNullException.ThrowIfNull(outputColumn);
+        ArgumentNullException.ThrowIfNull(labels);
         _data = data;
         _polynomial = polynomial;
+        OutputColumn = outputColumn;
+        Labels = labels;
     }
+
+    public List<string> Labels { get; set; }
+
+    public List<string>? OutputColumn { get; set; }
 
     public string[] PredictedClasses
     {
@@ -52,7 +68,7 @@ public class LogicGpGenotype : IGenotype
     {
         return new LogicGpGenotype(
             (IPolynomial<string>)_polynomial.Clone(),
-            _data);
+            _data, OutputColumn, Labels);
     }
 
     private void UpdatePredictedClasses()
@@ -125,7 +141,7 @@ public class LogicGpGenotype : IGenotype
         _polynomial.Monomials.Add(new LogicGpMonomial<string>(
             new List<ILiteral<string>>
                 { _data.GetRandomLiteral() },
-            _polynomial.Monomials[0].Weights.Length));
+            _polynomial.Monomials[0].Weights.Length, OutputColumn, Labels));
         UpdatePredictions();
     }
 

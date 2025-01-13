@@ -8,10 +8,12 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
     : ISearchSpace
 {
+    public List<string>? OutputColumn { get; set; }
+
     public IGenotype GetRandomGenotype()
     {
         var classes = data.Labels.Distinct().Count();
-        return new LogicGpGenotype(classes, data);
+        return new LogicGpGenotype(classes, data, OutputColumn, data.Labels);
     }
 
     public IIndividualList GetAStartingPopulation()
@@ -21,10 +23,13 @@ public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
         foreach (var polynomial in data.Literals
                      .Select(
                          literal =>
-                             new LogicGpMonomial<string>([literal], classes))
+                             new LogicGpMonomial<string>([literal], classes,
+                                 OutputColumn, data.Labels))
                      .Select(monomial =>
                          new LogicGpPolynomial<string>([monomial])))
-            result.Add(new Individual(new LogicGpGenotype(polynomial, data),
+            result.Add(new Individual(
+                new LogicGpGenotype(polynomial, data, OutputColumn,
+                    data.Labels),
                 null));
 
         return result;

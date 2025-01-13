@@ -35,7 +35,7 @@ public abstract class
                     literal.GeneratePredictions(
                         fold.TrainSet.GetColumnAsString(literal.Label)
                             .ToList());
-            var individuals = algorithm.Fit(fold.TrainSet);
+            var individuals = algorithm.Fit(fold.TrainSet, Label);
             // Testing
             foreach (var literal in data.Literals)
                 literal.GeneratePredictions(
