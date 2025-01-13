@@ -15,19 +15,19 @@ public static class Dependencies
         this IServiceCollection services)
     {
         services
-            .AddSingleton<IGeneticProgram,
+            .AddScoped<IGeneticProgram,
                 GeneticProgram>();
-        services.AddSingleton<LogicGpAlgorithm>();
-        services.AddSingleton<LogicGpGpasBinaryTrainer>();
-        services.AddSingleton<LogicGpFlrwMulticlassTrainer>();
-        services.AddSingleton<RandomInitialization>();
-        services.AddSingleton<CompleteInitialization>();
-        services.AddSingleton<GenerationStoppingCriterion>();
-        services.AddSingleton<UniformSelection>();
-        services.AddSingleton<ParetoFrontSelection>();
-        services.AddSingleton<IFitnessFunction, LogicGpPareto>();
-        services.AddSingleton<DefaultPopulationManager>();
-        services.AddSingleton<LogicGpSearchSpace>();
+        services.AddScoped<LogicGpAlgorithm>();
+        services.AddScoped<LogicGpGpasBinaryTrainer>();
+        services.AddScoped<LogicGpFlrwMulticlassTrainer>();
+        services.AddScoped<RandomInitialization>();
+        services.AddScoped<CompleteInitialization>();
+        services.AddScoped<GenerationStoppingCriterion>();
+        services.AddScoped<UniformSelection>();
+        services.AddScoped<ParetoFrontSelection>();
+        services.AddScoped<IFitnessFunction, LogicGpPareto>();
+        services.AddScoped<DefaultPopulationManager>();
+        services.AddScoped<LogicGpSearchSpace>();
         return services;
     }
 }
