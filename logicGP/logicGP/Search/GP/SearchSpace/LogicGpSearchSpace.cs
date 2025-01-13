@@ -1,3 +1,4 @@
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using logicGP.Search.GP;

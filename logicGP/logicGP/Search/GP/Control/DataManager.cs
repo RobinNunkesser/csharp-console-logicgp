@@ -1,8 +1,9 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
-namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
+namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 
 public class DataManager
 {

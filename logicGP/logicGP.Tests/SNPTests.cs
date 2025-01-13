@@ -1,4 +1,5 @@
 ﻿using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
