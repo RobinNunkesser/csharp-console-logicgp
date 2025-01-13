@@ -4,7 +4,7 @@ using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
-public class DataFactory
+public class DataManager
 {
     public List<ILiteral<float>> Literals { get; set; }
 

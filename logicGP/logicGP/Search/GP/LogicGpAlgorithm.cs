@@ -21,7 +21,7 @@ public class LogicGpAlgorithm(
     UniformSelection selection,
     ParetoFrontSelection paretoFrontSelection,
     IFitnessFunction fitnessFunction,
-    DataFactory data)
+    DataManager data)
 {
     public IIndividualList Fit(IDataView input)
     {

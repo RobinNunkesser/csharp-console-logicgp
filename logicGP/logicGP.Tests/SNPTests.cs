@@ -27,7 +27,7 @@ public sealed class SNPTests
     [TestMethod]
     public void TestLiteralSignatureEquality()
     {
-        var data = new DataFactory();
+        var data = new DataManager();
         data.Initialize(_data, "y");
         var literal1 = data.GetRandomLiteral();
         var literal2 = data.GetRandomLiteral();
@@ -66,7 +66,7 @@ public sealed class SNPTests
     [TestMethod]
     public void TestLiteralEquality()
     {
-        var data = new DataFactory();
+        var data = new DataManager();
         data.Initialize(_data, "y");
         var literal1 = data.GetRandomLiteral();
         var literal2 = data.GetRandomLiteral();

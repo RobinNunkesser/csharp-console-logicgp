@@ -9,7 +9,7 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
 public class LogicGpGpasBinaryTrainer(
     LogicGpAlgorithm algorithm,
-    DataFactory data)
+    DataManager data)
     : LogicGpTrainerBase<ITransformer>
 {
     protected override ITransformer ConcreteFit(IDataView input, string label)

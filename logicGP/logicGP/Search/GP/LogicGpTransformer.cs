@@ -5,7 +5,7 @@ using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class LogicGpTransformer(IIndividual model, DataFactory data)
+public class LogicGpTransformer(IIndividual model, DataManager data)
     : ITransformer
 {
     public IIndividual Model { get; } = model;

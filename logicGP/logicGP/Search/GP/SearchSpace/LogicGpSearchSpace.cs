@@ -4,7 +4,7 @@ using logicGP.Search.GP;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
-public class LogicGpSearchSpace(IGeneticProgram gp, DataFactory data)
+public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
     : ISearchSpace
 {
     public int Classes { get; set; } = 2;

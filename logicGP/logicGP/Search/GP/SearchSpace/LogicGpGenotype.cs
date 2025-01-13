@@ -4,11 +4,11 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
 public class LogicGpGenotype : IGenotype
 {
-    private readonly DataFactory _data;
+    private readonly DataManager _data;
     private readonly IPolynomial<float> _polynomial;
     private float[]? _predictedClasses;
 
-    public LogicGpGenotype(int classes, DataFactory data)
+    public LogicGpGenotype(int classes, DataManager data)
     {
         _data = data;
         var literal = data.GetRandomLiteral();
@@ -16,7 +16,7 @@ public class LogicGpGenotype : IGenotype
         _polynomial = new LogicGpPolynomial<float>([monomial]);
     }
 
-    public LogicGpGenotype(IPolynomial<float> polynomial, DataFactory data)
+    public LogicGpGenotype(IPolynomial<float> polynomial, DataManager data)
     {
         _data = data;
         _polynomial = polynomial;
