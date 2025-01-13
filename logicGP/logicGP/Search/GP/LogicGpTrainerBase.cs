@@ -74,14 +74,18 @@ public abstract class
             candidatePopulation.Add(candidate);
         var chosenIndividual = bestSelection.Process(candidatePopulation)[0];
 
-        return (TTransformer)(ITransformer)new LogicGpTransformer(
-            chosenIndividual, data);
+        var transformer = CreateTransformer(chosenIndividual, data);
+
+        return transformer;
     }
 
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
         throw new NotImplementedException();
     }
+
+    protected abstract TTransformer CreateTransformer(
+        IIndividual chosenIndividual, DataManager dataManager);
 
     protected abstract void ParameterizeAlgorithm(
         LogicGpAlgorithm logicGpAlgorithm);

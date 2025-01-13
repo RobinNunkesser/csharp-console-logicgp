@@ -29,16 +29,16 @@ public class CarEvaluationTests
         var mlModel = trainer.Fit(_data);
         Assert.IsNotNull(mlModel);
         var testResults = mlModel.Transform(_data);
-        var trueValues = testResults.GetColumn<uint>("y").ToArray();
-        var predictedValues = testResults.GetColumn<float[]>("Score")
-            .Select(score => score[0] >= 0.5 ? 0 : 1).ToArray();
+        var trueValues = testResults.GetColumn<string>("y").ToArray();
+        var predictedValues =
+            testResults.GetColumn<string>("PredictedLabel").ToList();
         var mcr = 0F;
 
-        for (var i = 0; i < predictedValues.Length; i++)
+        for (var i = 0; i < predictedValues.Count; i++)
             if (predictedValues[i] != trueValues[i])
                 mcr++;
 
-        mcr /= predictedValues.Length;
+        mcr /= predictedValues.Count;
         var acc = 1.0 - mcr;
         Console.WriteLine($"{acc}");
     }

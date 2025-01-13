@@ -44,7 +44,8 @@ public sealed class SNPSimulation
 
             var mlModel = trainer.Fit(trainData);
             Assert.IsNotNull(mlModel);
-            logWriter.WriteLine(((LogicGpTransformer)mlModel).Model.ToString());
+            logWriter.WriteLine(
+                ((LogicGpGpasTransformer)mlModel).Model.ToString());
             var testResults = mlModel.Transform(testData);
             var trueValues = testResults.GetColumn<uint>("y").ToArray();
             var predictedValues = testResults.GetColumn<float[]>("Score")

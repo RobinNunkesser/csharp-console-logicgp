@@ -2,7 +2,7 @@ using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class LogicGpModelOutput
+public class LogicGpGpasModelOutput
 {
     [LoadColumn(0)] [ColumnName("y")] public uint Y { get; set; }
 

@@ -6,8 +6,10 @@ using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class LogicGpTransformer(IIndividual model, DataManager data)
-    : ITransformer
+public abstract class LogicGpTransformerBase<TModelOutput>(
+    IIndividual model,
+    DataManager data)
+    : ITransformer where TModelOutput : class
 {
     public IIndividual Model { get; } = model;
 
@@ -29,42 +31,12 @@ public class LogicGpTransformer(IIndividual model, DataManager data)
         ((LogicGpGenotype)Model.Genotype)
             .UpdatePredictionsRecursively();
         var mlContext = new MLContext();
-        var predictionData = new List<LogicGpModelOutput>();
         var predictedClasses =
             ((LogicGpGenotype)Model.Genotype).PredictedClasses;
 
-        // Create a cursor to iterate through the rows
-        using (var cursor = input.GetRowCursor(input.Schema))
-        {
-            // Get column indices
-            var yIndex = cursor.Schema[data.Label];
+        var predictionData =
+            CreatePredictionData(input, predictedClasses, data);
 
-            // Create delegates to access the values
-            var yGetter = cursor.GetGetter<float>(yIndex);
-
-            // Variables to hold the values
-            float y = 0;
-
-            var index = 0;
-            // Iterate through the rows
-            while (cursor.MoveNext())
-            {
-                yGetter(ref y);
-                var predictedClass = predictedClasses[index];
-                // TODO: Handle other types
-                var score = predictedClass.Equals("1") ? 1 : 0;
-
-
-                predictionData.Add(new LogicGpModelOutput
-                {
-                    Y = (uint)y,
-
-                    Score = new[] { score, (float)(1 - score) },
-                    PredictedLabel = predictedClass
-                });
-                index++;
-            }
-        }
 
         return mlContext.Data.LoadFromEnumerable(predictionData);
     }
@@ -75,4 +47,7 @@ public class LogicGpTransformer(IIndividual model, DataManager data)
     }
 
     public bool IsRowToRowMapper => false;
+
+    protected abstract List<TModelOutput> CreatePredictionData(IDataView input,
+        string[] predictedClasses, DataManager dataManager);
 }
