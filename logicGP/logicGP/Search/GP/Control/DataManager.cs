@@ -22,8 +22,6 @@ public class DataManager
         var schema = gpTrainingData.Schema;
         foreach (var column in schema)
         {
-            // TODO: Handle other types
-            if (column.Type.RawType != typeof(float)) continue;
             var columnData = gpTrainingData.GetColumnAsString(column).ToList();
             var uniqueValues =
                 new HashSet<string>(

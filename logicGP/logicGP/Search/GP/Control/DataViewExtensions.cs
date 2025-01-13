@@ -19,7 +19,7 @@ public static class DataViewExtensions
     public static IEnumerable<string>? GetColumnAsString(
         this IDataView dataView, DataViewSchema.Column column)
     {
-        return column.Type.RawType switch
+        var dataColumn = column.Type.RawType switch
         {
             { } floatType when floatType == typeof(float) => dataView
                 .GetColumn<float>(column)
@@ -27,9 +27,14 @@ public static class DataViewExtensions
             { } intType when intType == typeof(int) => dataView
                 .GetColumn<int>(column)
                 .Select(entry => entry.ToString()),
+            { } charType when charType == typeof(char) => dataView
+                .GetColumn<char>(column)
+                .Select(entry => entry.ToString()),
             { } stringType when stringType == typeof(string) => dataView
                 .GetColumn<string>(column),
-            _ => null
+            _ => dataView
+                .GetColumn<string>(column)
         };
+        return dataColumn;
     }
 }
