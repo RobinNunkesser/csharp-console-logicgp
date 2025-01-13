@@ -25,10 +25,9 @@ public class LogicGpTransformer(IIndividual model, DataManager data)
     {
         foreach (var literal in data.Literals)
             literal.GeneratePredictions(
-                input.GetColumn<float>(literal.Label).ToList());
+                input.GetColumnAsString(literal.Label).ToList());
         ((LogicGpGenotype)Model.Genotype)
             .UpdatePredictionsRecursively();
-
         var mlContext = new MLContext();
         var predictionData = new List<LogicGpModelOutput>();
         var predictedClasses =
@@ -52,7 +51,8 @@ public class LogicGpTransformer(IIndividual model, DataManager data)
             {
                 yGetter(ref y);
                 var predictedClass = predictedClasses[index];
-                var score = predictedClass > 0 ? 0 : 1;
+                // TODO: Handle other types
+                var score = predictedClass.Equals("1") ? 1 : 0;
 
 
                 predictionData.Add(new LogicGpModelOutput

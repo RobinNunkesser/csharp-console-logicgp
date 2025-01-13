@@ -20,9 +20,10 @@ public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
         var result = new Population();
         foreach (var polynomial in data.Literals
                      .Select(
-                         literal => new LogicGpMonomial<float>([literal], 2))
+                         literal =>
+                             new LogicGpMonomial<string>([literal], 2))
                      .Select(monomial =>
-                         new LogicGpPolynomial<float>([monomial])))
+                         new LogicGpPolynomial<string>([monomial])))
             result.Add(new Individual(new LogicGpGenotype(polynomial, data),
                 null));
 

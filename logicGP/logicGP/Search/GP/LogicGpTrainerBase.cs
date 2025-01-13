@@ -4,7 +4,6 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Microsoft.ML;
-using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
@@ -33,12 +32,13 @@ public abstract class
             if (foldIndex > 0)
                 foreach (var literal in data.Literals)
                     literal.GeneratePredictions(
-                        fold.TrainSet.GetColumn<float>(literal.Label).ToList());
+                        fold.TrainSet.GetColumnAsString(literal.Label)
+                            .ToList());
             var individuals = algorithm.Fit(fold.TrainSet);
             // Testing
             foreach (var literal in data.Literals)
                 literal.GeneratePredictions(
-                    fold.TestSet.GetColumn<float>(literal.Label).ToList());
+                    fold.TestSet.GetColumnAsString(literal.Label).ToList());
             var fitness = new LogicGpPareto
             {
                 LabelColumnName = Label,

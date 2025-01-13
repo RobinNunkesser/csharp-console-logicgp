@@ -6,24 +6,25 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 public class LogicGpGenotype : IGenotype
 {
     private readonly DataManager _data;
-    private readonly IPolynomial<float> _polynomial;
-    private float[]? _predictedClasses;
+    private readonly IPolynomial<string> _polynomial;
+    private string[]? _predictedClasses;
 
     public LogicGpGenotype(int classes, DataManager data)
     {
         _data = data;
         var literal = data.GetRandomLiteral();
-        var monomial = new LogicGpMonomial<float>([literal], classes);
-        _polynomial = new LogicGpPolynomial<float>([monomial]);
+        var monomial = new LogicGpMonomial<string>([literal], classes);
+        _polynomial = new LogicGpPolynomial<string>([monomial]);
     }
 
-    public LogicGpGenotype(IPolynomial<float> polynomial, DataManager data)
+    public LogicGpGenotype(IPolynomial<string> polynomial,
+        DataManager data)
     {
         _data = data;
         _polynomial = polynomial;
     }
 
-    public float[] PredictedClasses
+    public string[] PredictedClasses
     {
         get
         {
@@ -49,13 +50,14 @@ public class LogicGpGenotype : IGenotype
 
     public object Clone()
     {
-        return new LogicGpGenotype((IPolynomial<float>)_polynomial.Clone(),
+        return new LogicGpGenotype(
+            (IPolynomial<string>)_polynomial.Clone(),
             _data);
     }
 
     private void UpdatePredictedClasses()
     {
-        _predictedClasses = new float[Predictions.Length];
+        _predictedClasses = new string[Predictions.Length];
         for (var i = 0; i < Predictions.Length; i++)
         {
             var maxIndex = Array.IndexOf(Predictions[i], Predictions[i].Max());
@@ -68,12 +70,12 @@ public class LogicGpGenotype : IGenotype
         return _polynomial.ToString() ?? string.Empty;
     }
 
-    public IMonomial<float> GetRandomMonomial()
+    public IMonomial<string> GetRandomMonomial()
     {
         return _polynomial.GetRandomMonomial();
     }
 
-    public void InsertMonomial(IMonomial<float> monomial)
+    public void InsertMonomial(IMonomial<string> monomial)
     {
         _polynomial.Monomials.Add(monomial);
         UpdatePredictions();
@@ -120,8 +122,8 @@ public class LogicGpGenotype : IGenotype
 
     public void InsertRandomMonomial()
     {
-        _polynomial.Monomials.Add(new LogicGpMonomial<float>(
-            new List<ILiteral<float>>
+        _polynomial.Monomials.Add(new LogicGpMonomial<string>(
+            new List<ILiteral<string>>
                 { _data.GetRandomLiteral() },
             _polynomial.Monomials[0].Weights.Length));
         UpdatePredictions();

@@ -10,5 +10,5 @@ public class LogicGpModelOutput
 
     [LoadColumn(2)]
     [ColumnName(@"PredictedLabel")]
-    public float PredictedLabel { get; set; }
+    public string PredictedLabel { get; set; }
 }

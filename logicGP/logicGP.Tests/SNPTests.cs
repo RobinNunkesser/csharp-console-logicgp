@@ -35,19 +35,19 @@ public sealed class SNPTests
         var literal3 = data.GetRandomLiteral();
         var literal4 = data.GetRandomLiteral();
         var literal5 = data.GetRandomLiteral();
-        var monomial1 = new LogicGpMonomial<float>([literal1, literal2], 2);
+        var monomial1 = new LogicGpMonomial<string>([literal1, literal2], 2);
         var monomial2 =
-            new LogicGpMonomial<float>([literal3, literal4, literal5], 2);
-        var monomial3 = new LogicGpMonomial<float>([literal1, literal3], 2);
+            new LogicGpMonomial<string>([literal3, literal4, literal5], 2);
+        var monomial3 = new LogicGpMonomial<string>([literal1, literal3], 2);
         var monomial4 =
-            new LogicGpMonomial<float>([literal2, literal4, literal5], 2);
+            new LogicGpMonomial<string>([literal2, literal4, literal5], 2);
         var monomial5 =
-            new LogicGpMonomial<float>(
+            new LogicGpMonomial<string>(
                 [literal1, literal2, literal3, literal4, literal5], 2);
-        var polynomial1 = new LogicGpPolynomial<float>([monomial1, monomial2]);
-        var polynomial2 = new LogicGpPolynomial<float>([monomial3, monomial4]);
-        var polynomial3 = new LogicGpPolynomial<float>([monomial5]);
-        var polynomial4 = new LogicGpPolynomial<float>([monomial1, monomial3]);
+        var polynomial1 = new LogicGpPolynomial<string>([monomial1, monomial2]);
+        var polynomial2 = new LogicGpPolynomial<string>([monomial3, monomial4]);
+        var polynomial3 = new LogicGpPolynomial<string>([monomial5]);
+        var polynomial4 = new LogicGpPolynomial<string>([monomial1, monomial3]);
         var genotype1 = new LogicGpGenotype(polynomial1, data);
         var genotype2 = new LogicGpGenotype(polynomial2, data);
         var genotype3 = new LogicGpGenotype(polynomial3, data);
@@ -74,19 +74,19 @@ public sealed class SNPTests
         var literal3 = data.GetRandomLiteral();
         var literal4 = data.GetRandomLiteral();
         var literal5 = data.GetRandomLiteral();
-        var monomial1 = new LogicGpMonomial<float>([literal1, literal2], 2);
+        var monomial1 = new LogicGpMonomial<string>([literal1, literal2], 2);
         var monomial2 =
-            new LogicGpMonomial<float>([literal3, literal4, literal5], 2);
-        var monomial3 = new LogicGpMonomial<float>([literal1, literal3], 2);
+            new LogicGpMonomial<string>([literal3, literal4, literal5], 2);
+        var monomial3 = new LogicGpMonomial<string>([literal1, literal3], 2);
         var monomial4 =
-            new LogicGpMonomial<float>([literal2, literal4, literal5], 2);
+            new LogicGpMonomial<string>([literal2, literal4, literal5], 2);
         var monomial5 =
-            new LogicGpMonomial<float>(
+            new LogicGpMonomial<string>(
                 [literal1, literal2, literal3, literal4, literal5], 2);
-        var polynomial1 = new LogicGpPolynomial<float>([monomial1, monomial2]);
-        var polynomial2 = new LogicGpPolynomial<float>([monomial3, monomial4]);
-        var polynomial3 = new LogicGpPolynomial<float>([monomial5]);
-        var polynomial4 = new LogicGpPolynomial<float>([monomial1, monomial3]);
+        var polynomial1 = new LogicGpPolynomial<string>([monomial1, monomial2]);
+        var polynomial2 = new LogicGpPolynomial<string>([monomial3, monomial4]);
+        var polynomial3 = new LogicGpPolynomial<string>([monomial5]);
+        var polynomial4 = new LogicGpPolynomial<string>([monomial1, monomial3]);
         var genotype1 = new LogicGpGenotype(polynomial1, data);
         var genotype2 = new LogicGpGenotype(polynomial2, data);
         var genotype3 = new LogicGpGenotype(polynomial3, data);
