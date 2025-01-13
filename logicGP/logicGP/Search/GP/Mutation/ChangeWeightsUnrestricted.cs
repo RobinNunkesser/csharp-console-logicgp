@@ -4,7 +4,7 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Mutation;
 
-public class ChangeWeights : IMutation
+public class ChangeWeightsUnrestricted : IMutation
 {
     public IIndividualList Process(IIndividualList individuals)
     {
@@ -12,7 +12,7 @@ public class ChangeWeights : IMutation
         foreach (var individual in individuals)
         {
             var mutant = (IIndividual)individual.Clone();
-            ((LogicGpGenotype)mutant.Genotype).RandomizeAMonomialWeight();
+            ((LogicGpGenotype)mutant.Genotype).RandomizeAMonomialWeight(false);
             newPopulation.Add(mutant);
         }
 

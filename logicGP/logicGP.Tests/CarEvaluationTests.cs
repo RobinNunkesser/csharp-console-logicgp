@@ -1,6 +1,7 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace logicGP.Tests;
 
@@ -26,6 +27,19 @@ public class CarEvaluationTests
             serviceProvider.GetRequiredService<LogicGpFlrwMulticlassTrainer>();
         trainer.Label = "class";
         var mlModel = trainer.Fit(_data);
-        //Assert.IsNotNull(mlModel);
+        Assert.IsNotNull(mlModel);
+        var testResults = mlModel.Transform(_data);
+        var trueValues = testResults.GetColumn<uint>("y").ToArray();
+        var predictedValues = testResults.GetColumn<float[]>("Score")
+            .Select(score => score[0] >= 0.5 ? 0 : 1).ToArray();
+        var mcr = 0F;
+
+        for (var i = 0; i < predictedValues.Length; i++)
+            if (predictedValues[i] != trueValues[i])
+                mcr++;
+
+        mcr /= predictedValues.Length;
+        var acc = 1.0 - mcr;
+        Console.WriteLine($"{acc}");
     }
 }

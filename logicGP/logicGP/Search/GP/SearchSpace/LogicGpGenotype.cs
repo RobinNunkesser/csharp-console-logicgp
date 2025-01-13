@@ -81,10 +81,10 @@ public class LogicGpGenotype : IGenotype
         UpdatePredictions();
     }
 
-    public void RandomizeAMonomialWeight()
+    public void RandomizeAMonomialWeight(bool restricted)
     {
         var monomial = GetRandomMonomial();
-        monomial.RandomizeWeights();
+        monomial.RandomizeWeights(restricted);
         UpdatePredictions();
     }
 

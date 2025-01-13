@@ -16,8 +16,8 @@ public class GeneticProgram : IGeneticProgram
     public IFitnessFunction FitnessFunction { get; set; }
     public ISelection SelectionForOperator { get; set; }
     public ISelection SelectionForSurvival { get; set; }
-    public IMutation[] Mutations { get; set; }
-    public ICrossover[] Crossovers { get; set; }
+    public List<IMutation> Mutations { get; set; }
+    public List<ICrossover> Crossovers { get; set; }
     public IDataView TrainingData { get; set; }
     public IIndividualList Population => PopulationManager.Population;
 

@@ -25,6 +25,7 @@ public abstract class
         var candidates = new IIndividualList[k];
         var foldIndex = 0;
         data.Initialize(cvResults[0].TrainSet, Label);
+        ParameterizeAlgorithm(algorithm);
 
         foreach (var fold in cvResults)
         {
@@ -81,4 +82,7 @@ public abstract class
     {
         throw new NotImplementedException();
     }
+
+    protected abstract void ParameterizeAlgorithm(
+        LogicGpAlgorithm logicGpAlgorithm);
 }

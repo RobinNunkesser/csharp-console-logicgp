@@ -20,11 +20,21 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
     public int Size => Literals.Count;
 
-    public void RandomizeWeights()
+    public void RandomizeWeights(bool restricted)
     {
         var random = new Random();
-        for (var i = 0; i < Weights.Length; i++)
-            Weights[i] = (float)random.NextDouble();
+        if (restricted)
+        {
+            var index = random.Next(0, Weights.Length);
+            for (var i = 0; i < Weights.Length; i++)
+                Weights[i] = i == index ? 1 : 0;
+        }
+        else
+        {
+            for (var i = 0; i < Weights.Length; i++)
+                Weights[i] = (float)random.NextDouble();
+        }
+
         UpdatePredictions();
     }
 

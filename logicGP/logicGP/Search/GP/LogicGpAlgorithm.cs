@@ -1,3 +1,4 @@
+using System.Collections;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Crossover;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
@@ -24,6 +25,18 @@ public class LogicGpAlgorithm(
     IFitnessFunction fitnessFunction,
     DataManager data)
 {
+    public enum WeightMutation
+    {
+        None,
+        Restricted,
+        Unrestricted
+    }
+
+    public bool UseFullInitialization { get; set; } = false;
+
+    public WeightMutation WeightMutationToUse { get; set; } =
+        WeightMutation.None;
+
     public IIndividualList Fit(IDataView input)
     {
         randomInitialization.Size = 2;
@@ -34,13 +47,26 @@ public class LogicGpAlgorithm(
         gp.SelectionForSurvival = paretoFrontSelection;
         gp.PopulationManager = populationManager;
         gp.TrainingData = input;
-        gp.Initialization = completeInitialization;
+        gp.Initialization = UseFullInitialization
+            ? completeInitialization
+            : randomInitialization;
         gp.Crossovers = [new LogicGpCrossover()];
         gp.Mutations =
         [
             new DeleteLiteral(), new InsertLiteral(),
             new InsertMonomial(), new ReplaceLiteral(), new DeleteMonomial()
         ];
+
+        IMutation? weightMutation = WeightMutationToUse switch
+        {
+            WeightMutation.None => null,
+            WeightMutation.Restricted => new ChangeWeightsRestricted(),
+            WeightMutation.Unrestricted => new ChangeWeightsUnrestricted(),
+            _ => null
+        };
+
+        if (weightMutation != null)
+            ((IList)gp.Mutations).Add(weightMutation);
         fitnessFunction.LabelColumnName = data.Label;
         ((LogicGpPareto)fitnessFunction).Labels = data.Labels;
         gp.FitnessFunction = fitnessFunction;

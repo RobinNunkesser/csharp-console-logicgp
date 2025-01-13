@@ -37,7 +37,7 @@ public class LogicGpTransformer(IIndividual model, DataManager data)
         using (var cursor = input.GetRowCursor(input.Schema))
         {
             // Get column indices
-            var yIndex = cursor.Schema["y"];
+            var yIndex = cursor.Schema[data.Label];
 
             // Create delegates to access the values
             var yGetter = cursor.GetGetter<float>(yIndex);

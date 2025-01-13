@@ -8,4 +8,11 @@ public class LogicGpFlrwMulticlassTrainer(
     DataManager data)
     : LogicGpTrainerBase<ITransformer>(algorithm, data)
 {
+    protected override void ParameterizeAlgorithm(
+        LogicGpAlgorithm logicGpAlgorithm)
+    {
+        logicGpAlgorithm.UseFullInitialization = true;
+        logicGpAlgorithm.WeightMutationToUse =
+            LogicGpAlgorithm.WeightMutation.Restricted;
+    }
 }

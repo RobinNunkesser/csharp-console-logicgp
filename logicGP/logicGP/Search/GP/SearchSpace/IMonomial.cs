@@ -6,6 +6,6 @@ public interface IMonomial<TCategory> : ICloneable
     float[] Weights { get; set; }
     public float[][] Predictions { get; set; }
     int Size { get; }
-    void RandomizeWeights();
+    void RandomizeWeights(bool restricted);
     void UpdatePredictions();
 }

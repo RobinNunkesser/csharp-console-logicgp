@@ -11,8 +11,8 @@ namespace logicGP.Search.GP;
 
 public interface IGeneticProgram
 {
-    public IMutation[] Mutations { get; set; }
-    public ICrossover[] Crossovers { get; set; }
+    public List<IMutation> Mutations { get; set; }
+    public List<ICrossover> Crossovers { get; set; }
     public IDataView TrainingData { get; set; }
     public IIndividualList Population { get; }
 
