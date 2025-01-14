@@ -24,6 +24,8 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
     public List<string>? OutputColumn { get; set; }
 
+    public float[] CounterWeights { get; set; }
+
     public float[][] Predictions { get; set; }
 
     public int Size => Literals.Count;
@@ -71,34 +73,42 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
         // TODO: This is a hack for quick and dirty weight computation
 
-        if (literalPredictions.Length != Predictions.Length)
-            throw new InvalidOperationException();
-
-        var count = new int[_classes];
-        for (var i = 0; i < Predictions.Length; i++)
-            if (literalPredictions[i])
-            {
-                var index = Labels.IndexOf(OutputColumn[i]);
-                if (index == -1 || index >= _classes)
-                    throw new InvalidOperationException();
-                count[index]++;
-            }
-
-        var weights = count.Select(c => (float)c).ToArray();
-        var sum = weights.Sum();
-        if (sum == 0)
-            sum = 1;
-        for (var j = 0; j < weights.Length; j++)
-            weights[j] /= sum;
-
-        Weights = weights;
+        if (Predictions.Length == OutputColumn.Count)
+            ComputeWeights(literalPredictions);
 
 
         for (var i = 0; i < Predictions.Length; i++)
             if (literalPredictions[i])
                 Predictions[i] = Weights;
             else
-                Predictions[i] = new float[_classes];
+                Predictions[i] = CounterWeights;
+    }
+
+    private void ComputeWeights(bool[] literalPredictions)
+    {
+        var count = new int[_classes];
+        var counterCount = new int[_classes];
+        for (var i = 0; i < Predictions.Length; i++)
+        {
+            var index = Labels.IndexOf(OutputColumn[i]);
+            if (index == -1 || index >= _classes)
+                throw new InvalidOperationException();
+            if (literalPredictions[i])
+                count[index]++;
+            else
+                counterCount[index]++;
+        }
+
+        var weights = count.Select(c => (float)c).ToArray();
+        var counterWeights = counterCount.Select(c => (float)c).ToArray();
+        /*var sum = weights.Sum();
+        if (sum == 0)
+            sum = 1;
+        for (var j = 0; j < weights.Length; j++)
+            weights[j] /= sum;*/
+
+        Weights = weights;
+        CounterWeights = counterWeights;
     }
 
     public override string ToString()
