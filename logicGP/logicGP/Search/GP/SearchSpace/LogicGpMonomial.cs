@@ -105,9 +105,9 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
         if (sum == 0)
             sum = 1;
         for (var j = 0; j < weights.Length; j++)
-            weights[j] /= sum;
+            weights[j] /= sum;*/
 
-        sum = counterWeights.Sum();
+        /*sum = counterWeights.Sum();
         if (sum == 0)
             sum = 1;
         for (var j = 0; j < counterWeights.Length; j++)

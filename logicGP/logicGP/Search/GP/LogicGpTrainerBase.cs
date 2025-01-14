@@ -31,8 +31,9 @@ public abstract class
             // Training
             var individuals =
                 algorithm.Train(fold.TrainSet, Label, foldIndex == 0);
-            // Testing
-            var testMetrics = algorithm.Test(fold.TestSet, individuals);
+            // Validating
+            var validationMetrics =
+                algorithm.Validate(fold.TestSet, individuals);
             // Selecting
             var selection = new BestModelForEachSizeSelection();
             candidates[foldIndex++] = selection.Process(individuals);

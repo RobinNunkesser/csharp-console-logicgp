@@ -27,6 +27,12 @@ public class LogicGpAlgorithm(
     IFitnessFunction fitnessFunction,
     DataManager data)
 {
+    public enum PredictionStrategy
+    {
+        Max,
+        SoftmaxProbability
+    }
+
     public enum WeightMutation
     {
         None,
@@ -39,11 +45,12 @@ public class LogicGpAlgorithm(
     public WeightMutation WeightMutationToUse { get; set; } =
         WeightMutation.None;
 
-    public IMetrics? Test(IDataView testData, IIndividualList individuals)
+    public IMetrics? Validate(IDataView validationData,
+        IIndividualList individuals)
     {
         foreach (var literal in data.Literals)
             literal.GeneratePredictions(
-                testData.GetColumnAsString(literal.Label).ToList());
+                validationData.GetColumnAsString(literal.Label).ToList());
         foreach (var individual in individuals)
         {
             ((LogicGpGenotype)individual.Genotype)
@@ -51,7 +58,7 @@ public class LogicGpAlgorithm(
             individual.Generation = 0;
             var fitnessValue = fitnessFunction.Evaluate(
                 individual,
-                testData);
+                validationData);
             var accuracy = 0.0;
             for (var i = 0; i < fitnessValue.Length - 1; i++)
                 accuracy += fitnessValue[i];
@@ -62,7 +69,7 @@ public class LogicGpAlgorithm(
         return new Metrics();
     }
 
-    public IMetrics? Validate(IDataView validationData)
+    public IMetrics? Test(IDataView testData)
     {
         return new Metrics();
     }
@@ -78,7 +85,7 @@ public class LogicGpAlgorithm(
 
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 1000;
+        generationStoppingCriterion.Limit = 100;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;

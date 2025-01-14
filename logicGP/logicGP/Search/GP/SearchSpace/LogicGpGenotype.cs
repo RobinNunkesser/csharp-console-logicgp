@@ -75,25 +75,43 @@ public class LogicGpGenotype : IGenotype
 
     private void UpdatePredictedClasses()
     {
+        var predictionStrategy =
+            LogicGpAlgorithm.PredictionStrategy.Max;
         _predictedClasses = new string[Predictions.Length];
         for (var i = 0; i < Predictions.Length; i++)
         {
-            var random = new Random();
-            var cumulative = Predictions[i]
-                .Select((value, index) => new { value, index })
-                .Select((x, index) => new
-                {
-                    x.index, cumulative = Predictions[i].Take(index + 1).Sum()
-                })
-                .ToList();
-            var randomValue = random.NextDouble();
-            var index = cumulative.First(x => x.cumulative >= randomValue)
-                .index;
+            var index = predictionStrategy switch
+            {
+                LogicGpAlgorithm.PredictionStrategy.Max => MaxIndex(i),
+                LogicGpAlgorithm.PredictionStrategy.SoftmaxProbability =>
+                    SoftmaxProbabilityIndex(i),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
             _predictedClasses[i] = _data.Labels[index];
-            /*var maxIndex = Array.IndexOf(Predictions[i], Predictions[i].Max());
-            _predictedClasses[i] = _data.Labels[maxIndex];*/
         }
     }
+
+    private int SoftmaxProbabilityIndex(int i)
+    {
+        var random = new Random();
+        var cumulative = Predictions[i]
+            .Select((value, index) => new { value, index })
+            .Select((x, index) => new
+            {
+                x.index, cumulative = Predictions[i].Take(index + 1).Sum()
+            })
+            .ToList();
+        var randomValue = random.NextDouble();
+        return cumulative.First(x => x.cumulative >= randomValue)
+            .index;
+    }
+
+    private int MaxIndex(int i)
+    {
+        return Array.IndexOf(Predictions[i], Predictions[i].Max());
+    }
+
 
     public override string ToString()
     {

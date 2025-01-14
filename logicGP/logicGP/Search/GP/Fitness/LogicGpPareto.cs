@@ -20,7 +20,7 @@ public class LogicGpPareto : IStaticMultiObjectiveFitnessFunction
         var objectives = new double[NumberOfObjectives];
         for (var i = 0; i < predictions.Length; i++)
         {
-            if (predictions[i].Equals(labels[i])) continue;
+            if (!predictions[i].Equals(labels[i])) continue;
             var index = Labels.IndexOf(labels[i]);
             objectives[index]++;
         }

@@ -19,6 +19,7 @@ public class LogicGpFlrwTransformer(
         for (var index = 0; index < labelColumn.Count; index++)
         {
             var predictedClass = predictedClasses[index];
+
             predictionData.Add(new LogicGpFlrwModelOutput
             {
                 Y = labelColumn[index],
