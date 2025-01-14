@@ -72,13 +72,13 @@ public class LogicGpAlgorithm(
         bool firstTraining = true)
     {
         if (firstTraining)
-            data.Initialize(trainData, labelColumnName);
+            PrepareForFirstTraining(trainData, labelColumnName);
         else
-            UpdateDataManager(trainData);
+            PrepareForRetraining(trainData, labelColumnName);
 
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 10;
+        generationStoppingCriterion.Limit = 1000;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;
@@ -114,7 +114,15 @@ public class LogicGpAlgorithm(
         return gp.Run();
     }
 
-    private void UpdateDataManager(IDataView trainData)
+    private void PrepareForFirstTraining(IDataView trainData,
+        string labelColumnName)
+    {
+        data.Initialize(trainData, labelColumnName);
+    }
+
+
+    private void PrepareForRetraining(IDataView trainData,
+        string labelColumnName)
     {
         foreach (var literal in data.Literals)
             literal.GeneratePredictions(

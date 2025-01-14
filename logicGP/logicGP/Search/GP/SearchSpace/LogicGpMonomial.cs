@@ -121,7 +121,7 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
     {
         var sb = new StringBuilder();
         sb.Append('(');
-        sb.Append(string.Join(", ", Weights));
+        sb.Append(string.Join(",", Weights));
         sb.Append(')');
         sb.Append(string.Join("", Literals));
         return sb.ToString();

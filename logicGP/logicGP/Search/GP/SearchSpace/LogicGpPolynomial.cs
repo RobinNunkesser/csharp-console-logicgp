@@ -53,7 +53,8 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         for (var i = 0; i < Predictions.Length; i++)
         {
             Predictions[i] = Monomials
-                .Select(monomial => monomial.Predictions[i]).Aggregate((a, b) =>
+                .Select(monomial => monomial.Predictions[i].ToArray())
+                .Aggregate((a, b) =>
                     a.Zip(b, (c, d) => c + d).ToArray());
             var sum = 0.0f;
             for (var j = 0; j < Predictions[i].Length; j++)

@@ -20,6 +20,7 @@ public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
     {
         var result = new Population();
         var classes = data.Labels.Distinct().Count();
+
         foreach (var polynomial in data.Literals
                      .Select(
                          literal =>
