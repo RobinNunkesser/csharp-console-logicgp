@@ -27,6 +27,20 @@ public class Individual : IIndividual
         if (fitness == null || otherFitness == null)
             throw new InvalidOperationException("Fitness not set");
         //if (otherIndividual.Size > 10) return true;
+        if (Size < otherIndividual.Size)
+        {
+            var accumulatedFitness = 0.0;
+            var accumulatedOtherFitness = 0.0;
+            for (var i = 0; i < fitness.Length - 1; i++)
+            {
+                accumulatedFitness += fitness[i];
+                accumulatedOtherFitness += otherFitness[i];
+            }
+
+            if (accumulatedOtherFitness / accumulatedFitness < 1.01)
+                return true;
+        }
+
         return !fitness.Where((t, i) => t < otherFitness[i]).Any();
     }
 

@@ -14,7 +14,7 @@ public sealed class SNPTests
     {
         var mlContext = new MLContext();
         _data = mlContext.Data.LoadFromTextFile<SNPModelInput>(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/laumain_s500_o15_p0225_n44/SNPglm_2.csv",
+            "/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/standard/SNPglm_2.csv",
             ',', true);
     }
 
@@ -37,7 +37,7 @@ public sealed class SNPTests
         var testResults = mlModel.Transform(_data);
         var trueValues = testResults.GetColumn<uint>("y").ToArray();
         var predictedValues = testResults.GetColumn<float[]>("Score")
-            .Select(score => score[0] >= 0.5 ? 0 : 1).ToArray();
+            .Select(score => score[0] >= 0.5 ? 1 : 0).ToArray();
         var mcr = 0F;
 
         for (var i = 0; i < predictedValues.Length; i++)
