@@ -26,11 +26,17 @@ public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
                              new LogicGpMonomial<string>([literal], classes,
                                  OutputColumn, data.Labels))
                      .Select(monomial =>
-                         new LogicGpPolynomial<string>([monomial])))
-            result.Add(new Individual(
+                         new LogicGpPolynomial<string>([monomial], classes,
+                             OutputColumn, data.Labels)))
+        {
+            var newIndividual = new Individual(
                 new LogicGpGenotype(polynomial, data, OutputColumn,
                     data.Labels),
-                null));
+                null);
+            ((LogicGpGenotype)newIndividual.Genotype)
+                .UpdatePredictionsRecursively();
+            result.Add(newIndividual);
+        }
 
         return result;
     }

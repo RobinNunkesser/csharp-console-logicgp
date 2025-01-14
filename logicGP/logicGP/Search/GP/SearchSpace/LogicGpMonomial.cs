@@ -95,8 +95,8 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
                 throw new InvalidOperationException();
             if (literalPredictions[i])
                 count[index]++;
-            else
-                counterCount[index]++;
+            // else
+            //counterCount[index]++;
         }
 
         var weights = count.Select(c => (float)c).ToArray();
@@ -105,7 +105,13 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
         if (sum == 0)
             sum = 1;
         for (var j = 0; j < weights.Length; j++)
-            weights[j] /= sum;*/
+            weights[j] /= sum;
+
+        sum = counterWeights.Sum();
+        if (sum == 0)
+            sum = 1;
+        for (var j = 0; j < counterWeights.Length; j++)
+            counterWeights[j] /= sum;*/
 
         Weights = weights;
         CounterWeights = counterWeights;
@@ -114,9 +120,9 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append("(");
+        sb.Append('(');
         sb.Append(string.Join(", ", Weights));
-        sb.Append(")");
+        sb.Append(')');
         sb.Append(string.Join("", Literals));
         return sb.ToString();
     }

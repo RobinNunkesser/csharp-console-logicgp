@@ -9,6 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Italbytz.Adapters.Algorithms.AI" Version="9.0.0"/>
+        <PackageReference Include="Italbytz.Ports.Algorithms.AI" Version="9.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
         <PackageReference Include="Microsoft.ML" Version="4.0.0"/>
     </ItemGroup>

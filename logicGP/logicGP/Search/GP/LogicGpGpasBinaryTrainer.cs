@@ -20,7 +20,7 @@ public class LogicGpGpasBinaryTrainer(
     protected override void ParameterizeAlgorithm(
         LogicGpAlgorithm logicGpAlgorithm)
     {
-        logicGpAlgorithm.UseFullInitialization = false;
+        logicGpAlgorithm.UseFullInitialization = true;
         logicGpAlgorithm.WeightMutationToUse =
             LogicGpAlgorithm.WeightMutation.None;
     }

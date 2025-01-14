@@ -1,7 +1,6 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Microsoft.ML;
 
@@ -24,49 +23,22 @@ public abstract class
         var cvResults = mlContext.Data.CrossValidationSplit(input);
         var candidates = new IIndividualList[k];
         var foldIndex = 0;
-        data.Initialize(cvResults[0].TrainSet, Label);
+
         ParameterizeAlgorithm(algorithm);
 
         foreach (var fold in cvResults)
         {
             // Training
-            if (foldIndex > 0)
-                foreach (var literal in data.Literals)
-                    literal.GeneratePredictions(
-                        fold.TrainSet.GetColumnAsString(literal.Label)
-                            .ToList());
-            var individuals = algorithm.Fit(fold.TrainSet, Label);
+            var individuals =
+                algorithm.Train(fold.TrainSet, Label, foldIndex == 0);
             // Testing
-            foreach (var literal in data.Literals)
-                literal.GeneratePredictions(
-                    fold.TestSet.GetColumnAsString(literal.Label).ToList());
-            var fitness = new LogicGpPareto
-            {
-                LabelColumnName = Label,
-                Labels = data.Labels
-            };
-            foreach (var individual in individuals)
-            {
-                ((LogicGpGenotype)individual.Genotype)
-                    .UpdatePredictionsRecursively();
-                individual.Generation = 0;
-                var fitnessValue = ((IFitnessFunction)fitness).Evaluate(
-                    individual,
-                    fold.TestSet);
-                var accuracy = 0.0;
-                for (var i = 0; i < fitnessValue.Length - 1; i++)
-                    accuracy += fitnessValue[i];
-                individual.LatestKnownFitness =
-                    [accuracy, fitnessValue[^1]];
-                //individual.LatestKnownFitness = fitnessValue;
-            }
-
+            var testMetrics = algorithm.Test(fold.TestSet, individuals);
             // Selecting
-            //candidates[foldIndex++] = individuals;
             var selection = new BestModelForEachSizeSelection();
             candidates[foldIndex++] = selection.Process(individuals);
         }
 
+        // Final Selection
         var bestSelection = new FinalModelSelection();
         var allCandidates = candidates.SelectMany(i => i).ToList();
         var candidatePopulation = new Population();

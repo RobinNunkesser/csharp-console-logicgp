@@ -21,7 +21,9 @@ public class LogicGpGenotype : IGenotype
         var monomial =
             new LogicGpMonomial<string>([literal], classes, OutputColumn,
                 Labels);
-        _polynomial = new LogicGpPolynomial<string>([monomial]);
+        _polynomial = new LogicGpPolynomial<string>([monomial], classes,
+            OutputColumn,
+            Labels);
     }
 
     public LogicGpGenotype(IPolynomial<string> polynomial,
@@ -76,8 +78,20 @@ public class LogicGpGenotype : IGenotype
         _predictedClasses = new string[Predictions.Length];
         for (var i = 0; i < Predictions.Length; i++)
         {
-            var maxIndex = Array.IndexOf(Predictions[i], Predictions[i].Max());
-            _predictedClasses[i] = _data.Labels[maxIndex];
+            var random = new Random();
+            var cumulative = Predictions[i]
+                .Select((value, index) => new { value, index })
+                .Select((x, index) => new
+                {
+                    x.index, cumulative = Predictions[i].Take(index + 1).Sum()
+                })
+                .ToList();
+            var randomValue = random.NextDouble();
+            var index = cumulative.First(x => x.cumulative >= randomValue)
+                .index;
+            _predictedClasses[i] = _data.Labels[index];
+            /*var maxIndex = Array.IndexOf(Predictions[i], Predictions[i].Max());
+            _predictedClasses[i] = _data.Labels[maxIndex];*/
         }
     }
 
