@@ -49,7 +49,7 @@ public sealed class SNPSimulation
             var testResults = mlModel.Transform(testData);
             var trueValues = testResults.GetColumn<uint>("y").ToArray();
             var predictedValues = testResults.GetColumn<float[]>("Score")
-                .Select(score => score[0] >= 0.5 ? 0 : 1).ToArray();
+                .Select(score => score[0] >= 0.5 ? 1 : 0).ToArray();
             var mcr = 0F;
 
             for (var i = 0; i < predictedValues.Length; i++)
