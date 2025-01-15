@@ -95,26 +95,34 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
                 throw new InvalidOperationException();
             if (literalPredictions[i])
                 count[index]++;
-            // else
-            //counterCount[index]++;
+            else
+                counterCount[index]++;
         }
 
-        var weights = count.Select(c => (float)c).ToArray();
-        var counterWeights = counterCount.Select(c => (float)c).ToArray();
-        var sum = weights.Sum();
+        var inDistribution = count.Select(c => (float)c).ToArray();
+        var outDistribution = counterCount.Select(c => (float)c).ToArray();
+        var sum = inDistribution.Sum();
         if (sum == 0)
             sum = 1;
-        for (var j = 0; j < weights.Length; j++)
-            weights[j] /= sum;
+        for (var j = 0; j < inDistribution.Length; j++)
+            inDistribution[j] /= sum;
 
-        /*sum = counterWeights.Sum();
+        sum = outDistribution.Sum();
         if (sum == 0)
             sum = 1;
-        for (var j = 0; j < counterWeights.Length; j++)
-            counterWeights[j] /= sum;*/
+        for (var j = 0; j < outDistribution.Length; j++)
+            outDistribution[j] /= sum;
 
-        Weights = weights;
-        CounterWeights = counterWeights;
+        var newWeights = new float[_classes];
+        for (var j = 0; j < newWeights.Length; j++)
+            newWeights[j] = inDistribution[j] / outDistribution[j];
+
+        var newCounterWeights = new float[_classes];
+        for (var j = 0; j < newCounterWeights.Length; j++)
+            newCounterWeights[j] = outDistribution[j] / inDistribution[j];
+
+        Weights = newWeights;
+        CounterWeights = new float[_classes]; //newCounterWeights;
     }
 
     public override string ToString()

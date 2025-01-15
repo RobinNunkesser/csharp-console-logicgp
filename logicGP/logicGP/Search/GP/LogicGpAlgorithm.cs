@@ -46,8 +46,14 @@ public class LogicGpAlgorithm(
         WeightMutation.None;
 
     public IMetrics? Validate(IDataView validationData,
-        IIndividualList individuals)
+        IIndividualList individuals,
+        string labelColumnName = DefaultColumnNames.Label)
     {
+        var labelColumn = validationData.GetColumnAsString(labelColumnName)
+            .ToList();
+        var labelDistribution = new float[data.Labels.Count];
+        foreach (var label in labelColumn)
+            labelDistribution[data.Labels.IndexOf(label)]++;
         foreach (var literal in data.Literals)
             literal.GeneratePredictions(
                 validationData.GetColumnAsString(literal.Label).ToList());
@@ -59,11 +65,18 @@ public class LogicGpAlgorithm(
             var fitnessValue = fitnessFunction.Evaluate(
                 individual,
                 validationData);
-            var accuracy = 0.0;
+
+            var macroAccuracy = 0.0;
             for (var i = 0; i < fitnessValue.Length - 1; i++)
-                accuracy += fitnessValue[i];
+                macroAccuracy += fitnessValue[i] / labelDistribution[i];
+
+            macroAccuracy /= fitnessValue.Length - 1;
+
+            //var accuracy = 0.0;
+            //for (var i = 0; i < fitnessValue.Length - 1; i++)
+            //    accuracy += fitnessValue[i];
             individual.LatestKnownFitness =
-                [accuracy, fitnessValue[^1]];
+                [macroAccuracy, fitnessValue[^1]];
         }
 
         return new Metrics();
@@ -75,8 +88,9 @@ public class LogicGpAlgorithm(
     }
 
     public IIndividualList Train(IDataView trainData,
-        string labelColumnName = DefaultColumnNames.Label,
-        bool firstTraining = true)
+        bool firstTraining = true,
+        string labelColumnName = DefaultColumnNames.Label
+    )
     {
         if (firstTraining)
             PrepareForFirstTraining(trainData, labelColumnName);

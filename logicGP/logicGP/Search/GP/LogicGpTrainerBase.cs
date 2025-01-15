@@ -30,10 +30,10 @@ public abstract class
         {
             // Training
             var individuals =
-                algorithm.Train(fold.TrainSet, Label, foldIndex == 0);
+                algorithm.Train(fold.TrainSet, foldIndex == 0, Label);
             // Validating
             var validationMetrics =
-                algorithm.Validate(fold.TestSet, individuals);
+                algorithm.Validate(fold.TestSet, individuals, Label);
             // Selecting
             var selection = new BestModelForEachSizeSelection();
             candidates[foldIndex++] = selection.Process(individuals);
