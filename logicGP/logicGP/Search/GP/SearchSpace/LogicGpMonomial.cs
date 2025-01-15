@@ -101,11 +101,11 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
         var weights = count.Select(c => (float)c).ToArray();
         var counterWeights = counterCount.Select(c => (float)c).ToArray();
-        /*var sum = weights.Sum();
+        var sum = weights.Sum();
         if (sum == 0)
             sum = 1;
         for (var j = 0; j < weights.Length; j++)
-            weights[j] /= sum;*/
+            weights[j] /= sum;
 
         /*sum = counterWeights.Sum();
         if (sum == 0)

@@ -17,9 +17,9 @@ public sealed class SNPSimulation
         //const string folder = "laumain_s1000_o15_p0225_n44";
         //const string folder = "lauinteraction_s1000_o15_p0225_n45_i14";
         using var logWriter = new StreamWriter(
-            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_test_log.txt");
+            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_test_norm_log.txt");
         using var writer = new StreamWriter(
-            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_test.csv");
+            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_test_norm.csv");
         writer.WriteLine("\"x\"");
         var mlContext = new MLContext();
         var services = new ServiceCollection().AddServices();
