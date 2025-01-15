@@ -119,10 +119,11 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
         var newCounterWeights = new float[_classes];
         for (var j = 0; j < newCounterWeights.Length; j++)
-            newCounterWeights[j] = outDistribution[j] / inDistribution[j];
+            newCounterWeights[j] = 0;
+        //-newWeights[j]; //outDistribution[j] / inDistribution[j];
 
         Weights = newWeights;
-        CounterWeights = new float[_classes]; //newCounterWeights;
+        CounterWeights = newCounterWeights;
     }
 
     public override string ToString()

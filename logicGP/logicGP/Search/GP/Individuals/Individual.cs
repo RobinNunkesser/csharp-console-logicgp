@@ -26,7 +26,7 @@ public class Individual : IIndividual
         var otherFitness = otherIndividual.LatestKnownFitness;
         if (fitness == null || otherFitness == null)
             throw new InvalidOperationException("Fitness not set");
-        if (otherIndividual.Size > 10) return true;
+        //if (otherIndividual.Size > 10) return true;
         /*if (Size < otherIndividual.Size)
         {
             var accumulatedFitness = 0.0;
