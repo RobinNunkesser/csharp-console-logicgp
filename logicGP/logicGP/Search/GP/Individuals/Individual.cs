@@ -26,8 +26,8 @@ public class Individual : IIndividual
         var otherFitness = otherIndividual.LatestKnownFitness;
         if (fitness == null || otherFitness == null)
             throw new InvalidOperationException("Fitness not set");
-        //if (otherIndividual.Size > 10) return true;
-        if (Size < otherIndividual.Size)
+        if (otherIndividual.Size > 10) return true;
+        /*if (Size < otherIndividual.Size)
         {
             var accumulatedFitness = 0.0;
             var accumulatedOtherFitness = 0.0;
@@ -39,7 +39,7 @@ public class Individual : IIndividual
 
             if (accumulatedOtherFitness / accumulatedFitness < 1.01)
                 return true;
-        }
+        }*/
 
         return !fitness.Where((t, i) => t < otherFitness[i]).Any();
     }

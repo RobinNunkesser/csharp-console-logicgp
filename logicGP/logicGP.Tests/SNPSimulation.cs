@@ -12,9 +12,9 @@ public sealed class SNPSimulation
     [TestMethod]
     public void GPASSimulation()
     {
-        //const string folder = "standard";
+        const string folder = "standard";
         //const string folder = "laumain_s1000_o15_p0225_n14";
-        const string folder = "laumain_s1000_o15_p0225_n44";
+        //const string folder = "laumain_s1000_o15_p0225_n44";
         //const string folder = "lauinteraction_s1000_o15_p0225_n45_i14";
         using var logWriter = new StreamWriter(
             $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_test_log.txt");

@@ -1,4 +1,5 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -26,21 +27,38 @@ public class CarEvaluationTests
         var trainer =
             serviceProvider.GetRequiredService<LogicGpFlrwMulticlassTrainer>();
         trainer.Label = "class";
+
+        var columnData = _data.GetColumnAsString(trainer.Label).ToList();
+        var uniqueValues =
+            new HashSet<string>(
+                columnData);
+        var labels = uniqueValues.OrderBy(c => c).ToList();
+
         var mlModel = trainer.Fit(_data);
         Assert.IsNotNull(mlModel);
         var testResults = mlModel.Transform(_data);
         var trueValues = testResults.GetColumn<string>("y").ToArray();
         var predictedValues =
             testResults.GetColumn<string>("PredictedLabel").ToList();
-        var mcr = 0F;
+
+        var accuracies = new float[labels.Count];
+        var counts = new int[labels.Count];
 
         for (var i = 0; i < predictedValues.Count; i++)
-            if (predictedValues[i] != trueValues[i])
-                mcr++;
+        {
+            counts[labels.IndexOf(trueValues[i])]++;
+            if (predictedValues[i] == trueValues[i])
+                accuracies[labels.IndexOf(trueValues[i])]++;
+        }
 
-        mcr /= predictedValues.Count;
-        var acc = 1.0 - mcr;
-        Console.WriteLine($"{acc}");
+        for (var i = 0; i < labels.Count; i++)
+        {
+            accuracies[i] /= counts[i];
+            Console.WriteLine($"{labels[i]}: {accuracies[i]}");
+        }
+
+        var macroAccuracy = accuracies.Sum() / labels.Count;
+        Console.WriteLine($"Macro Accuracy: {macroAccuracy}");
     }
 
     [TestMethod]
@@ -69,6 +87,49 @@ public class CarEvaluationTests
             {
                 mlContext.Data.SaveAsText(testData, testDataStream, ',');
             }
+        }
+    }
+
+    [TestMethod]
+    public void ParseMLRun()
+    {
+        var filePath =
+            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/carevaluation/mlnettraining.csv";
+        using var reader = new StreamReader(filePath);
+        var bestMacroaccuracy = new Dictionary<string,float>();
+        while (!reader.EndOfStream)
+        {
+            var line = reader.ReadLine();
+            var elements = line.Split(' ',
+                StringSplitOptions.RemoveEmptyEntries |
+                StringSplitOptions.TrimEntries);
+            var nextIsAccuracy = false;
+            var currentAlgorithm = "";
+            foreach (var element in elements)
+            {
+                if (element.Contains("|")) continue;
+                var parsedValue = 0.0f;
+                if (float.TryParse(element, out parsedValue))
+                {
+                    if (nextIsAccuracy)
+                    {
+                        nextIsAccuracy = false;
+                        if (bestMacroaccuracy[currentAlgorithm] < parsedValue)
+                            bestMacroaccuracy[currentAlgorithm] = parsedValue;
+                    }
+
+                    continue;
+                }
+
+                nextIsAccuracy = true;
+                currentAlgorithm = element;
+                if (!bestMacroaccuracy.ContainsKey(element)) bestMacroaccuracy[element] = 0.0f;
+            }
+        }
+
+        foreach (var entry in bestMacroaccuracy)
+        {
+            Console.WriteLine($"{entry.Key}: {entry.Value}");
         }
     }
 }
