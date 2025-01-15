@@ -33,6 +33,13 @@ public class LogicGpAlgorithm(
         SoftmaxProbability
     }
 
+    public enum UsedAccuracy
+    {
+        Macro,
+        Micro
+    }
+
+
     public enum WeightMutation
     {
         None,
@@ -66,17 +73,21 @@ public class LogicGpAlgorithm(
                 individual,
                 validationData);
 
-            var macroAccuracy = 0.0;
+            var usedAccuracy = UsedAccuracy.Micro;
+            var accuracy = 0.0;
             for (var i = 0; i < fitnessValue.Length - 1; i++)
-                macroAccuracy += fitnessValue[i] / labelDistribution[i];
+                if (usedAccuracy == UsedAccuracy.Micro)
+                    accuracy += fitnessValue[i];
+                else
+                    accuracy += fitnessValue[i] / labelDistribution[i];
 
-            macroAccuracy /= fitnessValue.Length - 1;
+            accuracy /= fitnessValue.Length - 1;
 
             //var accuracy = 0.0;
             //for (var i = 0; i < fitnessValue.Length - 1; i++)
             //    accuracy += fitnessValue[i];
             individual.LatestKnownFitness =
-                [macroAccuracy, fitnessValue[^1]];
+                [accuracy, fitnessValue[^1]];
         }
 
         return new Metrics();
