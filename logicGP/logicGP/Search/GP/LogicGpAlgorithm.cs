@@ -88,7 +88,9 @@ public class LogicGpAlgorithm(
                 if (UsedAccuracy == Accuracies.Micro)
                     accuracy += fitnessValue[i];
                 else
-                    accuracy += fitnessValue[i] / labelDistribution[i];
+                    accuracy += labelDistribution[i] == 0
+                        ? fitnessValue[i] == 0 ? 1.0 : 0.0
+                        : fitnessValue[i] / labelDistribution[i];
 
             accuracy /= fitnessValue.Length - 1;
 

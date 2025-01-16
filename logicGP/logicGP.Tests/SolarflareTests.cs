@@ -7,15 +7,15 @@ using Microsoft.ML.Data;
 namespace logicGP.Tests;
 
 [TestClass]
-public class NationalPollTests
+public class SolarflareTests
 {
     private readonly IDataView _data;
 
-    public NationalPollTests()
+    public SolarflareTests()
     {
         var mlContext = new MLContext();
-        _data = mlContext.Data.LoadFromTextFile<NationalPollModelInput>(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/nationalpollnpha/national_poll_on_healthy_aging_npha.csv",
+        _data = mlContext.Data.LoadFromTextFile<SolarflareModelInput>(
+            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/solarflare/solarflare_1.csv",
             ',', true);
     }
 
@@ -27,7 +27,7 @@ public class NationalPollTests
         var trainer =
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
-        trainer.Label = "Number_of_Doctors_Visited";
+        trainer.Label = "flares";
 
         var columnData = _data.GetColumnAsString(trainer.Label).ToList();
         var uniqueValues =

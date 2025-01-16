@@ -7,15 +7,15 @@ using Microsoft.ML.Data;
 namespace logicGP.Tests;
 
 [TestClass]
-public class NationalPollTests
+public class BalanceScaleTests
 {
     private readonly IDataView _data;
 
-    public NationalPollTests()
+    public BalanceScaleTests()
     {
         var mlContext = new MLContext();
-        _data = mlContext.Data.LoadFromTextFile<NationalPollModelInput>(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/nationalpollnpha/national_poll_on_healthy_aging_npha.csv",
+        _data = mlContext.Data.LoadFromTextFile<BalanceScaleModelInput>(
+            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/balancescale/balancescale.csv",
             ',', true);
     }
 
@@ -27,7 +27,7 @@ public class NationalPollTests
         var trainer =
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
-        trainer.Label = "Number_of_Doctors_Visited";
+        trainer.Label = "class";
 
         var columnData = _data.GetColumnAsString(trainer.Label).ToList();
         var uniqueValues =
