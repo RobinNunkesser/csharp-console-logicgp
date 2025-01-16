@@ -27,16 +27,23 @@ public class LogicGpAlgorithm(
     IFitnessFunction fitnessFunction,
     DataManager data)
 {
+    public enum Accuracies
+    {
+        Macro,
+        Micro
+    }
+
     public enum PredictionStrategy
     {
         Max,
         SoftmaxProbability
     }
 
-    public enum UsedAccuracy
+    public enum Weighting
     {
-        Macro,
-        Micro
+        Fixed,
+        Computed,
+        Mutated
     }
 
 
@@ -46,6 +53,9 @@ public class LogicGpAlgorithm(
         Restricted,
         Unrestricted
     }
+
+    public Accuracies UsedAccuracy { get; set; } = Accuracies.Micro;
+    public Weighting UsedWeighting { get; set; } = Weighting.Computed;
 
     public bool UseFullInitialization { get; set; } = false;
 
@@ -73,10 +83,9 @@ public class LogicGpAlgorithm(
                 individual,
                 validationData);
 
-            var usedAccuracy = UsedAccuracy.Micro;
             var accuracy = 0.0;
             for (var i = 0; i < fitnessValue.Length - 1; i++)
-                if (usedAccuracy == UsedAccuracy.Micro)
+                if (UsedAccuracy == Accuracies.Micro)
                     accuracy += fitnessValue[i];
                 else
                     accuracy += fitnessValue[i] / labelDistribution[i];

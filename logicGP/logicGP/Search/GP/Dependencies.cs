@@ -20,7 +20,8 @@ public static class Dependencies
                 GeneticProgram>();
         services.AddScoped<LogicGpAlgorithm>();
         services.AddScoped<LogicGpGpasBinaryTrainer>();
-        services.AddScoped<LogicGpFlrwMulticlassTrainer>();
+        services.AddScoped<LogicGpFlrwMacroMulticlassTrainer>();
+        services.AddScoped<LogicGpFlrwMicroMulticlassTrainer>();
         services.AddScoped<RandomInitialization>();
         services.AddScoped<CompleteInitialization>();
         services.AddScoped<GenerationStoppingCriterion>();

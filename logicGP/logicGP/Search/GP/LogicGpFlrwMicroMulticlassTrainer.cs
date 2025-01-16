@@ -4,7 +4,7 @@ using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class LogicGpGpasBinaryTrainer(
+public class LogicGpFlrwMicroMulticlassTrainer(
     LogicGpAlgorithm algorithm,
     DataManager data)
     : LogicGpTrainerBase<ITransformer>(algorithm, data)
@@ -13,15 +13,15 @@ public class LogicGpGpasBinaryTrainer(
         IIndividual chosenIndividual,
         DataManager dataManager)
     {
-        return new LogicGpGpasTransformer(
+        return new LogicGpFlrwTransformer(
             chosenIndividual, data);
     }
 
     protected override void ParameterizeAlgorithm(
         LogicGpAlgorithm logicGpAlgorithm)
     {
-        logicGpAlgorithm.UseFullInitialization = false;
-        logicGpAlgorithm.UsedWeighting = LogicGpAlgorithm.Weighting.Fixed;
+        logicGpAlgorithm.UseFullInitialization = true;
+        logicGpAlgorithm.UsedWeighting = LogicGpAlgorithm.Weighting.Computed;
         logicGpAlgorithm.WeightMutationToUse =
             LogicGpAlgorithm.WeightMutation.None;
         logicGpAlgorithm.UsedAccuracy = LogicGpAlgorithm.Accuracies.Micro;

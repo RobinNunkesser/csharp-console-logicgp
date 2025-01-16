@@ -4,7 +4,7 @@ using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class LogicGpFlrwMulticlassTrainer(
+public class LogicGpFlrwMacroMulticlassTrainer(
     LogicGpAlgorithm algorithm,
     DataManager data)
     : LogicGpTrainerBase<ITransformer>(algorithm, data)
@@ -21,7 +21,9 @@ public class LogicGpFlrwMulticlassTrainer(
         LogicGpAlgorithm logicGpAlgorithm)
     {
         logicGpAlgorithm.UseFullInitialization = true;
+        logicGpAlgorithm.UsedWeighting = LogicGpAlgorithm.Weighting.Computed;
         logicGpAlgorithm.WeightMutationToUse =
             LogicGpAlgorithm.WeightMutation.None;
+        logicGpAlgorithm.UsedAccuracy = LogicGpAlgorithm.Accuracies.Macro;
     }
 }

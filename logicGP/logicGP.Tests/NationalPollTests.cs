@@ -7,15 +7,15 @@ using Microsoft.ML.Data;
 namespace logicGP.Tests;
 
 [TestClass]
-public class CarEvaluationTests
+public class NationalPollTests
 {
     private readonly IDataView _data;
 
-    public CarEvaluationTests()
+    public NationalPollTests()
     {
         var mlContext = new MLContext();
-        _data = mlContext.Data.LoadFromTextFile<CarEvaluationModelInput>(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/carevaluation/car_evaluation_strings.csv",
+        _data = mlContext.Data.LoadFromTextFile<NationalPollModelInput>(
+            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/nationalpollnpha/national_poll_on_healthy_aging_npha.csv",
             ',', true);
     }
 
@@ -27,7 +27,7 @@ public class CarEvaluationTests
         var trainer =
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
-        trainer.Label = "class";
+        trainer.Label = "Number_of_Doctors_Visited";
 
         var columnData = _data.GetColumnAsString(trainer.Label).ToList();
         var uniqueValues =
@@ -95,7 +95,7 @@ public class CarEvaluationTests
     public void ParseMLRun()
     {
         var filePath =
-            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/carevaluation/mlnettraining.csv";
+            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/nationalpollnpha/mlnettraining.csv";
         using var reader = new StreamReader(filePath);
         var bestMacroaccuracy = new Dictionary<string, float>();
         while (!reader.EndOfStream)

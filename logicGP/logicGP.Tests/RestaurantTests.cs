@@ -24,7 +24,8 @@ public class RestaurantTests
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
         var trainer =
-            serviceProvider.GetRequiredService<LogicGpFlrwMulticlassTrainer>();
+            serviceProvider
+                .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
         trainer.Label = "will_wait";
         var mlModel = trainer.Fit(_data);
         Assert.IsNotNull(mlModel);
