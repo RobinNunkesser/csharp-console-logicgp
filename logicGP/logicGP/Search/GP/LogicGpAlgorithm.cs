@@ -121,7 +121,7 @@ public class LogicGpAlgorithm(
 
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 10000;
+        generationStoppingCriterion.Limit = 5;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;

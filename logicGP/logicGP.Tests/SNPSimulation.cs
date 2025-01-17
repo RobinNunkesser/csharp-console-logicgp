@@ -15,8 +15,8 @@ public sealed class SNPSimulation
         //const string folder = "standard";
         //const string folder = "laumain_s1000_o15_p0225_n44";
         //const string folder = "lauinteraction_s1000_o15_p0225_n45_i14";
-        const string folder = "standard_mac";
-        //const string folder = "laumain_s1000_o15_p0225_n44_mac";
+        //const string folder = "standard_mac";
+        const string folder = "laumain_s1000_o15_p0225_n44_mac";
         //const string folder = "lauinteraction_s1000_o15_p0225_n45_i14_mac";
         var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         using var logWriter = new StreamWriter(

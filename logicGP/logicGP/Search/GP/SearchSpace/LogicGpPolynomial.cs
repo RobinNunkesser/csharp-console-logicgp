@@ -88,6 +88,8 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
             weights[j] /= sum;
 
         Weights = weights;
+
+        Weights = [1.0f, 0.0f];
     }
 
     public override string ToString()

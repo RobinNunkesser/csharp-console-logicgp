@@ -124,6 +124,8 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
         Weights = newWeights;
         CounterWeights = newCounterWeights;
+
+        Weights = [0.0f, 2.0f];
     }
 
     public override string ToString()
