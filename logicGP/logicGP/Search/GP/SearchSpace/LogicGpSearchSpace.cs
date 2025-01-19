@@ -9,11 +9,13 @@ public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
     : ISearchSpace
 {
     public List<string>? OutputColumn { get; set; }
+    public LogicGpAlgorithm.Weighting? UsedWeighting { get; set; }
 
     public IGenotype GetRandomGenotype()
     {
         var classes = data.Labels.Distinct().Count();
-        return new LogicGpGenotype(classes, data, OutputColumn, data.Labels);
+        return new LogicGpGenotype(classes, data, OutputColumn, data.Labels,
+            UsedWeighting);
     }
 
     public IIndividualList GetAStartingPopulation()
@@ -32,7 +34,7 @@ public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
         {
             var newIndividual = new Individual(
                 new LogicGpGenotype(polynomial, data, OutputColumn,
-                    data.Labels),
+                    data.Labels, UsedWeighting),
                 null);
             ((LogicGpGenotype)newIndividual.Genotype)
                 .UpdatePredictionsRecursively();

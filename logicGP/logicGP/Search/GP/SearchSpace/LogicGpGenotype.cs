@@ -8,15 +8,18 @@ public class LogicGpGenotype : IGenotype
     private readonly DataManager _data;
     private readonly IPolynomial<string> _polynomial;
     private string[]? _predictedClasses;
+    private readonly LogicGpAlgorithm.Weighting _usedWeighting;
 
     public LogicGpGenotype(int classes, DataManager data,
-        List<string>? outputColumn, List<string> labels)
+        List<string>? outputColumn, List<string> labels,
+        LogicGpAlgorithm.Weighting? usedWeighting)
     {
         ArgumentNullException.ThrowIfNull(outputColumn);
         ArgumentNullException.ThrowIfNull(labels);
         Labels = labels;
         OutputColumn = outputColumn;
         _data = data;
+        _usedWeighting = usedWeighting ?? LogicGpAlgorithm.Weighting.Computed;
         var literal = data.GetRandomLiteral();
         var monomial =
             new LogicGpMonomial<string>([literal], classes, OutputColumn,
@@ -28,7 +31,8 @@ public class LogicGpGenotype : IGenotype
 
     public LogicGpGenotype(IPolynomial<string> polynomial,
         DataManager data,
-        List<string>? outputColumn, List<string> labels)
+        List<string>? outputColumn, List<string> labels,
+        LogicGpAlgorithm.Weighting? usedWeighting)
     {
         ArgumentNullException.ThrowIfNull(outputColumn);
         ArgumentNullException.ThrowIfNull(labels);
@@ -36,6 +40,7 @@ public class LogicGpGenotype : IGenotype
         _polynomial = polynomial;
         OutputColumn = outputColumn;
         Labels = labels;
+        _usedWeighting = usedWeighting ?? LogicGpAlgorithm.Weighting.Computed;
     }
 
     public List<string> Labels { get; set; }
@@ -70,7 +75,7 @@ public class LogicGpGenotype : IGenotype
     {
         return new LogicGpGenotype(
             (IPolynomial<string>)_polynomial.Clone(),
-            _data, OutputColumn, Labels);
+            _data, OutputColumn, Labels, _usedWeighting);
     }
 
     private void UpdatePredictedClasses()

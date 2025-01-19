@@ -71,9 +71,7 @@ public class LogicGpAlgorithm(
         var labelDistribution = new float[data.Labels.Count];
         foreach (var label in labelColumn)
             labelDistribution[data.Labels.IndexOf(label)]++;
-        foreach (var literal in data.Literals)
-            literal.GeneratePredictions(
-                validationData.GetColumnAsString(literal.Label).ToList());
+        AdaptLiterals(validationData);
         foreach (var individual in individuals)
         {
             ((LogicGpGenotype)individual.Genotype)
@@ -121,7 +119,7 @@ public class LogicGpAlgorithm(
 
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 5;
+        generationStoppingCriterion.Limit = 3;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;
@@ -152,6 +150,7 @@ public class LogicGpAlgorithm(
         gp.FitnessFunction = fitnessFunction;
         searchSpace.OutputColumn =
             trainData.GetColumnAsString(labelColumnName).ToList();
+        searchSpace.UsedWeighting = UsedWeighting;
         gp.SearchSpace = searchSpace;
         gp.StoppingCriteria = [generationStoppingCriterion];
         return gp.Run();
@@ -167,9 +166,14 @@ public class LogicGpAlgorithm(
     private void PrepareForRetraining(IDataView trainData,
         string labelColumnName)
     {
+        AdaptLiterals(trainData);
+    }
+
+    private void AdaptLiterals(IDataView newData)
+    {
         foreach (var literal in data.Literals)
             literal.GeneratePredictions(
-                trainData.GetColumnAsString(literal.Label)
+                newData.GetColumnAsString(literal.Label)
                     .ToList());
     }
 }

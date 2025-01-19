@@ -1,5 +1,6 @@
 using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -31,8 +32,10 @@ public sealed class SNPSimulation
             serviceProvider.GetRequiredService<LogicGpGpasBinaryTrainer>();*/
         var trainer =
             serviceProvider
-                .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
+                .GetRequiredService<LogicGpGpasBinaryTrainer>();
         trainer.Label = "y";
+
+
         for (var j = 1; j < 100; j++)
         {
             var trainDataPath =
@@ -56,15 +59,38 @@ public sealed class SNPSimulation
             var trueValues = testResults.GetColumn<uint>("y").ToArray();
             var predictedValues = testResults.GetColumn<float[]>("Score")
                 .Select(score => score[0] >= 0.5 ? 1 : 0).ToArray();
-            var mcr = 0F;
+            var acc = 0F;
+
+            var columnData = testData.GetColumnAsString(trainer.Label).ToList();
+            var uniqueValues =
+                new HashSet<string>(
+                    columnData);
+            var labels = uniqueValues.OrderBy(c => c).ToList();
+            var counts = new int[labels.Count];
+            var accuracies = new float[labels.Count];
 
             for (var i = 0; i < predictedValues.Length; i++)
-                if (predictedValues[i] != trueValues[i])
-                    mcr++;
+            {
+                counts[labels.IndexOf(trueValues[i].ToString())]++;
+                if (predictedValues[i] == trueValues[i])
+                    accuracies[labels.IndexOf(trueValues[i].ToString())]++;
+            }
 
-            mcr /= predictedValues.Length;
-            var acc = 1.0 - mcr;
-            writer.WriteLine(acc.ToString(CultureInfo.InvariantCulture));
+            for (var i = 0; i < labels.Count; i++)
+            {
+                accuracies[i] /= counts[i];
+                Console.WriteLine($"{labels[i]}: {accuracies[i]}");
+            }
+
+            var macroAccuracy = accuracies.Sum() / labels.Count;
+
+            for (var i = 0; i < predictedValues.Length; i++)
+                if (predictedValues[i] == trueValues[i])
+                    acc++;
+
+            acc /= predictedValues.Length;
+            writer.WriteLine(
+                macroAccuracy.ToString(CultureInfo.InvariantCulture));
             writer.Flush();
             logWriter.WriteLine($"Accuracy: {acc}");
             logWriter.Flush();
