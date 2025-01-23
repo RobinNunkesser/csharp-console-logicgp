@@ -50,21 +50,33 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
     {
         if (Monomials.Count == 0) return;
         Predictions = new float[Monomials[0].Literals[0].Predictions.Length][];
+        var count = new int[_classes];
         for (var i = 0; i < Predictions.Length; i++)
         {
             Predictions[i] = Monomials
                 .Select(monomial => monomial.Predictions[i].ToArray())
                 .Aggregate((a, b) =>
                     a.Zip(b, (c, d) => c + d).ToArray());
+            if (Predictions.Length == _outputValues.Count &&
+                Predictions[i].Sum() == 0)
+                count[_labels.IndexOf(_outputValues[i])]++;
             var sum = 0.0f;
             for (var j = 0; j < Predictions[i].Length; j++)
-            {
-                Predictions[i][j] += Weights[j];
+                //Predictions[i][j] += Weights[j];
                 sum += Predictions[i][j];
-            }
 
             for (var j = 0; j < Predictions[i].Length; j++)
                 Predictions[i][j] /= sum;
+        }
+
+        if (count.Sum() > 0)
+            ComputeWeightsForCount(count);
+
+        foreach (var pred in Predictions)
+        {
+            if (pred.Sum() != 0) continue;
+            for (var j = 0; j < pred.Length; j++)
+                pred[j] = Weights[j];
         }
     }
 
@@ -73,12 +85,8 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         return Monomials.SelectMany(monomial => monomial.Literals).ToList();
     }
 
-    private void ComputeWeights()
+    private void ComputeWeightsForCount(int[] count)
     {
-        var count = new int[_classes];
-        foreach (var index in _outputValues.Select(value =>
-                     _labels.IndexOf(value))) count[index]++;
-
         var weights = count.Select(c => (float)c).ToArray();
 
         var sum = weights.Sum();
@@ -88,8 +96,17 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
             weights[j] /= sum;
 
         Weights = weights;
+    }
 
-        Weights = [1.0f, 0.0f];
+    private void ComputeWeights()
+    {
+        var count = new int[_classes];
+        foreach (var index in _outputValues.Select(value =>
+                     _labels.IndexOf(value))) count[index]++;
+
+        ComputeWeightsForCount(count);
+
+        //Weights = [1.0f, 0.0f];
     }
 
     public override string ToString()

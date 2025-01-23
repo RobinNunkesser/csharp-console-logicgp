@@ -66,6 +66,7 @@ public class LogicGpAlgorithm(
         IIndividualList individuals,
         string labelColumnName = DefaultColumnNames.Label)
     {
+        //Console.WriteLine("Validating");
         var labelColumn = validationData.GetColumnAsString(labelColumnName)
             .ToList();
         var labelDistribution = new float[data.Labels.Count];
@@ -112,6 +113,7 @@ public class LogicGpAlgorithm(
         string labelColumnName = DefaultColumnNames.Label
     )
     {
+        //Console.WriteLine("Training");
         if (firstTraining)
             PrepareForFirstTraining(trainData, labelColumnName);
         else
@@ -119,7 +121,7 @@ public class LogicGpAlgorithm(
 
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 3;
+        generationStoppingCriterion.Limit = 10000;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;
@@ -159,6 +161,7 @@ public class LogicGpAlgorithm(
     private void PrepareForFirstTraining(IDataView trainData,
         string labelColumnName)
     {
+        //Console.WriteLine("Preparing for first training");
         data.Initialize(trainData, labelColumnName);
     }
 
@@ -166,6 +169,7 @@ public class LogicGpAlgorithm(
     private void PrepareForRetraining(IDataView trainData,
         string labelColumnName)
     {
+        //Console.WriteLine("Preparing for retraining");
         AdaptLiterals(trainData);
     }
 

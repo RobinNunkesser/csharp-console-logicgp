@@ -7,8 +7,8 @@ public class LogicGpGenotype : IGenotype
 {
     private readonly DataManager _data;
     private readonly IPolynomial<string> _polynomial;
-    private string[]? _predictedClasses;
     private readonly LogicGpAlgorithm.Weighting _usedWeighting;
+    private string[]? _predictedClasses;
 
     public LogicGpGenotype(int classes, DataManager data,
         List<string>? outputColumn, List<string> labels,
@@ -108,8 +108,9 @@ public class LogicGpGenotype : IGenotype
             })
             .ToList();
         var randomValue = random.NextDouble();
-        return cumulative.First(x => x.cumulative >= randomValue)
-            .index;
+        var chosen =
+            cumulative.FirstOrDefault(x => x.cumulative >= randomValue);
+        return chosen?.index ?? 0;
     }
 
     private int MaxIndex(int i)
