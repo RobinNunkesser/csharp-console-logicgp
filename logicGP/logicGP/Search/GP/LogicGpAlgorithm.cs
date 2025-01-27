@@ -10,7 +10,10 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.StoppingCriterion;
 using Italbytz.Ports.Algorithms.AI.Search;
-using logicGP.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Fitness;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Mutation;
 using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
@@ -121,7 +124,7 @@ public class LogicGpAlgorithm(
 
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 10000;
+        generationStoppingCriterion.Limit = 3;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;

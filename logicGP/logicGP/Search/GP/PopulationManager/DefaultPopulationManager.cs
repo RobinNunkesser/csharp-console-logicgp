@@ -1,5 +1,6 @@
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Initialization;
+using Italbytz.Ports.Algorithms.AI.Search.GP.PopulationManager;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.PopulationManager;
 
@@ -10,10 +11,5 @@ public class DefaultPopulationManager : IPopulationManager
     public void InitPopulation(IInitialization initialization)
     {
         Population = initialization.Process(null);
-    }
-
-    public void CreateNewGeneration()
-    {
-        throw new NotImplementedException();
     }
 }

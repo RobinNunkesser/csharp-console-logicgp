@@ -1,4 +1,5 @@
 using System.Text;
+using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 

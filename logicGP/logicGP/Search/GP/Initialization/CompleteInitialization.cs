@@ -1,6 +1,6 @@
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
-using logicGP.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Initialization;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Initialization;
 

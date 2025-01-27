@@ -1,4 +1,5 @@
-using logicGP.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP.StoppingCriterion;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.StoppingCriterion;
 

@@ -14,7 +14,7 @@ public class RestaurantTests
     {
         var mlContext = new MLContext();
         _data = mlContext.Data.LoadFromTextFile<RestaurantModelInput>(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/restaurant/restaurantcompletecoded.csv",
+            "/Users/nunkesser/repos/work/articles/logicgp/data/restaurant/restaurant.csv",
             ',', true);
     }
 

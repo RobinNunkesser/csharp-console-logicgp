@@ -1,6 +1,7 @@
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Mutation;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Mutation;
 

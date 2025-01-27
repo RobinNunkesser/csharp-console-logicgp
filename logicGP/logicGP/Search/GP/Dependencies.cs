@@ -5,7 +5,8 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP.PopulationManager;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.StoppingCriterion;
-using logicGP.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Fitness;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;

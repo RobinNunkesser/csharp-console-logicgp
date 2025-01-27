@@ -1,12 +1,14 @@
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Crossover;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Mutation;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.StoppingCriterion;
-using logicGP.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Crossover;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Fitness;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Initialization;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Mutation;
+using Italbytz.Ports.Algorithms.AI.Search.GP.PopulationManager;
+using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
+using Italbytz.Ports.Algorithms.AI.Search.GP.Selection;
+using Italbytz.Ports.Algorithms.AI.Search.GP.StoppingCriterion;
 using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;

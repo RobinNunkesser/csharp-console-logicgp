@@ -34,32 +34,34 @@ public class CarEvaluationTests
             new HashSet<string>(
                 columnData);
         var labels = uniqueValues.OrderBy(c => c).ToList();
-
-        var mlModel = trainer.Fit(_data);
-        Assert.IsNotNull(mlModel);
-        var testResults = mlModel.Transform(_data);
-        var trueValues = testResults.GetColumn<string>("y").ToArray();
-        var predictedValues =
-            testResults.GetColumn<string>("PredictedLabel").ToList();
-
-        var accuracies = new float[labels.Count];
-        var counts = new int[labels.Count];
-
-        for (var i = 0; i < predictedValues.Count; i++)
+        for (var j = 0; j < 10; j++)
         {
-            counts[labels.IndexOf(trueValues[i])]++;
-            if (predictedValues[i] == trueValues[i])
-                accuracies[labels.IndexOf(trueValues[i])]++;
-        }
+            var mlModel = trainer.Fit(_data);
+            Assert.IsNotNull(mlModel);
+            var testResults = mlModel.Transform(_data);
+            var trueValues = testResults.GetColumn<string>("y").ToArray();
+            var predictedValues =
+                testResults.GetColumn<string>("PredictedLabel").ToList();
 
-        for (var i = 0; i < labels.Count; i++)
-        {
-            accuracies[i] /= counts[i];
-            Console.WriteLine($"{labels[i]}: {accuracies[i]}");
-        }
+            var accuracies = new float[labels.Count];
+            var counts = new int[labels.Count];
 
-        var macroAccuracy = accuracies.Sum() / labels.Count;
-        Console.WriteLine($"Macro Accuracy: {macroAccuracy}");
+            for (var i = 0; i < predictedValues.Count; i++)
+            {
+                counts[labels.IndexOf(trueValues[i])]++;
+                if (predictedValues[i] == trueValues[i])
+                    accuracies[labels.IndexOf(trueValues[i])]++;
+            }
+
+            for (var i = 0; i < labels.Count; i++)
+            {
+                accuracies[i] /= counts[i];
+                Console.WriteLine($"{labels[i]}: {accuracies[i]}");
+            }
+
+            var macroAccuracy = accuracies.Sum() / labels.Count;
+            Console.WriteLine($"Macro Accuracy: {macroAccuracy}");
+        }
     }
 
     [TestMethod]
