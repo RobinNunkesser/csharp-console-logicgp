@@ -8,7 +8,7 @@ namespace logicGP.Tests;
 
 public class RealTests
 {
-    protected void TestFlRw(IDataView data, string label)
+    protected void TestFlRw(IDataView data, string label, int generations = 10)
     {
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
@@ -17,7 +17,7 @@ public class RealTests
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
         trainer.Label = label;
         // This is only for testing purposes, in production this should be set to a higher value (e.g. 10000)
-        trainer.MaxGenerations = 10;
+        trainer.MaxGenerations = generations;
 
         var columnData = data.GetColumnAsString(trainer.Label).ToList();
         var uniqueValues =

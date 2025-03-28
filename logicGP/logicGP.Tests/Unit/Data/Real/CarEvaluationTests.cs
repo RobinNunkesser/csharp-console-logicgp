@@ -1,3 +1,4 @@
+using Italbytz.Adapters.Algorithms.AI.Util;
 using logicGP.Tests.Data;
 using Microsoft.ML;
 
@@ -21,6 +22,7 @@ public class CarEvaluationTests : RealTests
     [TestMethod]
     public void TestFlRw()
     {
+        ThreadSafeRandomNetCore.Seed = 42;
         TestFlRw(_data, "class");
     }
 }

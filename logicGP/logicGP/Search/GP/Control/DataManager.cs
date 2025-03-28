@@ -1,5 +1,6 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
+using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 using Microsoft.ML;
 
@@ -47,7 +48,7 @@ public class DataManager
 
     public ILiteral<string> GetRandomLiteral()
     {
-        var random = new Random();
+        var random = ThreadSafeRandomNetCore.LocalRandom;
         var index = random.Next(Literals.Count);
         return Literals[index];
     }

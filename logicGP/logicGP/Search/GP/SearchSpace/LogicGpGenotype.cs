@@ -1,4 +1,5 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
+using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
@@ -100,7 +101,7 @@ public class LogicGpGenotype : IGenotype
 
     private int SoftmaxProbabilityIndex(int i)
     {
-        var random = new Random();
+        var random = ThreadSafeRandomNetCore.LocalRandom;
         var cumulative = Predictions[i]
             .Select((value, index) => new { value, index })
             .Select((x, index) => new
@@ -146,7 +147,8 @@ public class LogicGpGenotype : IGenotype
     public void DeleteRandomLiteral()
     {
         var monomial = GetRandomMonomial();
-        monomial.Literals.RemoveAt(new Random().Next(monomial.Literals.Count));
+        monomial.Literals.RemoveAt(
+            ThreadSafeRandomNetCore.LocalRandom.Next(monomial.Literals.Count));
         if (monomial.Literals.Count == 0)
             _polynomial.Monomials.Remove(monomial);
         else
@@ -162,7 +164,8 @@ public class LogicGpGenotype : IGenotype
     public void DeleteRandomMonomial()
     {
         _polynomial.Monomials.RemoveAt(
-            new Random().Next(_polynomial.Monomials.Count));
+            ThreadSafeRandomNetCore.LocalRandom.Next(
+                _polynomial.Monomials.Count));
         if (_polynomial.Monomials.Count > 0)
             UpdatePredictions();
     }
@@ -187,7 +190,9 @@ public class LogicGpGenotype : IGenotype
     public void ReplaceRandomLiteral()
     {
         var monomial = GetRandomMonomial();
-        monomial.Literals[new Random().Next(monomial.Literals.Count)] =
+        monomial.Literals[
+                ThreadSafeRandomNetCore.LocalRandom.Next(
+                    monomial.Literals.Count)] =
             _data.GetRandomLiteral();
         monomial.UpdatePredictions();
         UpdatePredictions();

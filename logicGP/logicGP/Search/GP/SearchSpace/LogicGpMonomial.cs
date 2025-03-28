@@ -1,4 +1,5 @@
 using System.Text;
+using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
@@ -33,7 +34,7 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 
     public void RandomizeWeights(bool restricted)
     {
-        var random = new Random();
+        var random = ThreadSafeRandomNetCore.LocalRandom;
         if (restricted)
         {
             var index = random.Next(0, Weights.Length);

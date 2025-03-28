@@ -1,4 +1,5 @@
 using System.Collections;
+using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
@@ -16,7 +17,8 @@ public class Population : IIndividualList
 
     public IIndividual GetRandomIndividual()
     {
-        return _individuals[new Random().Next(_individuals.Count)];
+        return _individuals[
+            ThreadSafeRandomNetCore.LocalRandom.Next(_individuals.Count)];
     }
 
     public List<IIndividual> ToList()

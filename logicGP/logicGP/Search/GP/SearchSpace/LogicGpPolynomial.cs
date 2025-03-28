@@ -1,4 +1,5 @@
 using System.Text;
+using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
@@ -32,7 +33,7 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 
     public IMonomial<TCategory> GetRandomMonomial()
     {
-        var random = new Random();
+        var random = ThreadSafeRandomNetCore.LocalRandom;
         return Monomials[random.Next(Monomials.Count)];
     }
 
