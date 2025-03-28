@@ -28,9 +28,9 @@ Chosen data sets from the UC Irvine Machine Learning Repository
 
 |Data set| Code|
 | ------ | :---|
-|[National Poll on Healthy Aging (NPHA)](https://archive.ics.uci.edu/dataset/936/national+poll+on+healthy+aging+(npha))|[NationalPollTests](/logicGP/logicGP.Tests/Data/Real/NationalPollTests.cs)|
-|[Car Evaluation](https://archive.ics.uci.edu/dataset/19/car+evaluation)|[CarEvaluationTests](/logicGP/logicGP.Tests/Data/Real/CarEvaluationTests.cs)|
-|[Balance Scale](https://archive.ics.uci.edu/dataset/12/balance+scale)|[BalanceScaleTests](/logicGP/logicGP.Tests/Data/Real/BalanceScaleTests.cs)|
-|[Solar Flare](https://archive.ics.uci.edu/dataset/89/solar+flare)|[SolarflareTests](/logicGP/logicGP.Tests/Data/Real/SolarflareTests.cs)|
-|[Lenses](https://archive.ics.uci.edu/dataset/58/lenses)|[LensesTests](/logicGP/logicGP.Tests/Data/Real/LensesTests.cs)|
+|[National Poll on Healthy Aging (NPHA)](https://archive.ics.uci.edu/dataset/936/national+poll+on+healthy+aging+(npha))|[NationalPollTests](/logicGP/logicGP.Tests/Unit/Data/Real/NationalPollTests.cs)|
+|[Car Evaluation](https://archive.ics.uci.edu/dataset/19/car+evaluation)|[CarEvaluationTests](/logicGP/logicGP.Tests/Unit/Data/Real/CarEvaluationTests.cs)|
+|[Balance Scale](https://archive.ics.uci.edu/dataset/12/balance+scale)|[BalanceScaleTests](/logicGP/logicGP.Tests/Unit/Data/Real/BalanceScaleTests.cs)|
+|[Solar Flare](https://archive.ics.uci.edu/dataset/89/solar+flare)|[SolarflareTests](/logicGP/logicGP.Tests/Unit/Data/Real/SolarflareTests.cs)|
+|[Lenses](https://archive.ics.uci.edu/dataset/58/lenses)|[LensesTests](/logicGP/logicGP.Tests/Unit/Data/Real/LensesTests.cs)|
 
