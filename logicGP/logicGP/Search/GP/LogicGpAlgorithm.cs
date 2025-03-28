@@ -113,7 +113,8 @@ public class LogicGpAlgorithm(
 
     public IIndividualList Train(IDataView trainData,
         bool firstTraining = true,
-        string labelColumnName = DefaultColumnNames.Label
+        string labelColumnName = DefaultColumnNames.Label,
+        int generations = 10000
     )
     {
         //Console.WriteLine("Training");
@@ -124,7 +125,7 @@ public class LogicGpAlgorithm(
 
         randomInitialization.Size = 2;
         //generationStoppingCriterion.Limit = 10000;
-        generationStoppingCriterion.Limit = 3;
+        generationStoppingCriterion.Limit = generations;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
         gp.SelectionForSurvival = paretoFrontSelection;

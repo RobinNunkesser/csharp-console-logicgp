@@ -1,6 +1,6 @@
 using Microsoft.ML.Data;
 
-namespace logicGP.Tests;
+namespace logicGP.Tests.Data;
 
 public class NationalPollModelInput
 {

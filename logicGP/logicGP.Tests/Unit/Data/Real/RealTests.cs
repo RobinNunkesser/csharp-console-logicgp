@@ -1,0 +1,56 @@
+using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+
+namespace logicGP.Tests;
+
+public class RealTests
+{
+    protected void TestFlRw(IDataView data, string label)
+    {
+        var services = new ServiceCollection().AddServices();
+        var serviceProvider = services.BuildServiceProvider();
+        var trainer =
+            serviceProvider
+                .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
+        trainer.Label = label;
+        // This is only for testing purposes, in production this should be set to a higher value (e.g. 10000)
+        trainer.MaxGenerations = 10;
+
+        var columnData = data.GetColumnAsString(trainer.Label).ToList();
+        var uniqueValues =
+            new HashSet<string>(
+                columnData);
+        var labels = uniqueValues.OrderBy(c => c).ToList();
+        for (var j = 0; j < 10; j++)
+        {
+            var mlModel = trainer.Fit(data);
+            Assert.IsNotNull(mlModel);
+            var testResults = mlModel.Transform(data);
+            var trueValues = testResults.GetColumn<string>("y").ToArray();
+            var predictedValues =
+                testResults.GetColumn<string>("PredictedLabel").ToList();
+
+            var accuracies = new float[labels.Count];
+            var counts = new int[labels.Count];
+
+            for (var i = 0; i < predictedValues.Count; i++)
+            {
+                counts[labels.IndexOf(trueValues[i])]++;
+                if (predictedValues[i] == trueValues[i])
+                    accuracies[labels.IndexOf(trueValues[i])]++;
+            }
+
+            for (var i = 0; i < labels.Count; i++)
+            {
+                accuracies[i] /= counts[i];
+                Console.WriteLine($"{labels[i]}: {accuracies[i]}");
+            }
+
+            var macroAccuracy = accuracies.Sum() / labels.Count;
+            Console.WriteLine($"Macro Accuracy: {macroAccuracy}");
+        }
+    }
+}

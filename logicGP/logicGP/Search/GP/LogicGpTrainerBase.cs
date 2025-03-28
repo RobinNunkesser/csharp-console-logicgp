@@ -14,6 +14,7 @@ public abstract class
 
 {
     public required string Label { get; set; }
+    public required int MaxGenerations { get; set; } = 10000;
 
     public TTransformer Fit(IDataView input)
     {
@@ -30,7 +31,8 @@ public abstract class
         {
             // Training
             var individuals =
-                algorithm.Train(fold.TrainSet, foldIndex == 0, Label);
+                algorithm.Train(fold.TrainSet, foldIndex == 0, Label,
+                    MaxGenerations);
             // Validating
             var validationMetrics =
                 algorithm.Validate(fold.TestSet, individuals, Label);
