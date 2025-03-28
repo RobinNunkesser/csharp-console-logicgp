@@ -14,8 +14,10 @@ public class BalanceScaleTests
     public BalanceScaleTests()
     {
         var mlContext = new MLContext();
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            "Data", "balancescale.csv");
         _data = mlContext.Data.LoadFromTextFile<BalanceScaleModelInput>(
-            "/Users/nunkesser/repos/work/articles/logicgp/data/ucimlrepo/balancescale/balancescale.csv",
+            path,
             ',', true);
     }
 

@@ -17,11 +17,32 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\logicGP\logicGP.csproj" />
+        <ProjectReference Include="..\logicGP\logicGP.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Unit\" />
+        <Folder Include="Unit\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Data\balancescale.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\car_evaluation_strings.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\lenses.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\national_poll_on_healthy_aging_npha.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\restaurant.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\solarflare_1.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
