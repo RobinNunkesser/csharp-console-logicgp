@@ -11,26 +11,57 @@ namespace logicGP.Tests.Unit.Data.Simulated;
 [TestClass]
 public sealed class SNPSimulationTests
 {
-    [TestMethod]
-    public void TestSimulation1()
+    public enum TrainerType
     {
-        GPASSimulation("Simulation1", AppDomain.CurrentDomain.BaseDirectory);
+        LogicGpGpasBinaryTrainer,
+        LogicGpFlrwMicroMulticlassTrainer,
+        LogicGpFlrwMacroMulticlassTrainer
     }
 
     [TestMethod]
-    public void TestSimulation2()
+    public void TestSimulation1GPAS()
     {
-        GPASSimulation("Simulation2", AppDomain.CurrentDomain.BaseDirectory);
+        GPASSimulation("Simulation1", AppDomain.CurrentDomain.BaseDirectory,
+            TrainerType.LogicGpGpasBinaryTrainer);
     }
 
     [TestMethod]
-    public void TestSimulation3()
+    public void TestSimulation2GPAS()
     {
-        GPASSimulation("Simulation3", AppDomain.CurrentDomain.BaseDirectory);
+        GPASSimulation("Simulation2", AppDomain.CurrentDomain.BaseDirectory,
+            TrainerType.LogicGpGpasBinaryTrainer);
     }
 
+    [TestMethod]
+    public void TestSimulation3GPAS()
+    {
+        GPASSimulation("Simulation3", AppDomain.CurrentDomain.BaseDirectory,
+            TrainerType.LogicGpGpasBinaryTrainer);
+    }
 
-    public void GPASSimulation(string folder, string logFolder)
+    [TestMethod]
+    public void TestSimulation1FlRw()
+    {
+        GPASSimulation("Simulation1", AppDomain.CurrentDomain.BaseDirectory,
+            TrainerType.LogicGpFlrwMicroMulticlassTrainer);
+    }
+
+    [TestMethod]
+    public void TestSimulation2FlRw()
+    {
+        GPASSimulation("Simulation2", AppDomain.CurrentDomain.BaseDirectory,
+            TrainerType.LogicGpFlrwMicroMulticlassTrainer);
+    }
+
+    [TestMethod]
+    public void TestSimulation3FlRw()
+    {
+        GPASSimulation("Simulation3", AppDomain.CurrentDomain.BaseDirectory,
+            TrainerType.LogicGpFlrwMicroMulticlassTrainer);
+    }
+
+    public void GPASSimulation(string folder, string logFolder,
+        TrainerType trainerType)
     {
         var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         var path = Path.Combine(logFolder,
@@ -43,13 +74,22 @@ public sealed class SNPSimulationTests
         var mlContext = new MLContext();
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
-        var trainer =
-            serviceProvider.GetRequiredService<LogicGpGpasBinaryTrainer>();
-        /*var trainer =
-            serviceProvider
-                .GetRequiredService<LogicGpFlrwMicroMulticlassTrainer>();*/
-        trainer.Label = "y";
 
+        LogicGpTrainerBase<ITransformer> trainer = trainerType switch
+        {
+            TrainerType.LogicGpGpasBinaryTrainer => serviceProvider
+                .GetRequiredService<LogicGpGpasBinaryTrainer>(),
+            TrainerType.LogicGpFlrwMicroMulticlassTrainer => serviceProvider
+                .GetRequiredService<LogicGpFlrwMicroMulticlassTrainer>(),
+            TrainerType.LogicGpFlrwMacroMulticlassTrainer => serviceProvider
+                .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>(),
+            _ => throw new ArgumentOutOfRangeException(nameof(trainerType),
+                trainerType, null)
+        };
+
+        trainer.Label = "y";
+        // This is only for testing purposes, in production this should be set to a higher value (e.g. 10000)
+        trainer.MaxGenerations = 10;
 
         for (var j = 1; j < 101; j++)
         {
@@ -71,8 +111,25 @@ public sealed class SNPSimulationTests
 
             var mlModel = trainer.Fit(trainData);
             Assert.IsNotNull(mlModel);
-            logWriter.WriteLine(
-                ((LogicGpGpasTransformer)mlModel).Model.ToString());
+
+            switch (trainerType)
+            {
+                case TrainerType.LogicGpGpasBinaryTrainer:
+                    logWriter.WriteLine(
+                        ((LogicGpGpasTransformer)mlModel).Model.ToString());
+                    break;
+                case TrainerType.LogicGpFlrwMicroMulticlassTrainer:
+                    logWriter.WriteLine(
+                        ((LogicGpFlrwTransformer)mlModel).Model
+                        .ToString());
+                    break;
+                case TrainerType.LogicGpFlrwMacroMulticlassTrainer:
+                    logWriter.WriteLine(
+                        ((LogicGpFlrwTransformer)mlModel).Model
+                        .ToString());
+                    break;
+            }
+
             var testResults = mlModel.Transform(testData);
             var trueValues = testResults.GetColumn<uint>("y").ToArray();
             var predictedValues = testResults.GetColumn<float[]>("Score")
