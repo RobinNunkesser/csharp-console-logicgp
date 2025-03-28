@@ -12,7 +12,7 @@ public class NationalPollTests : RealTests
     {
         var mlContext = new MLContext();
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data", "national_poll_on_healthy_aging_npha.csv");
+            "Data/Real", "national_poll_on_healthy_aging_npha.csv");
         _data = mlContext.Data.LoadFromTextFile<NationalPollModelInput>(
             path,
             ',', true);

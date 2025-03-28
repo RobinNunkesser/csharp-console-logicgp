@@ -12,7 +12,7 @@ public class LensesTests : RealTests
     {
         var mlContext = new MLContext();
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data", "lenses.csv");
+            "Data/Real", "lenses.csv");
         _data = mlContext.Data.LoadFromTextFile<LensesModelInput>(
             path,
             ',', true);

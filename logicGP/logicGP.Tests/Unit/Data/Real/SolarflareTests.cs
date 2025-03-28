@@ -12,7 +12,7 @@ public class SolarflareTests : RealTests
     {
         var mlContext = new MLContext();
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data", "solarflare_1.csv");
+            "Data/Real", "solarflare_1.csv");
         _data = mlContext.Data.LoadFromTextFile<SolarflareModelInput>(
             path,
             ',', true);

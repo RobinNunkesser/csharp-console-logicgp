@@ -25,22 +25,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Data\balancescale.csv">
+        <None Update="Data\Real\balancescale.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Data\car_evaluation_strings.csv">
+        <None Update="Data\Real\car_evaluation_strings.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Data\lenses.csv">
+        <None Update="Data\Real\lenses.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Data\national_poll_on_healthy_aging_npha.csv">
+        <None Update="Data\Real\national_poll_on_healthy_aging_npha.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Data\restaurant.csv">
+        <None Update="Data\Real\restaurant.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Data\solarflare_1.csv">
+        <None Update="Data\Real\solarflare_1.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

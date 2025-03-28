@@ -12,7 +12,7 @@ public class RestaurantTests : RealTests
     {
         var mlContext = new MLContext();
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data", "restaurant.csv");
+            "Data/Real", "restaurant.csv");
         _data = mlContext.Data.LoadFromTextFile<RestaurantModelInput>(
             path,
             ',', true);

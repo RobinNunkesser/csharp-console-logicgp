@@ -12,7 +12,7 @@ public class CarEvaluationTests : RealTests
     {
         var mlContext = new MLContext();
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data", "car_evaluation_strings.csv");
+            "Data/Real", "car_evaluation_strings.csv");
         _data = mlContext.Data.LoadFromTextFile<CarEvaluationModelInput>(
             path,
             ',', true);

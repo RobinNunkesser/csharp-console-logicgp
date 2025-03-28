@@ -12,7 +12,7 @@ public class BalanceScaleTests : RealTests
     {
         var mlContext = new MLContext();
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data", "balancescale.csv");
+            "Data/Real", "balancescale.csv");
         _data = mlContext.Data.LoadFromTextFile<BalanceScaleModelInput>(
             path,
             ',', true);
