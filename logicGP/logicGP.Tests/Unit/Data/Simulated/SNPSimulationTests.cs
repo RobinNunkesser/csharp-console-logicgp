@@ -1,29 +1,44 @@
 using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
+using logicGP.Tests.Data.Simulated;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
-namespace logicGP.Tests;
+namespace logicGP.Tests.Unit.Data.Simulated;
 
 [TestClass]
-public sealed class SNPSimulation
+public sealed class SNPSimulationTests
 {
     [TestMethod]
-    public void GPASSimulation()
+    public void TestSimulation1()
     {
-        const string folder = "standard";
-        //const string folder = "laumain_s1000_o15_p0225_n44";
-        //const string folder = "lauinteraction_s1000_o15_p0225_n45_i14";
-        //const string folder = "standard_mac";
-        //const string folder = "laumain_s1000_o15_p0225_n44_mac";
-        //const string folder = "lauinteraction_s1000_o15_p0225_n45_i14_mac";
+        GPASSimulation("Simulation1", AppDomain.CurrentDomain.BaseDirectory);
+    }
+
+    [TestMethod]
+    public void TestSimulation2()
+    {
+        GPASSimulation("Simulation2", AppDomain.CurrentDomain.BaseDirectory);
+    }
+
+    [TestMethod]
+    public void TestSimulation3()
+    {
+        GPASSimulation("Simulation3", AppDomain.CurrentDomain.BaseDirectory);
+    }
+
+
+    public void GPASSimulation(string folder, string logFolder)
+    {
         var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-        using var logWriter = new StreamWriter(
-            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_{timeStamp}_log.txt");
-        using var writer = new StreamWriter(
-            $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/logicgpgpasacc_{timeStamp}.csv");
+        var path = Path.Combine(logFolder,
+            $"logicgpgpasacc_{timeStamp}_log.txt");
+        using var logWriter = new StreamWriter(path);
+        path = Path.Combine(logFolder,
+            $"logicgpgpasacc_{timeStamp}.csv");
+        using var writer = new StreamWriter(path);
         writer.WriteLine("\"x\"");
         var mlContext = new MLContext();
         var services = new ServiceCollection().AddServices();
@@ -36,16 +51,19 @@ public sealed class SNPSimulation
         trainer.Label = "y";
 
 
-        for (var j = 1; j < 100; j++)
+        for (var j = 1; j < 101; j++)
         {
-            var trainDataPath =
-                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/SNPglm_{j}.csv";
+            var trainDataPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                $"Data/Simulated/{folder}", $"SNPglm_{j}.csv");
             logWriter.WriteLine($"Training on {trainDataPath}");
             var trainData = mlContext.Data.LoadFromTextFile<SNPModelInput>(
                 trainDataPath,
                 ',', true);
+            var testIndex = j == 100 ? 1 : j + 1;
             var testDataPath =
-                $"/Users/nunkesser/repos/work/articles/logicgp/data/snpaccuracy/{folder}/SNPglm_{j + 1}.csv";
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    $"Data/Simulated/{folder}", $"SNPglm_{testIndex}.csv");
             logWriter.WriteLine($"Testing on {testDataPath}");
             var testData = mlContext.Data.LoadFromTextFile<SNPModelInput>(
                 testDataPath,

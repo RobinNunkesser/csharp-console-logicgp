@@ -18,9 +18,9 @@ The project features unit tests as a starting point. The most important unit tes
 
 |Data set| Code|
 | ------ | :---|
-|Simulation from Section 3.3 of [Detecting high-order interactions of single nucleotide polymorphisms using genetic programming](https://doi.org/10.1093/bioinformatics/btm522)||
-|Simulation from Equation (2) of [Evaluation of tree‑based statistical learning methods for constructing genetic risk scores](https://doi.org/10.1186/s12859-022-04634-w)||
-|Simulation from Equation (3) of [Evaluation of tree‑based statistical learning methods for constructing genetic risk scores](https://doi.org/10.1186/s12859-022-04634-w)||
+|Simulation from Section 3.3 of [Detecting high-order interactions of single nucleotide polymorphisms using genetic programming](https://doi.org/10.1093/bioinformatics/btm522)|[SNPSimulationTests](/logicGP/logicGP.Tests/Unit/Data/Simulated/SNPSimulationTests.cs)|
+|Simulation from Equation (2) of [Evaluation of tree‑based statistical learning methods for constructing genetic risk scores](https://doi.org/10.1186/s12859-022-04634-w)|[SNPSimulationTests](/logicGP/logicGP.Tests/Unit/Data/Simulated/SNPSimulationTests.cs)|
+|Simulation from Equation (3) of [Evaluation of tree‑based statistical learning methods for constructing genetic risk scores](https://doi.org/10.1186/s12859-022-04634-w)|[SNPSimulationTests](/logicGP/logicGP.Tests/Unit/Data/Simulated/SNPSimulationTests.cs)|
 
 ## Real data sets
 
