@@ -36,11 +36,11 @@ Chosen data sets from the UC Irvine Machine Learning Repository
 
 ### Lenses
 
-Example model found by logicGP-FLCW-Macro 
+Example model found by logicGP-FLCW-Macro with $93.33%$ MacroAccuracy.
 
-| $w_{Hard}$ | Soft | None  | Monomials                                                                 |
+| $w_{Hard}$ | $w_{Soft}$ | $w_{None}$  | Condition                                                      |
 |------|------|-------|---------------------------------------------------------------------------|
 | 0.2  | 5.0  | 1.11  | age ∈ {young} ∧ spectacle prescription ∈ {myope}                         |
 | 0.0  | 0.0  | 3.67  | astigmatic ∈ {no}                                                        |
 | 0.0  | 3.2  | 0.96  | age ∈ {pre-presbyopic} ∧ spectacle prescription ∈ {myope}               |
-
+| 0.67 | 0.0  | 0.33  | none of the above
