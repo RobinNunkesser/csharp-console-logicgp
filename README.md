@@ -34,3 +34,13 @@ Chosen data sets from the UC Irvine Machine Learning Repository
 |[Solar Flare](https://archive.ics.uci.edu/dataset/89/solar+flare)|[SolarflareTests](/logicGP/logicGP.Tests/Unit/Data/Real/SolarflareTests.cs)|
 |[Lenses](https://archive.ics.uci.edu/dataset/58/lenses)|[LensesTests](/logicGP/logicGP.Tests/Unit/Data/Real/LensesTests.cs)|
 
+### Lenses
+
+Example model found by logicGP-FLCW-Macro 
+
+| $w_{Hard}$ | Soft | None  | Monomials                                                                 |
+|------|------|-------|---------------------------------------------------------------------------|
+| 0.2  | 5.0  | 1.11  | age ∈ {young} ∧ spectacle prescription ∈ {myope}                         |
+| 0.0  | 0.0  | 3.67  | astigmatic ∈ {no}                                                        |
+| 0.0  | 3.2  | 0.96  | age ∈ {pre-presbyopic} ∧ spectacle prescription ∈ {myope}               |
+
