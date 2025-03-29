@@ -55,7 +55,7 @@ Example Model found by logicGP-FLCW-Macro on the NPHA data set with $47.33\%$ Ma
 
 Example model found by logicGP-FLCW-Macro with $93.33\%$ MacroAccuracy.
 
-| $w_{Hard} | $w_{Soft} | $w_{None}  | Condition                                                      |
+| $w_{Hard}$ | $w_{Soft}$ | $w_{None}$  | Condition                                                      |
 |------|------|-------|---------------------------------------------------------------------------|
 | 0.2  | 5.0  | 1.11  | age ∈ {young} ∧ spectacle prescription ∈ {myope}                         |
 | 0.0  | 0.0  | 3.67  | astigmatic ∈ {no}                                                        |
