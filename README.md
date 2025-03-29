@@ -38,23 +38,24 @@ Chosen data sets from the UC Irvine Machine Learning Repository
 
 Example Model found by logicGP-FLCW-Macro on the NPHA data set with $47.33\%$ MacroAccuracy.
 
-| $w_{0-1}$  | $w_{2-3}$  | $w_{4+}$  | Condition                                                                                     |
+| $w_{0-1}  | $w_{2-3}  | $w_{4+}  | Condition                                                                                     |
 |--------|--------|-------|----------------------------------------------------------------------------------------------|
-| $1.86$ | $0.84$ | $0.86$ | Employment $\notin \{\text{Refused},\text{Retired}\}$                                        |
-| $0.36$ | $0.86$ | $1.63$ | Sleep Medication $\in \{\text{Refused},\text{Use regularly}\}$                              |
-| $1.49$ | $1.02$ | $0.70$ | Race $\in \{\text{Hispanic}\}$                                                              |
-| $1.47$ | $1.12$ | $0.54$ | Dental Health $\in \{\text{Excellent},\text{Poor}\}$                                        |
-| $1.41$ | $0.95$ | $0.89$ | Dental Health $\notin \{\text{Excellent},\text{Very Good}\}$ $\wedge$ Physical Health $\in \{\text{Very Good},\text{Good},\text{Poor}\}$ |
-| $0.81$ | $0.89$ | $1.39$ | Physical Health $\notin \{\text{Refused},\text{Very Good}\}$                                |
-| $1.24$ | $1.01$ | $0.87$ | Mental Health $\in \{\text{Excellent}\}$                                                   |
-| $1.09$ | $0.97$ | $1.00$ | Physical Health $\notin \{\text{Very Good},\text{Poor}\}$                                   |
-| $0.91$ | $1.02$ | $1.02$ | Dental Health $\notin \{\text{Excellent},\text{Good}\}$ $\wedge$ Mental Health $\in \{\text{Very Good},\text{Good}\}$ |
+| $1.86$ | $0.84$ | $0.86$ | Employment $\notin$ {Refused,Retired}                                        |
+| $0.36$ | $0.86$ | $1.63$ | Sleep Medication $\in$ {Refused,Use regularly}                              |
+| $1.49$ | $1.02$ | $0.70$ | Race $\in$ {Hispanic}                                                              |
+| $1.47$ | $1.12$ | $0.54$ | Dental Health $\in$ {Excellent,Poor}                                        |
+| $1.41$ | $0.95$ | $0.89$ | Dental Health $\notin$ {Excellent,Very Good} $\wedge$ Physical Health $\in$ {Very Good,Good,Poor} |
+| $0.81$ | $0.89$ | $1.39$ | Physical Health $\notin$ {Refused,Very Good}                                |
+| $1.24$ | $1.01$ | $0.87$ | Mental Health $\in$ {Excellent}                                                   |
+| $1.09$ | $0.97$ | $1.00$ | Physical Health $\notin$ {Very Good,Poor}                                   |
+| $0.91$ | $1.02$ | $1.02$ | Dental Health $\notin$ {Excellent,Good} $\wedge$ Mental Health $\in$ {Very Good,Good} |
+| 0.0 | 1.0  | 0.0  | none of the above
 
 ### Lenses
 
 Example model found by logicGP-FLCW-Macro with $93.33\%$ MacroAccuracy.
 
-| $w_{Hard}$ | $w_{Soft}$ | $w_{None}$  | Condition                                                      |
+| $w_{Hard} | $w_{Soft} | $w_{None}  | Condition                                                      |
 |------|------|-------|---------------------------------------------------------------------------|
 | 0.2  | 5.0  | 1.11  | age ∈ {young} ∧ spectacle prescription ∈ {myope}                         |
 | 0.0  | 0.0  | 3.67  | astigmatic ∈ {no}                                                        |
