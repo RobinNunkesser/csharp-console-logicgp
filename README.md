@@ -34,9 +34,25 @@ Chosen data sets from the UC Irvine Machine Learning Repository
 |[Solar Flare](https://archive.ics.uci.edu/dataset/89/solar+flare)|[SolarflareTests](/logicGP/logicGP.Tests/Unit/Data/Real/SolarflareTests.cs)|
 |[Lenses](https://archive.ics.uci.edu/dataset/58/lenses)|[LensesTests](/logicGP/logicGP.Tests/Unit/Data/Real/LensesTests.cs)|
 
+### National Poll on Healthy Aging (NPHA)
+
+Example Model found by logicGP-FLCW-Macro on the NPHA data set with $47.33\%$ MacroAccuracy.
+
+| $w_{0-1}$  | $w_{2-3}$  | $w_{4+}$  | Condition                                                                                     |
+|--------|--------|-------|----------------------------------------------------------------------------------------------|
+| $1.86$ | $0.84$ | $0.86$ | Employment $\notin \{\text{Refused},\text{Retired}\}$                                        |
+| $0.36$ | $0.86$ | $1.63$ | Sleep Medication $\in \{\text{Refused},\text{Use regularly}\}$                              |
+| $1.49$ | $1.02$ | $0.70$ | Race $\in \{\text{Hispanic}\}$                                                              |
+| $1.47$ | $1.12$ | $0.54$ | Dental Health $\in \{\text{Excellent},\text{Poor}\}$                                        |
+| $1.41$ | $0.95$ | $0.89$ | Dental Health $\notin \{\text{Excellent},\text{Very Good}\}$ $\wedge$ Physical Health $\in \{\text{Very Good},\text{Good},\text{Poor}\}$ |
+| $0.81$ | $0.89$ | $1.39$ | Physical Health $\notin \{\text{Refused},\text{Very Good}\}$                                |
+| $1.24$ | $1.01$ | $0.87$ | Mental Health $\in \{\text{Excellent}\}$                                                   |
+| $1.09$ | $0.97$ | $1.00$ | Physical Health $\notin \{\text{Very Good},\text{Poor}\}$                                   |
+| $0.91$ | $1.02$ | $1.02$ | Dental Health $\notin \{\text{Excellent},\text{Good}\}$ $\wedge$ Mental Health $\in \{\text{Very Good},\text{Good}\}$ |
+
 ### Lenses
 
-Example model found by logicGP-FLCW-Macro with $93.33%$ MacroAccuracy.
+Example model found by logicGP-FLCW-Macro with $93.33\%$ MacroAccuracy.
 
 | $w_{Hard}$ | $w_{Soft}$ | $w_{None}$  | Condition                                                      |
 |------|------|-------|---------------------------------------------------------------------------|
