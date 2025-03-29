@@ -38,7 +38,7 @@ Chosen data sets from the UC Irvine Machine Learning Repository
 
 Example Model found by logicGP-FLCW-Macro on the NPHA data set with $47.33\%$ MacroAccuracy.
 
-| $w_{0-1}  | $w_{2-3}  | $w_{4+}  | Condition                                                                                     |
+| $w_{0-1}$  | $w_{2-3}$  | $w_{4+}$  | Condition                                                                                     |
 |--------|--------|-------|----------------------------------------------------------------------------------------------|
 | $1.86$ | $0.84$ | $0.86$ | Employment $\notin$ {Refused,Retired}                                        |
 | $0.36$ | $0.86$ | $1.63$ | Sleep Medication $\in$ {Refused,Use regularly}                              |
