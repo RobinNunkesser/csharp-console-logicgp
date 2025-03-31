@@ -23,6 +23,8 @@ public class RestaurantTests : RealTests
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;
-        TestFlRw(_data, "will_wait");
+        var accuracy = TestFlRw(_data, "will_wait", 10);
+        Assert.IsTrue(accuracy > 0.8333);
+        Assert.IsTrue(accuracy < 0.8334);
     }
 }

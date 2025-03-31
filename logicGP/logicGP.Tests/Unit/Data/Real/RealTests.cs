@@ -8,7 +8,8 @@ namespace logicGP.Tests;
 
 public class RealTests
 {
-    protected void TestFlRw(IDataView data, string label, int generations = 10)
+    protected double TestFlRw(IDataView data, string label,
+        int generations = 100)
     {
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
@@ -24,6 +25,7 @@ public class RealTests
             new HashSet<string>(
                 columnData);
         var labels = uniqueValues.OrderBy(c => c).ToList();
+        var bestAccuracy = 0.0;
         for (var j = 0; j < 10; j++)
         {
             var mlModel = trainer.Fit(data);
@@ -50,7 +52,11 @@ public class RealTests
             }
 
             var macroAccuracy = accuracies.Sum() / labels.Count;
-            Console.WriteLine($"Macro Accuracy: {macroAccuracy}");
+            if (macroAccuracy > bestAccuracy) bestAccuracy = macroAccuracy;
+            Console.WriteLine($"MacroAccuracy: {macroAccuracy}");
         }
+
+        Console.WriteLine($"Best MacroAccuracy: {bestAccuracy}");
+        return bestAccuracy;
     }
 }

@@ -23,6 +23,8 @@ public sealed class SNPSimulationTests
     {
         GPASSimulation("Simulation1", AppDomain.CurrentDomain.BaseDirectory,
             TrainerType.LogicGpGpasBinaryTrainer);
+        // Only test successful completion
+        Assert.IsTrue(true);
     }
 
     [TestMethod]
@@ -30,6 +32,8 @@ public sealed class SNPSimulationTests
     {
         GPASSimulation("Simulation2", AppDomain.CurrentDomain.BaseDirectory,
             TrainerType.LogicGpGpasBinaryTrainer);
+        // Only test successful completion
+        Assert.IsTrue(true);
     }
 
     [TestMethod]
@@ -37,6 +41,8 @@ public sealed class SNPSimulationTests
     {
         GPASSimulation("Simulation3", AppDomain.CurrentDomain.BaseDirectory,
             TrainerType.LogicGpGpasBinaryTrainer);
+        // Only test successful completion
+        Assert.IsTrue(true);
     }
 
     [TestMethod]
@@ -44,6 +50,8 @@ public sealed class SNPSimulationTests
     {
         GPASSimulation("Simulation1", AppDomain.CurrentDomain.BaseDirectory,
             TrainerType.LogicGpFlrwMicroMulticlassTrainer);
+        // Only test successful completion
+        Assert.IsTrue(true);
     }
 
     [TestMethod]
@@ -51,6 +59,8 @@ public sealed class SNPSimulationTests
     {
         GPASSimulation("Simulation2", AppDomain.CurrentDomain.BaseDirectory,
             TrainerType.LogicGpFlrwMicroMulticlassTrainer);
+        // Only test successful completion
+        Assert.IsTrue(true);
     }
 
     [TestMethod]
@@ -58,6 +68,8 @@ public sealed class SNPSimulationTests
     {
         GPASSimulation("Simulation3", AppDomain.CurrentDomain.BaseDirectory,
             TrainerType.LogicGpFlrwMicroMulticlassTrainer);
+        // Only test successful completion
+        Assert.IsTrue(true);
     }
 
     public void GPASSimulation(string folder, string logFolder,

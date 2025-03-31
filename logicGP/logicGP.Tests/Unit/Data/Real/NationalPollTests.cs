@@ -23,6 +23,8 @@ public class NationalPollTests : RealTests
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;
-        TestFlRw(_data, "class");
+        var accuracy = TestFlRw(_data, "Number_of_Doctors_Visited", 10);
+        Assert.IsTrue(accuracy > 0.3814);
+        Assert.IsTrue(accuracy < 0.3815);
     }
 }

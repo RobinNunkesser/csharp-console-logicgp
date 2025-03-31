@@ -23,6 +23,8 @@ public class SolarflareTests : RealTests
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;
-        TestFlRw(_data, "flares");
+        var accuracy = TestFlRw(_data, "flares", 10);
+        Assert.IsTrue(accuracy > 0.2238);
+        Assert.IsTrue(accuracy < 0.2239);
     }
 }

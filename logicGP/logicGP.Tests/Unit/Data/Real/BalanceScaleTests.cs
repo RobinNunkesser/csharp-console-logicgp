@@ -23,6 +23,8 @@ public class BalanceScaleTests : RealTests
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;
-        TestFlRw(_data, "class");
+        var accuracy = TestFlRw(_data, "class", 10);
+        Assert.IsTrue(accuracy > 0.4644);
+        Assert.IsTrue(accuracy < 0.4645);
     }
 }

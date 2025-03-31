@@ -23,6 +23,8 @@ public class LensesTests : RealTests
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;
-        TestFlRw(_data, "class");
+        var accuracy = TestFlRw(_data, "class", 10);
+        Assert.IsTrue(accuracy > 0.8000);
+        Assert.IsTrue(accuracy < 0.8001);
     }
 }
