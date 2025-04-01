@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Unit\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <None Update="Data\Real\balancescale.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

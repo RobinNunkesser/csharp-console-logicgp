@@ -3,16 +3,26 @@ using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
+public enum LogicGpLiteralType
+{
+    Dussault,
+    Rudell,
+    Su,
+    LessGreater
+}
+
 public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 {
     private readonly List<TCategory> _orderedCategories;
     public readonly bool[] BitSet;
 
     public LogicGpLiteral(string label, HashSet<TCategory> categories, int set,
-        List<TCategory> trainingData)
+        List<TCategory> trainingData,
+        LogicGpLiteralType literalType = LogicGpLiteralType.Rudell)
     {
         Label = label;
         Set = set;
+        LiteralType = literalType;
         _orderedCategories = categories.OrderBy(c => c).ToList();
         BitSet = new bool[_orderedCategories.Count];
         for (var i = 0; i < _orderedCategories.Count; i++)
@@ -21,6 +31,7 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
     }
 
     public int Set { get; }
+    public LogicGpLiteralType LiteralType { get; }
 
     public string Label { get; set; }
 
@@ -71,6 +82,61 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
     }
 
     public override string ToString()
+    {
+        switch (LiteralType)
+        {
+            case LogicGpLiteralType.Dussault:
+                return ToDussaultString();
+            case LogicGpLiteralType.Rudell:
+                return ToRudellString();
+            case LogicGpLiteralType.Su:
+                return ToSuString();
+            case LogicGpLiteralType.LessGreater:
+                return ToLessGreaterString();
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private string ToLessGreaterString()
+    {
+        return "ToLessGreater";
+    }
+
+    private string ToSuString()
+    {
+        var sb = new StringBuilder();
+        if (BitSet[0])
+        {
+            var index = Array.IndexOf(BitSet, false);
+            sb.Append($"({Label} < {_orderedCategories[index]})");
+        }
+        else
+        {
+            var index = Array.IndexOf(BitSet, true);
+            sb.Append($"({Label} > {_orderedCategories[index]})");
+        }
+
+        return sb.ToString();
+    }
+
+    private string ToDussaultString()
+    {
+        var sb = new StringBuilder();
+        var count = BitSet.Count(bit => bit);
+        if (count != 1 && count != BitSet.Length - 1)
+            throw new ArgumentException(
+                "Dussault literals must have exactly one or all but one bit set");
+        if (count == 1)
+            sb.Append(
+                $"({Label} = {_orderedCategories[Array.IndexOf(BitSet, true)]})");
+        else
+            sb.Append(
+                $"({Label} \u2260 {_orderedCategories[Array.IndexOf(BitSet, false)]})");
+        return sb.ToString();
+    }
+
+    private string ToRudellString()
     {
         var sb = new StringBuilder();
         sb.Append($"({Label} ∈ {{");
