@@ -23,8 +23,8 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 /// <seealso cref="ILiteral{TCategory}" />
 public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 {
+    private readonly bool[] _bitSet;
     private readonly List<TCategory> _orderedCategories;
-    public readonly bool[] BitSet;
 
     public LogicGpLiteral(string label, HashSet<TCategory> categories, int set,
         List<TCategory> trainingData,
@@ -34,14 +34,14 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         Set = set;
         LiteralType = literalType;
         _orderedCategories = categories.OrderBy(c => c).ToList();
-        BitSet = new bool[_orderedCategories.Count];
+        _bitSet = new bool[_orderedCategories.Count];
         for (var i = 0; i < _orderedCategories.Count; i++)
-            BitSet[i] = (set & (1 << i)) != 0;
+            _bitSet[i] = (set & (1 << i)) != 0;
         GeneratePredictions(trainingData);
     }
 
-    public int Set { get; }
-    public LogicGpLiteralType LiteralType { get; }
+    private int Set { get; }
+    private LogicGpLiteralType LiteralType { get; }
 
     public string Label { get; set; }
 
@@ -54,7 +54,7 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         {
             var category = data[i];
             var index = _orderedCategories.IndexOf(category);
-            Predictions[i] = BitSet[index];
+            Predictions[i] = _bitSet[index];
         }
     }
 
@@ -91,7 +91,7 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(BitSet, _orderedCategories, Label);
+        return HashCode.Combine(_bitSet, _orderedCategories, Label);
     }
 
     public override string ToString()
@@ -114,14 +114,14 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
     private string ToLessGreaterString()
     {
         var sb = new StringBuilder();
-        if (BitSet[0])
+        if (_bitSet[0])
         {
-            var index = Array.IndexOf(BitSet, false);
+            var index = Array.IndexOf(_bitSet, false);
             sb.Append($"({Label} < {_orderedCategories[index]})");
         }
         else
         {
-            var index = Array.IndexOf(BitSet, true);
+            var index = Array.IndexOf(_bitSet, true);
             sb.Append($"({Label} > {_orderedCategories[index - 1]})");
         }
 
@@ -131,17 +131,17 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
     private string ToSuString()
     {
         var sb = new StringBuilder();
-        var firstIndexPositive = Array.IndexOf(BitSet, true);
+        var firstIndexPositive = Array.IndexOf(_bitSet, true);
         if (firstIndexPositive == -1)
             throw new ArgumentException("No positive value in BitSet");
-        var firstIndexNegative = Array.IndexOf(BitSet, false);
+        var firstIndexNegative = Array.IndexOf(_bitSet, false);
         if (firstIndexNegative == -1)
             throw new ArgumentException("No negative value in BitSet");
-        var lastIndexPositive = Array.LastIndexOf(BitSet, true);
-        var lastIndexNegative = Array.LastIndexOf(BitSet, false);
+        var lastIndexPositive = Array.LastIndexOf(_bitSet, true);
+        var lastIndexNegative = Array.LastIndexOf(_bitSet, false);
         var negative = false;
         for (var i = firstIndexPositive; i < lastIndexPositive; i++)
-            if (!BitSet[i])
+            if (!_bitSet[i])
                 negative = true;
         if (negative)
             sb.Append(
@@ -155,16 +155,16 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
     private string ToDussaultString()
     {
         var sb = new StringBuilder();
-        var count = BitSet.Count(bit => bit);
-        if (count != 1 && count != BitSet.Length - 1)
+        var count = _bitSet.Count(bit => bit);
+        if (count != 1 && count != _bitSet.Length - 1)
             throw new ArgumentException(
                 "Dussault literals must have exactly one or all but one bit set");
         if (count == 1)
             sb.Append(
-                $"({Label} = {_orderedCategories[Array.IndexOf(BitSet, true)]})");
+                $"({Label} = {_orderedCategories[Array.IndexOf(_bitSet, true)]})");
         else
             sb.Append(
-                $"({Label} \u2260 {_orderedCategories[Array.IndexOf(BitSet, false)]})");
+                $"({Label} \u2260 {_orderedCategories[Array.IndexOf(_bitSet, false)]})");
         return sb.ToString();
     }
 
@@ -173,7 +173,7 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         var sb = new StringBuilder();
         sb.Append($"({Label} ∈ {{");
         for (var j = 0; j < _orderedCategories.Count; j++)
-            if (BitSet[j])
+            if (_bitSet[j])
                 sb.Append(_orderedCategories[j] + ",");
         sb.Remove(sb.Length - 1, 1);
         sb.Append("})");

@@ -30,10 +30,10 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 ///     The class also provides properties for setting the accuracy, weighting,
 ///     initialization, population manager, search space, stopping criterion,
 ///     selection, and fitness function.
-///     The class also provides methods for preparing the algorithm for training and
+///     The class also provides methods for preparing the algorithm for training
+///     and
 ///     adapting literals.
 /// </remarks>
-
 public class LogicGpAlgorithm(
     IGeneticProgram gp,
     RandomInitialization randomInitialization,
@@ -85,7 +85,6 @@ public class LogicGpAlgorithm(
         IIndividualList individuals,
         string labelColumnName = DefaultColumnNames.Label)
     {
-        //Console.WriteLine("Validating");
         var labelColumn = validationData.GetColumnAsString(labelColumnName)
             .ToList();
         var labelDistribution = new float[data.Labels.Count];
@@ -133,14 +132,12 @@ public class LogicGpAlgorithm(
         int generations = 10000
     )
     {
-        //Console.WriteLine("Training");
         if (firstTraining)
             PrepareForFirstTraining(trainData, labelColumnName);
         else
             PrepareForRetraining(trainData, labelColumnName);
 
         randomInitialization.Size = 2;
-        //generationStoppingCriterion.Limit = 10000;
         generationStoppingCriterion.Limit = generations;
         selection.Size = 6;
         gp.SelectionForOperator = selection;
@@ -181,7 +178,6 @@ public class LogicGpAlgorithm(
     private void PrepareForFirstTraining(IDataView trainData,
         string labelColumnName)
     {
-        //Console.WriteLine("Preparing for first training");
         data.Initialize(trainData, labelColumnName);
     }
 
@@ -189,7 +185,6 @@ public class LogicGpAlgorithm(
     private void PrepareForRetraining(IDataView trainData,
         string labelColumnName)
     {
-        //Console.WriteLine("Preparing for retraining");
         AdaptLiterals(trainData);
     }
 

@@ -8,13 +8,15 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
 /// <summary>
 ///     A class representing the search space for the LogicGP algorithm.
-///     It implements the ISearchSpace interface and provides methods for generating
+///     It implements the ISearchSpace interface and provides methods for
+///     generating
 ///     random genotypes and starting populations.
 /// </summary>
 /// <remarks>
 ///     The LogicGpSearchSpace class is used to represent the search space for the
 ///     LogicGP algorithm.
-///     It contains methods for generating random genotypes and starting populations.
+///     It contains methods for generating random genotypes and starting
+///     populations.
 ///     The class also provides properties for setting the output column and
 ///     weighting used in the algorithm.
 /// </remarks>
@@ -41,10 +43,10 @@ public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
                      .Select(
                          literal =>
                              new LogicGpMonomial<string>([literal], classes,
-                                 OutputColumn, data.Labels))
+                                 OutputColumn, data.Labels, UsedWeighting))
                      .Select(monomial =>
                          new LogicGpPolynomial<string>([monomial], classes,
-                             OutputColumn, data.Labels)))
+                             OutputColumn, data.Labels, UsedWeighting)))
         {
             var newIndividual = new Individual(
                 new LogicGpGenotype(polynomial, data, OutputColumn,

@@ -17,8 +17,10 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 ///     It contains a polynomial that represents the genotype and provides methods
 ///     for generating predictions based on the polynomial.
 ///     The class supports different types of monomials and provides methods for
-///     manipulating monomials, such as inserting, deleting, and replacing literals.
-///     The class also provides methods for updating predictions and checking if the
+///     manipulating monomials, such as inserting, deleting, and replacing
+///     literals.
+///     The class also provides methods for updating predictions and checking if
+///     the
 ///     genotype is empty.
 /// </remarks>
 /// <seealso cref="IGenotype" />
@@ -42,10 +44,10 @@ public class LogicGpGenotype : IGenotype
         var literal = data.GetRandomLiteral();
         var monomial =
             new LogicGpMonomial<string>([literal], classes, OutputColumn,
-                Labels);
+                Labels, _usedWeighting);
         _polynomial = new LogicGpPolynomial<string>([monomial], classes,
             OutputColumn,
-            Labels);
+            Labels, _usedWeighting);
     }
 
     public LogicGpGenotype(IPolynomial<string> polynomial,
@@ -200,7 +202,8 @@ public class LogicGpGenotype : IGenotype
         _polynomial.Monomials.Add(new LogicGpMonomial<string>(
             new List<ILiteral<string>>
                 { _data.GetRandomLiteral() },
-            _polynomial.Monomials[0].Weights.Length, OutputColumn, Labels));
+            _polynomial.Monomials[0].Weights.Length, OutputColumn, Labels,
+            _usedWeighting));
         UpdatePredictions();
     }
 

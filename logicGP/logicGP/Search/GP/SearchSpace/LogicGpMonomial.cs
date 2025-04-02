@@ -26,9 +26,11 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 {
     private readonly int _classes;
+    private readonly LogicGpAlgorithm.Weighting? _usedWeighting;
 
     public LogicGpMonomial(IEnumerable<ILiteral<TCategory>> literals,
-        int classes, List<string>? outputValues, List<string> labels)
+        int classes, List<string>? outputValues, List<string> labels,
+        LogicGpAlgorithm.Weighting? usedWeighting)
     {
         ArgumentNullException.ThrowIfNull(outputValues);
         ArgumentNullException.ThrowIfNull(labels);
@@ -36,8 +38,10 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
         OutputColumn = outputValues;
         Literals = literals.ToList();
         _classes = classes;
+        _usedWeighting = usedWeighting;
         Weights = new float[_classes];
         Weights[_classes - 1] = 1;
+        CounterWeights = new float[_classes];
         UpdatePredictions();
     }
 
@@ -72,7 +76,7 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
     public object Clone()
     {
         return new LogicGpMonomial<TCategory>(Literals, _classes, OutputColumn,
-            Labels)
+            Labels, _usedWeighting)
         {
             Weights = new float[_classes].Select((_, i) => Weights[i]).ToArray()
         };
@@ -93,10 +97,21 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
         Predictions = new float[Literals[0].Predictions.Length][];
 
         // TODO: This is a hack for quick and dirty weight computation
-
+        // It relies on the fact that training data has more rows than validation data
         if (Predictions.Length == OutputColumn.Count)
-            ComputeWeights(literalPredictions);
-
+            switch (_usedWeighting)
+            {
+                case LogicGpAlgorithm.Weighting.Fixed:
+                    Weights = [0.0f, 1.0f];
+                    break;
+                case LogicGpAlgorithm.Weighting.Computed:
+                    ComputeWeights(literalPredictions);
+                    break;
+                case LogicGpAlgorithm.Weighting.Mutated:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
         for (var i = 0; i < Predictions.Length; i++)
             if (literalPredictions[i])
@@ -141,12 +156,9 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
         var newCounterWeights = new float[_classes];
         for (var j = 0; j < newCounterWeights.Length; j++)
             newCounterWeights[j] = 0;
-        //-newWeights[j]; //outDistribution[j] / inDistribution[j];
 
         Weights = newWeights;
-        CounterWeights = newCounterWeights;
-
-        //Weights = [0.0f, 2.0f];
+        //CounterWeights = newCounterWeights;
     }
 
     public override string ToString()

@@ -27,15 +27,18 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
     private readonly int _classes;
     private readonly List<string> _labels;
     private readonly List<string>? _outputValues;
+    private readonly LogicGpAlgorithm.Weighting? _usedWeighting;
 
     public LogicGpPolynomial(IEnumerable<IMonomial<TCategory>> monomials,
-        int classes, List<string>? outputValues, List<string> labels)
+        int classes, List<string>? outputValues, List<string> labels,
+        LogicGpAlgorithm.Weighting? usedWeighting)
     {
         _classes = classes;
         _outputValues = outputValues;
         _labels = labels;
         Monomials = [..monomials];
         Weights = new float[Monomials[0].Literals[0].Predictions.Length];
+        _usedWeighting = usedWeighting;
         ComputeWeights();
         UpdatePredictions();
     }
@@ -61,7 +64,7 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
             Monomials.Select(
                 monomial => (IMonomial<TCategory>)monomial.Clone());
         return new LogicGpPolynomial<TCategory>(
-            monomials, _classes, _outputValues, _labels);
+            monomials, _classes, _outputValues, _labels, _usedWeighting);
     }
 
     public List<IMonomial<TCategory>> Monomials { get; set; }
@@ -82,7 +85,6 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
                 count[_labels.IndexOf(_outputValues[i])]++;
             var sum = 0.0f;
             for (var j = 0; j < Predictions[i].Length; j++)
-                //Predictions[i][j] += Weights[j];
                 sum += Predictions[i][j];
 
             for (var j = 0; j < Predictions[i].Length; j++)
@@ -107,6 +109,12 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 
     private void ComputeWeightsForCount(int[] count)
     {
+        if (_usedWeighting == LogicGpAlgorithm.Weighting.Fixed)
+        {
+            Weights = [1.0f, 0.0f];
+            return;
+        }
+
         var weights = count.Select(c => (float)c).ToArray();
 
         var sum = weights.Sum();
@@ -123,10 +131,7 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         var count = new int[_classes];
         foreach (var index in _outputValues.Select(value =>
                      _labels.IndexOf(value))) count[index]++;
-
         ComputeWeightsForCount(count);
-
-        //Weights = [1.0f, 0.0f];
     }
 
     public override string ToString()

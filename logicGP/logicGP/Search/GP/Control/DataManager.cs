@@ -8,11 +8,11 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 
 public class DataManager
 {
-    public List<ILiteral<string>> Literals { get; set; }
+    public required List<ILiteral<string>> Literals { get; set; }
 
-    public List<string> Labels { get; set; }
+    public required List<string> Labels { get; set; }
 
-    public string Label { get; set; }
+    public required string Label { get; set; }
 
     public void Initialize(IDataView gpTrainingData,
         string labelColumnName = DefaultColumnNames.Label)
@@ -38,9 +38,12 @@ public class DataManager
             var powerSetCount = 1 << uniqueCount;
             for (var i = 1; i < powerSetCount - 1; i++)
             {
+                var literalType = uniqueValues.Count <= 3
+                    ? LogicGpLiteralType.Dussault
+                    : LogicGpLiteralType.Rudell;
                 var literal = new LogicGpLiteral<string>(column.Name,
                     uniqueValues, i,
-                    columnData);
+                    columnData, literalType);
                 Literals.Add(literal);
             }
         }
