@@ -5,6 +5,23 @@ using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
+/// <summary>
+///     A class representing a genotype in the LogicGP algorithm.
+///     It implements the IGenotype interface and provides methods for generating
+///     predictions,
+///     comparing genotypes, and manipulating monomials.
+/// </summary>
+/// <remarks>
+///     The LogicGpGenotype class is used to represent a genotype in the LogicGP
+///     algorithm.
+///     It contains a polynomial that represents the genotype and provides methods
+///     for generating predictions based on the polynomial.
+///     The class supports different types of monomials and provides methods for
+///     manipulating monomials, such as inserting, deleting, and replacing literals.
+///     The class also provides methods for updating predictions and checking if the
+///     genotype is empty.
+/// </remarks>
+/// <seealso cref="IGenotype" />
 public class LogicGpGenotype : IGenotype
 {
     private readonly DataManager _data;

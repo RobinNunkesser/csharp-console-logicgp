@@ -4,6 +4,24 @@ using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
+/// <summary>
+///     A class representing a monomial in the LogicGP algorithm.
+///     It implements the IMonomial interface and provides methods for generating
+///     predictions,
+///     comparing monomials, and manipulating literals.
+/// </summary>
+/// <typeparam name="TCategory">The type of the categories used in the monomial.</typeparam>
+/// <remarks>
+///     The LogicGpMonomial class is used to represent a monomial in the LogicGP
+///     algorithm.
+///     It contains a list of literals that represent the monomial and provides
+///     methods for generating predictions based on the literals.
+///     The class supports different types of literals and provides methods for
+///     manipulating literals, such as inserting, deleting, and replacing literals.
+///     The class also provides methods for updating predictions and checking the
+///     size of the monomial.
+/// </remarks>
+/// <seealso cref="IMonomial{TCategory}" />
 public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
 {
     private readonly int _classes;

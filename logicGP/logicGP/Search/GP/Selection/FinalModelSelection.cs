@@ -5,6 +5,21 @@ using Italbytz.Ports.Algorithms.AI.Search.GP.Selection;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 
+/// <summary>
+///     A class representing the final model selection process in the LogicGP
+///     algorithm.
+///     It implements the ISelection interface and provides methods for processing
+///     a list of individuals and selecting the best model based on their fitness.
+/// </summary>
+/// <remarks>
+///     The FinalModelSelection class is used to select the best model from a list
+///     of individuals in the LogicGP algorithm.
+///     It groups the individuals by their literal signature and selects the best
+///     model based on their fitness.
+///     The class also provides methods for processing the individuals and
+///     selecting the best model.
+/// </remarks>
+/// <seealso cref="ISelection" />
 public class FinalModelSelection : ISelection
 {
     public IIndividualList Process(IIndividualList individuals)

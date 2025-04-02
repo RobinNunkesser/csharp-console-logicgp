@@ -6,6 +6,19 @@ using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
+/// <summary>
+///     A class representing the search space for the LogicGP algorithm.
+///     It implements the ISearchSpace interface and provides methods for generating
+///     random genotypes and starting populations.
+/// </summary>
+/// <remarks>
+///     The LogicGpSearchSpace class is used to represent the search space for the
+///     LogicGP algorithm.
+///     It contains methods for generating random genotypes and starting populations.
+///     The class also provides properties for setting the output column and
+///     weighting used in the algorithm.
+/// </remarks>
+/// <seealso cref="ISearchSpace" />
 public class LogicGpSearchSpace(IGeneticProgram gp, DataManager data)
     : ISearchSpace
 {

@@ -18,6 +18,22 @@ using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
+/// <summary>
+///     A class representing the LogicGP algorithm for genetic programming.
+///     It provides methods for training,
+///     validating, and testing the algorithm.
+/// </summary>
+/// <remarks>
+///     The LogicGpAlgorithm class is used to represent the LogicGP algorithm for
+///     genetic programming.
+///     It contains methods for training, validating, and testing the algorithm.
+///     The class also provides properties for setting the accuracy, weighting,
+///     initialization, population manager, search space, stopping criterion,
+///     selection, and fitness function.
+///     The class also provides methods for preparing the algorithm for training and
+///     adapting literals.
+/// </remarks>
+
 public class LogicGpAlgorithm(
     IGeneticProgram gp,
     RandomInitialization randomInitialization,

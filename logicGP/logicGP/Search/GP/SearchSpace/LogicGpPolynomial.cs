@@ -4,6 +4,21 @@ using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
+/// <summary>
+///     A class representing a polynomial in the LogicGP algorithm.
+///     It implements the IPolynomial interface and provides methods for generating
+///     predictions and comparing polynomials.
+/// </summary>
+/// <typeparam name="TCategory">The type of the categories used in the polynomial.</typeparam>
+/// <remarks>
+///     The LogicGpPolynomial class is used to represent a polynomial in the LogicGP
+///     algorithm.
+///     It contains a list of monomials that represent the polynomial and provides
+///     methods for generating predictions based on the monomials.
+///     The class also provides methods for updating predictions and checking the size
+///     of the polynomial.
+/// </remarks>
+/// <seealso cref="IPolynomial{TCategory}" />
 public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 {
     private readonly int _classes;

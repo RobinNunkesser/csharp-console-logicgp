@@ -3,14 +3,24 @@ using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
-public enum LogicGpLiteralType
-{
-    Dussault,
-    Rudell,
-    Su,
-    LessGreater
-}
-
+/// <summary>
+///     A class representing a literal in the LogicGP algorithm.
+///     It implements the ILiteral interface and provides methods for generating
+///     predictions,
+///     comparing literals, and converting them to string representations.
+/// </summary>
+/// <typeparam name="TCategory">The type of the categories used in the literal.</typeparam>
+/// <remarks>
+///     The LogicGpLiteral class is used to represent a literal in the LogicGP
+///     algorithm.
+///     It contains a bit set that represents the categories associated with the
+///     literal.
+///     The class provides methods for generating predictions based on the bit set,
+///     comparing literals, and converting them to string representations.
+///     The class supports different types of literals, including Dussault, Rudell,
+///     Su, and LessGreater.
+/// </remarks>
+/// <seealso cref="ILiteral{TCategory}" />
 public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 {
     private readonly List<TCategory> _orderedCategories;
