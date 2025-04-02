@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
@@ -11,11 +12,13 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 /// </summary>
 /// <typeparam name="TCategory">The type of the categories used in the polynomial.</typeparam>
 /// <remarks>
-///     The LogicGpPolynomial class is used to represent a polynomial in the LogicGP
+///     The LogicGpPolynomial class is used to represent a polynomial in the
+///     LogicGP
 ///     algorithm.
 ///     It contains a list of monomials that represent the polynomial and provides
 ///     methods for generating predictions based on the monomials.
-///     The class also provides methods for updating predictions and checking the size
+///     The class also provides methods for updating predictions and checking the
+///     size
 ///     of the polynomial.
 /// </remarks>
 /// <seealso cref="IPolynomial{TCategory}" />
@@ -129,10 +132,16 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append('(');
-        sb.Append(string.Join(", ", Weights));
-        sb.Append(") + ");
-        sb.Append(string.Join(" + ", Monomials));
+        sb.Append("\n|");
+        for (var i = 0; i < Weights.Length; i++) sb.Append($" $w_{i}$ |");
+        sb.Append(" Condition                                   |\n|");
+        for (var i = 0; i < Weights.Length; i++) sb.Append(" ----- |");
+        sb.Append(" ------------------------------------------- |\n|  ");
+        sb.Append(string.Join(" |  ", Weights.Select(w => w.ToString("F2",
+            CultureInfo.InvariantCulture))));
+        sb.Append(" | None below fulfilled                        |\n|");
+        sb.Append(string.Join("\n|", Monomials));
+        sb.Append('\n');
         return sb.ToString();
     }
 }

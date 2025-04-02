@@ -48,7 +48,7 @@ public abstract class
         foreach (var candidate in allCandidates)
             candidatePopulation.Add(candidate);
         var chosenIndividual = bestSelection.Process(candidatePopulation)[0];
-        Console.WriteLine($"Chosen individual: {chosenIndividual}");
+        Console.WriteLine($"Chosen individual: \n{chosenIndividual}");
         var transformer = CreateTransformer(chosenIndividual, data);
 
         return transformer;

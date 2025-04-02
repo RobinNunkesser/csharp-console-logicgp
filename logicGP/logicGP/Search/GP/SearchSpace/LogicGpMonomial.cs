@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
@@ -151,10 +152,12 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append('(');
-        sb.Append(string.Join(",", Weights));
-        sb.Append(')');
+        sb.Append("  ");
+        sb.Append(string.Join(" |  ", Weights.Select(w => w.ToString("F2",
+            CultureInfo.InvariantCulture))));
+        sb.Append(" | ");
         sb.Append(string.Join("", Literals));
+        sb.Append(" |");
         return sb.ToString();
     }
 }
