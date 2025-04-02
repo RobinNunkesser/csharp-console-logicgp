@@ -73,7 +73,10 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         if (obj is null) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != GetType()) return false;
-        return Equals((LogicGpLiteral<TCategory>)obj);
+        if (obj is not LogicGpLiteral<TCategory> other) return false;
+        if (other.LiteralType != LiteralType) return false;
+        if (other.Label != Label) return false;
+        return other.Set == Set;
     }
 
     public override int GetHashCode()
@@ -100,11 +103,6 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 
     private string ToLessGreaterString()
     {
-        return "ToLessGreater";
-    }
-
-    private string ToSuString()
-    {
         var sb = new StringBuilder();
         if (BitSet[0])
         {
@@ -114,9 +112,33 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         else
         {
             var index = Array.IndexOf(BitSet, true);
-            sb.Append($"({Label} > {_orderedCategories[index]})");
+            sb.Append($"({Label} > {_orderedCategories[index - 1]})");
         }
 
+        return sb.ToString();
+    }
+
+    private string ToSuString()
+    {
+        var sb = new StringBuilder();
+        var firstIndexPositive = Array.IndexOf(BitSet, true);
+        if (firstIndexPositive == -1)
+            throw new ArgumentException("No positive value in BitSet");
+        var firstIndexNegative = Array.IndexOf(BitSet, false);
+        if (firstIndexNegative == -1)
+            throw new ArgumentException("No negative value in BitSet");
+        var lastIndexPositive = Array.LastIndexOf(BitSet, true);
+        var lastIndexNegative = Array.LastIndexOf(BitSet, false);
+        var negative = false;
+        for (var i = firstIndexPositive; i < lastIndexPositive; i++)
+            if (!BitSet[i])
+                negative = true;
+        if (negative)
+            sb.Append(
+                $"({Label} ∉ [{_orderedCategories[firstIndexNegative]},{_orderedCategories[lastIndexNegative]}])");
+        else
+            sb.Append(
+                $"({Label} ∈ [{_orderedCategories[firstIndexPositive]},{_orderedCategories[lastIndexPositive]}])");
         return sb.ToString();
     }
 
