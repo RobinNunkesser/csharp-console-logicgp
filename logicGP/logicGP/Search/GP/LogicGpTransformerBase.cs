@@ -1,5 +1,6 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -27,7 +28,8 @@ public abstract class LogicGpTransformerBase<TModelOutput>(
     {
         foreach (var literal in data.Literals)
             literal.GeneratePredictions(
-                input.GetColumnAsString(literal.Label).ToList());
+                DataViewExtensions.GetColumnAsString(input, literal.Label)
+                    .ToList());
         ((LogicGpGenotype)Model.Genotype)
             .UpdatePredictionsRecursively();
         var mlContext = new MLContext();

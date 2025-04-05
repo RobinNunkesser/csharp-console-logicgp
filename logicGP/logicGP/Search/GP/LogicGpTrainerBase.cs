@@ -1,7 +1,9 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
+using logicGP.Tests.Data.Simulated;
 using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
@@ -9,14 +11,14 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 public abstract class
     LogicGpTrainerBase<TTransformer>(
         LogicGpAlgorithm algorithm,
-        DataManager data) : IEstimator<TTransformer>
-    where TTransformer : ITransformer
+        DataManager data) : IEstimator<ITransformer>
+
 
 {
     public required string Label { get; set; }
     public required int MaxGenerations { get; set; } = 10000;
 
-    public TTransformer Fit(IDataView input)
+    public ITransformer Fit(IDataView input)
     {
         // Split data into k folds
         const int k = 5; // Number of folds
@@ -49,14 +51,26 @@ public abstract class
             candidatePopulation.Add(candidate);
         var chosenIndividual = bestSelection.Process(candidatePopulation)[0];
         Console.WriteLine($"Chosen individual: \n{chosenIndividual}");
-        var transformer = CreateTransformer(chosenIndividual, data);
+        // ToDo: Use custom mapping instead
 
-        return transformer;
+        //var transformer = CreateTransformer(chosenIndividual, data);
+        //return transformer;
+        return mlContext.Transforms.CustomMapping(
+            LogicGpMapping
+                .GetMapping<FeaturesInput, BinaryClassificationScheme>(),
+            null).Fit(input);
     }
 
+    /// <summary>
+    ///     This method cannot be implemented with reasonable effort because
+    ///     ML.NET only exposes the necessary API to "best friends".
+    /// </summary>
+    /// <param name="inputSchema"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
-        throw new NotImplementedException();
+        return inputSchema;
     }
 
     protected abstract TTransformer CreateTransformer(

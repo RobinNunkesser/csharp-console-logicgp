@@ -83,12 +83,14 @@ public class MyCustomMapperTests
                 @"SNP33", @"SNP34", @"SNP35", @"SNP36", @"SNP37", @"SNP38",
                 @"SNP39", @"SNP40", @"SNP41", @"SNP42", @"SNP43", @"SNP44",
                 @"SNP45", @"SNP46", @"SNP47", @"SNP48", @"SNP49", @"SNP50"))
-            /*.Append(mlContext.Transforms.Conversion.MapValueToKey(@"y", @"y",
-                addKeyValueAnnotationsAsText: false))*/
+            /*.Append(mlContext.Transforms.Conversion.MapValueToKey(@"y",
+                @"y",
+                addKeyValueAnnotationsAsText: false))
             .Append(mlContext.Transforms.CustomMapping(
-                MyCustomMapper
-                    .GetMapping<SNPModelInput, BinaryClassificationSchema>(),
-                null));
+                LabelMapper
+                    .GetMapping<MappingInput, LabelSchema>(),
+                null))*/
+            .Append(new MyCustomEstimator());
         /*.Append(
             mlContext.Transforms.Conversion.MapKeyToValue(@"PredictedLabel",
                 @"PredictedLabel"));*/

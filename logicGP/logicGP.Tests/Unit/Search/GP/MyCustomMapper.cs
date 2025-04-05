@@ -14,8 +14,8 @@ public class MyCustomMapper
         where TSrc : class, new() where TDst : class, new()
     {
         if (output is not BinaryClassificationSchema schema) return;
-        schema.Score = 0.0f;
-        schema.Probability = 0.0f;
-        schema.PredictedLabel = 0.0f;
+        schema.Score = 1.0f;
+        schema.Probability = 1.0f;
+        schema.PredictedLabel = 42.0f;
     }
 }

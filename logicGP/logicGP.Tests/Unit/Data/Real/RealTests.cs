@@ -1,5 +1,5 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -20,7 +20,8 @@ public class RealTests
         // This is only for testing purposes, in production this should be set to a higher value (e.g. 10000)
         trainer.MaxGenerations = generations;
 
-        var columnData = data.GetColumnAsString(trainer.Label).ToList();
+        var columnData = DataViewExtensions
+            .GetColumnAsString(data, trainer.Label).ToList();
         var uniqueValues =
             new HashSet<string>(
                 columnData);

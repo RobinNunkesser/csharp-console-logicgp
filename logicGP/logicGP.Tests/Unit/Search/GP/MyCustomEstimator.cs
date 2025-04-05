@@ -10,19 +10,21 @@ public class MyCustomEstimator : IEstimator<ITransformer>
         var mlContext = new MLContext();
         return mlContext.Transforms.CustomMapping(
             MyCustomMapper
-                .GetMapping<SNPModelInput, BinaryClassificationSchema>(),
+                .GetMapping<FeaturesInput, BinaryClassificationSchema>(),
             null).Fit(input);
     }
 
     /// <summary>
     ///     This method cannot be implemented with reasonable effort because
-    ///     of ML.NET only exposes the necessary API to "best friends".
+    ///     ML.NET only exposes the necessary API to "best friends".
+    ///     Schema modifications therefore need to be done in CustomMappings
     /// </summary>
     /// <param name="inputSchema"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
-        throw new NotImplementedException();
+        return inputSchema;
+        //throw new NotImplementedException();
     }
 }

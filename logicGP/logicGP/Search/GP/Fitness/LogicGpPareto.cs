@@ -1,5 +1,5 @@
-using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 using Microsoft.ML;
@@ -18,7 +18,8 @@ public class LogicGpPareto : IStaticMultiObjectiveFitnessFunction
         var predictions =
             ((LogicGpGenotype)individual.Genotype).PredictedClasses;
         var labels =
-            data.GetColumnAsString(LabelColumnName).ToList();
+            DataViewExtensions.GetColumnAsString(data, LabelColumnName)
+                .ToList();
         var objectives = new double[NumberOfObjectives];
         for (var i = 0; i < predictions.Length; i++)
         {

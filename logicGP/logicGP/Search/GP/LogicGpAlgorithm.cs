@@ -9,6 +9,7 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP.PopulationManager;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.StoppingCriterion;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search;
 using Italbytz.Ports.Algorithms.AI.Search.GP;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Fitness;
@@ -85,7 +86,8 @@ public class LogicGpAlgorithm(
         IIndividualList individuals,
         string labelColumnName = DefaultColumnNames.Label)
     {
-        var labelColumn = validationData.GetColumnAsString(labelColumnName)
+        var labelColumn = DataViewExtensions
+            .GetColumnAsString(validationData, labelColumnName)
             .ToList();
         var labelDistribution = new float[data.Labels.Count];
         foreach (var label in labelColumn)
@@ -168,7 +170,8 @@ public class LogicGpAlgorithm(
         ((LogicGpPareto)fitnessFunction).Labels = data.Labels;
         gp.FitnessFunction = fitnessFunction;
         searchSpace.OutputColumn =
-            trainData.GetColumnAsString(labelColumnName).ToList();
+            DataViewExtensions.GetColumnAsString(trainData, labelColumnName)
+                .ToList();
         searchSpace.UsedWeighting = UsedWeighting;
         gp.SearchSpace = searchSpace;
         gp.StoppingCriteria = [generationStoppingCriterion];
@@ -192,7 +195,7 @@ public class LogicGpAlgorithm(
     {
         foreach (var literal in data.Literals)
             literal.GeneratePredictions(
-                newData.GetColumnAsString(literal.Label)
+                DataViewExtensions.GetColumnAsString(newData, literal.Label)
                     .ToList());
     }
 }

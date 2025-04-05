@@ -2,10 +2,11 @@ using System.Globalization;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
-namespace Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
+namespace Italbytz.Adapters.Algorithms.AI.Util.ML;
 
 public static class DataViewExtensions
 {
+    // Todo: Move to nuget
     public static IEnumerable<string>? GetColumnAsString(
         this IDataView dataView,
         string columnName
@@ -13,7 +14,7 @@ public static class DataViewExtensions
     {
         var column = dataView.Schema[columnName];
 
-        return dataView.GetColumnAsString(column);
+        return GetColumnAsString(dataView, column);
     }
 
     public static IEnumerable<string>? GetColumnAsString(

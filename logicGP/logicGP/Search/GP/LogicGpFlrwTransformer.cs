@@ -1,4 +1,5 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 using Microsoft.ML;
 
@@ -14,7 +15,8 @@ public class LogicGpFlrwTransformer(
         DataManager dataManager)
     {
         var predictionData = new List<LogicGpFlrwModelOutput>();
-        var labelColumn = input.GetColumnAsString(data.Label).ToList();
+        var labelColumn = DataViewExtensions
+            .GetColumnAsString(input, data.Label).ToList();
 
         for (var index = 0; index < labelColumn.Count; index++)
         {
