@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Italbytz.Adapters.Algorithms.AI.Util;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
@@ -76,13 +77,18 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         var count = new int[_classes];
         for (var i = 0; i < Predictions.Length; i++)
         {
+            // Aggregate the predictions from all monomials
             Predictions[i] = Monomials
                 .Select(monomial => monomial.Predictions[i].ToArray())
                 .Aggregate((a, b) =>
                     a.Zip(b, (c, d) => c + d).ToArray());
+
+            // Count the number of data rows not covered by any monomial^
             if (Predictions.Length == _outputValues.Count &&
                 Predictions[i].Sum() == 0)
                 count[_labels.IndexOf(_outputValues[i])]++;
+
+            // Normalize the predictions
             var sum = 0.0f;
             for (var j = 0; j < Predictions[i].Length; j++)
                 sum += Predictions[i][j];
@@ -91,9 +97,13 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
                 Predictions[i][j] /= sum;
         }
 
+        // If there are any data rows not covered by any monomial,
+        // compute a weight representing the distribution of classes
+        // in the uncovered rows in relation to the covered rows
         if (count.Sum() > 0)
             ComputeWeightsForCount(count);
 
+        // Set the weight w_0 for every row the monomials do not cover
         foreach (var pred in Predictions)
         {
             if (pred.Sum() != 0) continue;
@@ -148,5 +158,36 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         sb.Append(string.Join("\n|", Monomials));
         sb.Append('\n');
         return sb.ToString();
+    }
+
+    public TDst Predict<TSrc, TDst>(TSrc src) where TSrc : class, new()
+        where TDst : class, new()
+    {
+        var scores = Monomials
+            .Select(monomial =>
+                ((LogicGpMonomial<string>)monomial).Predict(src))
+            .Aggregate((a, b) =>
+                a.Zip(b, (c, d) => c + d).ToArray());
+        if (scores.Sum() == 0) scores = Weights;
+
+        if (_classes == 2)
+        {
+            var prediction = new BinaryClassificationSchema
+            {
+                Score = scores[1]
+            };
+            var probabilities = new float[scores.Length];
+            var sum = scores.Sum();
+            for (var j = 0; j < scores.Length; j++)
+                probabilities[j] = scores[j] / sum;
+
+            prediction.Probability = probabilities[1];
+            prediction.PredictedLabel = probabilities[1] > 0.5f
+                ? 1.0f
+                : 0.0f;
+            return prediction as TDst ?? throw new InvalidOperationException();
+        }
+
+        return null;
     }
 }

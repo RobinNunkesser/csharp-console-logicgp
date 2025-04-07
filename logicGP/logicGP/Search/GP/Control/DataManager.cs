@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
@@ -23,26 +22,17 @@ public class DataManager
     {
         // Determine the labels from the label column
         Label = labelColumnName;
-        var labelColumn = gpTrainingData.Schema[Label];
-        var labelColumnData = DataViewExtensions
-            .GetColumnAsString(gpTrainingData, labelColumn).ToList();
-        Labels = new HashSet<string>(
-            labelColumnData).OrderBy(c => c).ToList();
+        Labels = (gpTrainingData.GetOrderedUniqueColumnEntries(Label) ??
+                  throw new InvalidOperationException(
+                      "The label column could not be parsed into string labels."))
+            .ToList();
 
         // Construct the literals for the feature columns
         Literals = [];
-        var featuresColumn = gpTrainingData.Schema
-            .GetColumnOrNull("Features");
-        if (featuresColumn == null)
-            throw new ArgumentException(
-                "The data view does not contain a column named 'Features'.");
-        var featuresAnnotations = featuresColumn?.Annotations;
-        if (featuresAnnotations == null)
-            throw new ArgumentException(
-                "The 'Features' column does not contain annotations.");
-        VBuffer<ReadOnlyMemory<char>> slotNames = default;
-        featuresAnnotations.GetValue("SlotNames", ref slotNames);
-        var slotsNamesArray = slotNames.GetValues().ToImmutableArray();
+
+        var slotsNamesArray = gpTrainingData.GetFeaturesSlotNames();
+
+
         var values = gpTrainingData.GetColumn<float[]>("Features")
             .ToList();
 
@@ -51,7 +41,7 @@ public class DataManager
 
         foreach (var slotName in slotsNamesArray)
         {
-            var columnData = GetFeatureColumnAsString(values, feature++);
+            var columnData = GetFeatureColumnAsString(values, feature);
 
             var uniqueValues =
                 new HashSet<string>(
@@ -64,15 +54,19 @@ public class DataManager
                 var literalType = uniqueValues.Count <= 3
                     ? LogicGpLiteralType.Dussault
                     : LogicGpLiteralType.Rudell;
-                var literal = new LogicGpLiteral<string>(slotName.ToString(),
+                var literal = new LogicGpLiteral<string>(feature,
+                    slotName.ToString(),
                     uniqueValues, i,
                     columnData, literalType);
                 Literals.Add(literal);
             }
+
+            feature++;
         }
     }
 
-    private List<string> GetFeatureColumnAsString(List<float[]> values, int i)
+    private static List<string> GetFeatureColumnAsString(List<float[]> values,
+        int i)
     {
         return values
             .Select(row => row[i].ToString(CultureInfo.InvariantCulture))

@@ -172,4 +172,17 @@ public class LogicGpMonomial<TCategory> : IMonomial<TCategory>
         sb.Append(" |");
         return sb.ToString();
     }
+
+    public float[] Predict<TSrc>(TSrc src) where TSrc : class, new()
+    {
+        var literalPredictions =
+            ((LogicGpLiteral<string>)Literals[0]).Predict(src);
+        if (Literals.Count > 1)
+            literalPredictions = Literals.Aggregate(literalPredictions,
+                (current, literal) =>
+                    current && ((LogicGpLiteral<string>)literal).Predict(src)
+            );
+
+        return literalPredictions ? Weights : new float[_classes];
+    }
 }

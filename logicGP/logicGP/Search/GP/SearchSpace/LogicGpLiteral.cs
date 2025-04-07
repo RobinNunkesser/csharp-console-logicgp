@@ -1,5 +1,7 @@
+using System.Globalization;
 using System.Text;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
+using logicGP.Tests.Data.Simulated;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
@@ -22,14 +24,18 @@ namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 /// </remarks>
 /// <seealso cref="ILiteral{TCategory}" />
 public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
+    where TCategory : class
 {
     private readonly bool[] _bitSet;
+    private readonly int _featureColumn;
     private readonly List<TCategory> _orderedCategories;
 
-    public LogicGpLiteral(string label, HashSet<TCategory> categories, int set,
+    public LogicGpLiteral(int featureColumn, string label,
+        HashSet<TCategory> categories, int set,
         List<TCategory> trainingData,
         LogicGpLiteralType literalType = LogicGpLiteralType.Rudell)
     {
+        _featureColumn = featureColumn;
         Label = label;
         Set = set;
         LiteralType = literalType;
@@ -178,5 +184,19 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         sb.Remove(sb.Length - 1, 1);
         sb.Append("})");
         return sb.ToString();
+    }
+
+    public bool Predict<TSrc>(TSrc src) where TSrc : class, new()
+    {
+        if (src is FeaturesInput featureRow)
+        {
+            var rawCategory = featureRow.Features[_featureColumn];
+            var category =
+                rawCategory.ToString(CultureInfo.InvariantCulture) as TCategory;
+            var index = _orderedCategories.IndexOf(category);
+            return _bitSet[index];
+        }
+
+        throw new InvalidDataException();
     }
 }

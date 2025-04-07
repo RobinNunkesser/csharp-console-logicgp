@@ -1,6 +1,6 @@
 namespace Italbytz.Adapters.Algorithms.AI.Util.ML;
 
-public class BinaryClassificationScheme
+public class BinaryClassificationSchema
 {
     public float[] Features { get; set; }
     public float PredictedLabel { get; set; }

@@ -15,6 +15,7 @@ public abstract class
 
 
 {
+    private IIndividual _chosenIndividual;
     public required string Label { get; set; }
     public required int MaxGenerations { get; set; } = 10000;
 
@@ -49,15 +50,15 @@ public abstract class
         var candidatePopulation = new Population();
         foreach (var candidate in allCandidates)
             candidatePopulation.Add(candidate);
-        var chosenIndividual = bestSelection.Process(candidatePopulation)[0];
-        Console.WriteLine($"Chosen individual: \n{chosenIndividual}");
+        _chosenIndividual = bestSelection.Process(candidatePopulation)[0];
+        Console.WriteLine($"Chosen individual: \n{_chosenIndividual}");
         // ToDo: Use custom mapping instead
 
         //var transformer = CreateTransformer(chosenIndividual, data);
         //return transformer;
+        var mapping = new LogicGpMapping(_chosenIndividual);
         return mlContext.Transforms.CustomMapping(
-            LogicGpMapping
-                .GetMapping<FeaturesInput, BinaryClassificationScheme>(),
+            mapping.GetMapping<FeaturesInput, BinaryClassificationSchema>(),
             null).Fit(input);
     }
 
@@ -71,6 +72,31 @@ public abstract class
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
         return inputSchema;
+    }
+
+    /*private void Mapping(FeaturesInput arg1, BinaryClassificationSchema arg2)
+    {
+        if (_chosenIndividual is not Individual logicGpIndividual) return;
+        if (logicGpIndividual.Genotype is not LogicGpGenotype logicGpGenotype)
+            return;
+        var gen = _chosenIndividual.Genotype;
+        var dst = ((LogicGpGenotype)gen)
+            .Predict<FeaturesInput, BinaryClassificationSchema>(arg1);
+        arg2.Probability =
+            dst.Probability;
+        arg2.Score =
+            dst.Score;
+        arg2.PredictedLabel =
+            dst.PredictedLabel;
+    }*/
+
+    private void WhatIsHappeningHere(FeaturesInput featuresInput,
+        BinaryClassificationSchema binaryClassificationSchema,
+        IIndividual chosenIndividual)
+    {
+        var fitness = _chosenIndividual.LatestKnownFitness;
+
+        throw new NotImplementedException();
     }
 
     protected abstract TTransformer CreateTransformer(

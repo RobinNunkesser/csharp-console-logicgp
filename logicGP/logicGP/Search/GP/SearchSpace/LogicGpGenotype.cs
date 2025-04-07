@@ -242,4 +242,11 @@ public class LogicGpGenotype : IGenotype
         return !literals.Except(otherLiterals).Any() &&
                !otherLiterals.Except(literals).Any();
     }
+
+    public TDst Predict<TSrc, TDst>(TSrc src) where TDst : class, new()
+        where TSrc : class, new()
+    {
+        return ((LogicGpPolynomial<string>)_polynomial)
+            .Predict<TSrc, TDst>(src);
+    }
 }
