@@ -22,13 +22,27 @@ public class LogicGpMapping(IIndividual chosenIndividual)
             return;
         var gen = chosenIndividual.Genotype;
         var dst = ((LogicGpGenotype)gen).Predict<TSrc, TDst>(arg1);
-        if (arg2 is not BinaryClassificationSchema destinationSchema ||
-            dst is not BinaryClassificationSchema prediction) return;
-        destinationSchema.Probability =
-            prediction.Probability;
-        destinationSchema.Score =
-            prediction.Score;
-        destinationSchema.PredictedLabel =
-            prediction.PredictedLabel;
+        if (arg2 is BinaryClassificationOutputSchema binaryDestinationSchema &&
+            dst is BinaryClassificationOutputSchema binaryPrediction)
+        {
+            binaryDestinationSchema.Probability =
+                binaryPrediction.Probability;
+            binaryDestinationSchema.Score =
+                binaryPrediction.Score;
+            binaryDestinationSchema.PredictedLabel =
+                binaryPrediction.PredictedLabel;
+        }
+        else if
+            (arg2 is MulticlassClassificationOutputSchema
+                 multiDestinationSchema &&
+             dst is MulticlassClassificationOutputSchema multiPrediction)
+        {
+            multiDestinationSchema.Probability =
+                multiPrediction.Probability;
+            multiDestinationSchema.Score =
+                multiPrediction.Score;
+            multiDestinationSchema.PredictedLabel =
+                multiPrediction.PredictedLabel;
+        }
     }
 }

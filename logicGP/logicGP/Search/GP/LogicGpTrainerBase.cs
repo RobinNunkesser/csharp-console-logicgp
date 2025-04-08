@@ -3,7 +3,6 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
-using logicGP.Tests.Data.Simulated;
 using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
@@ -52,13 +51,20 @@ public abstract class
             candidatePopulation.Add(candidate);
         _chosenIndividual = bestSelection.Process(candidatePopulation)[0];
         Console.WriteLine($"Chosen individual: \n{_chosenIndividual}");
-        // ToDo: Use custom mapping instead
 
-        //var transformer = CreateTransformer(chosenIndividual, data);
-        //return transformer;
+        var classes = _chosenIndividual.Genotype.Predictions[0].Length;
         var mapping = new LogicGpMapping(_chosenIndividual);
+        if (classes == 2)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<BinaryClassificationInputSchema,
+                        BinaryClassificationOutputSchema>(),
+                null).Fit(input);
+
         return mlContext.Transforms.CustomMapping(
-            mapping.GetMapping<FeaturesInput, BinaryClassificationSchema>(),
+            mapping
+                .GetMapping<BinaryClassificationInputSchema,
+                    MulticlassClassificationOutputSchema>(),
             null).Fit(input);
     }
 
@@ -74,30 +80,6 @@ public abstract class
         return inputSchema;
     }
 
-    /*private void Mapping(FeaturesInput arg1, BinaryClassificationSchema arg2)
-    {
-        if (_chosenIndividual is not Individual logicGpIndividual) return;
-        if (logicGpIndividual.Genotype is not LogicGpGenotype logicGpGenotype)
-            return;
-        var gen = _chosenIndividual.Genotype;
-        var dst = ((LogicGpGenotype)gen)
-            .Predict<FeaturesInput, BinaryClassificationSchema>(arg1);
-        arg2.Probability =
-            dst.Probability;
-        arg2.Score =
-            dst.Score;
-        arg2.PredictedLabel =
-            dst.PredictedLabel;
-    }*/
-
-    private void WhatIsHappeningHere(FeaturesInput featuresInput,
-        BinaryClassificationSchema binaryClassificationSchema,
-        IIndividual chosenIndividual)
-    {
-        var fitness = _chosenIndividual.LatestKnownFitness;
-
-        throw new NotImplementedException();
-    }
 
     protected abstract TTransformer CreateTransformer(
         IIndividual chosenIndividual, DataManager dataManager);

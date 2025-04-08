@@ -1,8 +1,8 @@
-using logicGP.Tests.Data.Simulated;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
-public class MyCustomMapper
+public class MyCustomBinaryMapper
 {
     public static Action<TSrc, TDst> GetMapping<TSrc, TDst>()
         where TSrc : class, new() where TDst : class, new()
@@ -13,9 +13,9 @@ public class MyCustomMapper
     private static void Fit<TSrc, TDst>(TSrc input, TDst output)
         where TSrc : class, new() where TDst : class, new()
     {
-        if (output is not BinaryClassificationSchema schema) return;
+        if (output is not BinaryClassificationOutputSchema schema) return;
         schema.Score = 1.0f;
         schema.Probability = 1.0f;
-        schema.PredictedLabel = 42.0f;
+        schema.PredictedLabel = 1;
     }
 }

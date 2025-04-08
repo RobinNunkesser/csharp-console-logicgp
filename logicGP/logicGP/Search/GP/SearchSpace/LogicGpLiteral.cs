@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
-using logicGP.Tests.Data.Simulated;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
@@ -188,7 +188,7 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 
     public bool Predict<TSrc>(TSrc src) where TSrc : class, new()
     {
-        if (src is FeaturesInput featureRow)
+        if (src is BinaryClassificationInputSchema featureRow)
         {
             var rawCategory = featureRow.Features[_featureColumn];
             var category =

@@ -4,7 +4,7 @@ namespace logicGP.Tests.Data.Simulated;
 
 public class SNPModelInput
 {
-    [LoadColumn(0)] [ColumnName(@"y")] public float Y { get; set; }
+    [LoadColumn(0)] [ColumnName(@"y")] public uint Y { get; set; }
 
     [LoadColumn(1)] [ColumnName(@"SNP1")] public float SNP1 { get; set; }
 

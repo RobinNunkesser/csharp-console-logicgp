@@ -3,6 +3,7 @@ using System.Text;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
+using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 
@@ -172,7 +173,7 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 
         if (_classes == 2)
         {
-            var prediction = new BinaryClassificationSchema
+            var prediction = new BinaryClassificationOutputSchema
             {
                 Score = scores[1]
             };
@@ -182,9 +183,28 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
                 probabilities[j] = scores[j] / sum;
 
             prediction.Probability = probabilities[1];
-            prediction.PredictedLabel = probabilities[1] > 0.5f
-                ? 1.0f
-                : 0.0f;
+            // ToDo: Adapt to Mapping
+            prediction.PredictedLabel = 1;
+            return prediction as TDst ?? throw new InvalidOperationException();
+        }
+        else
+        {
+            var prediction = new MulticlassClassificationOutputSchema
+            {
+                //Score = scores
+            };
+            var probabilities = new float[scores.Length];
+            var sum = scores.Sum();
+            for (var j = 0; j < scores.Length; j++)
+                probabilities[j] = scores[j] / sum;
+
+            prediction.Probability =
+                new VBuffer<float>(scores.Length, probabilities);
+
+
+            prediction.PredictedLabel =
+                (uint)Array.IndexOf(probabilities, probabilities.Max());
+            ;
             return prediction as TDst ?? throw new InvalidOperationException();
         }
 

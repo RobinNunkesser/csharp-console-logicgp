@@ -1,6 +1,9 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using logicGP.Tests.Data;
 using logicGP.Tests.Data.Simulated;
 using Microsoft.ML;
+using Microsoft.ML.Data;
 using InputOutputColumnPair = Microsoft.ML.InputOutputColumnPair;
 using MLContext = Microsoft.ML.MLContext;
 
@@ -10,7 +13,57 @@ namespace logicGP.Tests.Unit.Search.GP;
 public class MyCustomMapperTests
 {
     [TestMethod]
-    public void CustomMappingTrainerTest()
+    public void VectorDataTypeTests()
+    {
+        var score = new VBuffer<float>(3, 3, [1, 2, 3],
+            [0, 1, 2]);
+        var test = new VectorDataViewType(NumberDataViewType.Single, 3);
+        Assert.AreEqual(3, test.Size);
+    }
+
+    [TestMethod]
+    public void CustomMulticlassMappingTrainerTest()
+    {
+        var mlContext = new MLContext();
+        var trainDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            "Data/Real", "balancescale.csv");
+        var trainData =
+            mlContext.Data.LoadFromTextFile<BalanceScaleModelInput>(
+                trainDataPath,
+                ',', true);
+
+        var lookupData = new[]
+        {
+            new LookupMap<string>("B"),
+            new LookupMap<string>("R"),
+            new LookupMap<string>("L")
+        };
+        // Convert to IDataView
+        var lookupIdvMap = mlContext.Data.LoadFromEnumerable(lookupData);
+
+        var pipeline = mlContext.Transforms.ReplaceMissingValues(new[]
+            {
+                new InputOutputColumnPair(@"right-distance",
+                    @"right-distance"),
+                new InputOutputColumnPair(@"right-weight", @"right-weight"),
+                new InputOutputColumnPair(@"left-distance",
+                    @"left-distance"),
+                new InputOutputColumnPair(@"left-weight", @"left-weight")
+            })
+            .Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",
+                @"class", keyData: lookupIdvMap))
+            .Append(mlContext.Transforms.Concatenate(@"Features",
+                @"right-distance", @"right-weight", @"left-distance",
+                @"left-weight")).Append(new MyCustomMulticlassEstimator());
+        var model = pipeline.Fit(trainData);
+        var transformedData = model.Transform(trainData);
+        var metrics = mlContext.MulticlassClassification
+            .Evaluate(transformedData);
+        Assert.IsNotNull(metrics);
+    }
+
+    [TestMethod]
+    public void CustomBinaryMappingTrainerTest()
     {
         var mlContext = new MLContext();
         var trainDataPath = Path.Combine(
@@ -19,6 +72,15 @@ public class MyCustomMapperTests
         var trainData = mlContext.Data.LoadFromTextFile<SNPModelInput>(
             trainDataPath,
             ',', true);
+
+        var lookupData = new[]
+        {
+            new LookupMap<uint>(0),
+            new LookupMap<uint>(1)
+        };
+        // Convert to IDataView
+        var lookupIdvMap = mlContext.Data.LoadFromEnumerable(lookupData);
+
 
         // Data process configuration with pipeline data transformations
         var pipeline = mlContext.Transforms.ReplaceMissingValues(new[]
@@ -83,14 +145,14 @@ public class MyCustomMapperTests
                 @"SNP33", @"SNP34", @"SNP35", @"SNP36", @"SNP37", @"SNP38",
                 @"SNP39", @"SNP40", @"SNP41", @"SNP42", @"SNP43", @"SNP44",
                 @"SNP45", @"SNP46", @"SNP47", @"SNP48", @"SNP49", @"SNP50"))
-            /*.Append(mlContext.Transforms.Conversion.MapValueToKey(@"y",
+            .Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",
                 @"y",
-                addKeyValueAnnotationsAsText: false))
-            .Append(mlContext.Transforms.CustomMapping(
+                keyData: lookupIdvMap))
+            /*.Append(mlContext.Transforms.CustomMapping(
                 LabelMapper
                     .GetMapping<MappingInput, LabelSchema>(),
                 null))*/
-            .Append(new MyCustomEstimator());
+            .Append(new MyCustomBinaryEstimator());
         /*.Append(
             mlContext.Transforms.Conversion.MapKeyToValue(@"PredictedLabel",
                 @"PredictedLabel"));*/
@@ -99,7 +161,9 @@ public class MyCustomMapperTests
         var model = pipeline.Fit(trainData);
         var transformedData = model.Transform(trainData);
         var metrics = mlContext.BinaryClassification
-            .Evaluate(transformedData, "y");
+            .Evaluate(transformedData);
         Assert.IsNotNull(metrics);
     }
 }
+
+// Type for the IDataView that will be serving as the map
