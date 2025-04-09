@@ -191,7 +191,7 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         {
             var prediction = new MulticlassClassificationOutputSchema
             {
-                //Score = scores
+                Score = new VBuffer<float>(scores.Length, scores)
             };
             var probabilities = new float[scores.Length];
             var sum = scores.Sum();
@@ -203,7 +203,7 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 
 
             prediction.PredictedLabel =
-                (uint)Array.IndexOf(probabilities, probabilities.Max());
+                (uint)Array.IndexOf(probabilities, probabilities.Max()) + 1;
             ;
             return prediction as TDst ?? throw new InvalidOperationException();
         }

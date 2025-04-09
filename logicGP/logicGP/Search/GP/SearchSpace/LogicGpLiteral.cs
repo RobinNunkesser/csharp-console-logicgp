@@ -188,15 +188,18 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
 
     public bool Predict<TSrc>(TSrc src) where TSrc : class, new()
     {
-        if (src is BinaryClassificationInputSchema featureRow)
+        var rawCategory = src switch
         {
-            var rawCategory = featureRow.Features[_featureColumn];
-            var category =
-                rawCategory.ToString(CultureInfo.InvariantCulture) as TCategory;
-            var index = _orderedCategories.IndexOf(category);
-            return _bitSet[index];
-        }
+            BinaryClassificationInputSchema binaryFeatureRow => binaryFeatureRow
+                .Features[_featureColumn],
+            MulticlassClassificationInputSchema multiclassFeatureRow =>
+                multiclassFeatureRow.Features[_featureColumn],
+            _ => throw new InvalidDataException()
+        };
 
-        throw new InvalidDataException();
+        var category =
+            rawCategory.ToString(CultureInfo.InvariantCulture) as TCategory;
+        var index = _orderedCategories.IndexOf(category);
+        return _bitSet[index];
     }
 }

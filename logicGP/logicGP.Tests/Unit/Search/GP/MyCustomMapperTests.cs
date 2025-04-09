@@ -78,6 +78,8 @@ public class MyCustomMapperTests
             new LookupMap<uint>(0),
             new LookupMap<uint>(1)
         };
+
+
         // Convert to IDataView
         var lookupIdvMap = mlContext.Data.LoadFromEnumerable(lookupData);
 
@@ -148,10 +150,6 @@ public class MyCustomMapperTests
             .Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",
                 @"y",
                 keyData: lookupIdvMap))
-            /*.Append(mlContext.Transforms.CustomMapping(
-                LabelMapper
-                    .GetMapping<MappingInput, LabelSchema>(),
-                null))*/
             .Append(new MyCustomBinaryEstimator());
         /*.Append(
             mlContext.Transforms.Conversion.MapKeyToValue(@"PredictedLabel",

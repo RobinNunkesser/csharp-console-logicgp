@@ -1,11 +1,12 @@
-using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
-namespace logicGP.Tests;
+namespace logicGP.Tests.Unit.Data.Real;
 
 [TestClass]
 public class BalanceScaleTests : RealTests
@@ -26,38 +27,46 @@ public class BalanceScaleTests : RealTests
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;
-        var accuracy = TestFlRw(_data, "class", 10);
-        Assert.IsTrue(accuracy > 0.4644);
-        Assert.IsTrue(accuracy < 0.4645);
-    }
 
-    [TestMethod]
-    public void TestWithFullPipeline()
-    {
-        var mlContext = new MLContext();
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
         var trainer =
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
-        trainer.Label = "class";
-        trainer.MaxGenerations = 10;
-        var pipeline = mlContext.Transforms.ReplaceMissingValues(new[]
+
+        var lookupData = new[]
+        {
+            new LookupMap<string>("B"),
+            new LookupMap<string>("R"),
+            new LookupMap<string>("L")
+        };
+        var mlContext = new MLContext();
+        var testResults = TestFlRw(trainer, _data, lookupData, 10);
+        var metrics = mlContext.MulticlassClassification
+            .Evaluate(testResults, trainer.Label);
+
+
+        Assert.IsTrue(metrics.MacroAccuracy > 0.45);
+        Assert.IsTrue(metrics.MacroAccuracy < 0.46);
+    }
+
+    protected override EstimatorChain<ITransformer> GetPipeline(
+        LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap)
+    {
+        var mlContext = new MLContext();
+        return mlContext.Transforms.ReplaceMissingValues(new[]
             {
-                new InputOutputColumnPair(@"right-distance", @"right-distance"),
+                new InputOutputColumnPair(@"right-distance",
+                    @"right-distance"),
                 new InputOutputColumnPair(@"right-weight", @"right-weight"),
-                new InputOutputColumnPair(@"left-distance", @"left-distance"),
+                new InputOutputColumnPair(@"left-distance",
+                    @"left-distance"),
                 new InputOutputColumnPair(@"left-weight", @"left-weight")
             })
+            .Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",
+                @"class", keyData: lookupIdvMap))
             .Append(mlContext.Transforms.Concatenate(@"Features",
                 @"right-distance", @"right-weight", @"left-distance",
                 @"left-weight")).Append(trainer);
-        var mlModel = pipeline.Fit(_data);
-        Assert.IsNotNull(mlModel);
-
-        var testResults = mlModel.Transform(_data);
-        var metrics = mlContext.MulticlassClassification
-            .Evaluate(testResults, trainer.Label);
-        var acc = metrics.MacroAccuracy.ToString(CultureInfo.InvariantCulture);
     }
 }

@@ -62,6 +62,9 @@ public static class DataViewExtensions
             { } intType when intType == typeof(int) => dataView
                 .GetColumn<int>(column)
                 .Select(entry => entry.ToString()),
+            { } uintType when uintType == typeof(uint) => dataView
+                .GetColumn<uint>(column)
+                .Select(entry => entry.ToString()),
             { } charType when charType == typeof(char) => dataView
                 .GetColumn<char>(column)
                 .Select(entry => entry.ToString()),

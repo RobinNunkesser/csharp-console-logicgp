@@ -6,8 +6,39 @@ using Microsoft.ML.Data;
 
 namespace logicGP.Tests;
 
-public class RealTests
+public abstract class RealTests
 {
+    protected IDataView TestFlRw<TLabel>(
+        IEstimator<ITransformer> generalTrainer,
+        IDataView data,
+        LookupMap<TLabel>[] lookupData, int generations = 100)
+    {
+        var mlContext = new MLContext();
+
+        // Convert to IDataView
+        var lookupIdvMap = mlContext.Data.LoadFromEnumerable(lookupData);
+
+        if (generalTrainer is not LogicGpTrainerBase<ITransformer> trainer)
+            throw new ArgumentException(
+                "The trainer must be of type LogicGpTrainerBase<ITransformer>");
+
+        trainer.LabelKeyToValueDictionary =
+            LookupMap<TLabel>.KeyToValueMap(lookupData);
+        trainer.Label = "Label";
+        // This is only for testing purposes, in production this should be set to a higher value (e.g. 10000)
+        trainer.MaxGenerations = generations;
+
+        var pipeline = GetPipeline(trainer, lookupIdvMap);
+        var mlModel = pipeline.Fit(data);
+        Assert.IsNotNull(mlModel);
+
+        return mlModel.Transform(data);
+    }
+
+
+    protected abstract EstimatorChain<ITransformer> GetPipeline(
+        LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap);
+
     protected double TestFlRw(IDataView data, string label,
         int generations = 100)
     {

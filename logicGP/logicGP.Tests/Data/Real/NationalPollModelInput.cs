@@ -58,5 +58,5 @@ public class NationalPollModelInput
 
     [LoadColumn(14)]
     [ColumnName(@"Number_of_Doctors_Visited")]
-    public float Number_of_Doctors_Visited { get; set; }
+    public uint Number_of_Doctors_Visited { get; set; }
 }

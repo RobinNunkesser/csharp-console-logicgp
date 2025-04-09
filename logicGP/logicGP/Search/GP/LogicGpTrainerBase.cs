@@ -1,9 +1,11 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
+using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
@@ -18,8 +20,15 @@ public abstract class
     public required string Label { get; set; }
     public required int MaxGenerations { get; set; } = 10000;
 
+    public required Dictionary<int, string> LabelKeyToValueDictionary
+    {
+        get;
+        set;
+    }
+
     public ITransformer Fit(IDataView input)
     {
+        var featureNames = input.GetFeaturesSlotNames();
         // Split data into k folds
         const int k = 5; // Number of folds
         var mlContext = new MLContext();
@@ -31,6 +40,9 @@ public abstract class
 
         foreach (var fold in cvResults)
         {
+            var trainFeatures = fold.TrainSet
+                .GetColumn<float[]>(DefaultColumnNames.Features)
+                .ToList();
             // Training
             var individuals =
                 algorithm.Train(fold.TrainSet, foldIndex == 0, Label,
@@ -63,7 +75,7 @@ public abstract class
 
         return mlContext.Transforms.CustomMapping(
             mapping
-                .GetMapping<BinaryClassificationInputSchema,
+                .GetMapping<MulticlassClassificationInputSchema,
                     MulticlassClassificationOutputSchema>(),
             null).Fit(input);
     }

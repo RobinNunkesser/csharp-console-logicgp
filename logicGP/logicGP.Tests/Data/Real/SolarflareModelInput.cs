@@ -44,5 +44,5 @@ public class SolarflareModelInput
 
     [LoadColumn(10)]
     [ColumnName(@"flares")]
-    public float Flares { get; set; }
+    public uint Flares { get; set; }
 }

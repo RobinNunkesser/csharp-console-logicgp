@@ -1,5 +1,6 @@
 using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Simulated;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
@@ -97,7 +98,17 @@ public sealed class SNPSimulationTests
                 trainerType, null)
         };
 
-        trainer.Label = "y";
+        var lookupData = new[]
+        {
+            new LookupMap<uint>(0),
+            new LookupMap<uint>(1)
+        };
+        // Convert to IDataView
+        var lookupIdvMap = mlContext.Data.LoadFromEnumerable(lookupData);
+
+        trainer.LabelKeyToValueDictionary =
+            LookupMap<uint>.KeyToValueMap(lookupData);
+        trainer.Label = "Label";
         // This is only for testing purposes, in production this should be set to a higher value (e.g. 10000)
         trainer.MaxGenerations = 10;
 
@@ -182,6 +193,9 @@ public sealed class SNPSimulationTests
                     @"SNP33", @"SNP34", @"SNP35", @"SNP36", @"SNP37", @"SNP38",
                     @"SNP39", @"SNP40", @"SNP41", @"SNP42", @"SNP43", @"SNP44",
                     @"SNP45", @"SNP46", @"SNP47", @"SNP48", @"SNP49", @"SNP50"))
+                .Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",
+                    @"y",
+                    keyData: lookupIdvMap))
                 .Append(trainer);
 
             var mlModel = pipeline.Fit(trainData);
@@ -189,7 +203,7 @@ public sealed class SNPSimulationTests
 
             var testResults = mlModel.Transform(testData);
             var metrics = mlContext.BinaryClassification
-                .Evaluate(testResults, "y");
+                .Evaluate(testResults);
             var acc = metrics.Accuracy.ToString(CultureInfo.InvariantCulture);
             writer.WriteLine(acc);
 

@@ -14,5 +14,5 @@ public class LensesModelInput
     [ColumnName(@"astigmatic")]
     public float Astigmatic { get; set; }
 
-    [LoadColumn(3)] [ColumnName(@"class")] public float Class { get; set; }
+    [LoadColumn(3)] [ColumnName(@"class")] public uint Class { get; set; }
 }

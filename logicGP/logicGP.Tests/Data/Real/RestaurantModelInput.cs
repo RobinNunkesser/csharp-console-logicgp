@@ -40,5 +40,5 @@ public class RestaurantModelInput
 
     [LoadColumn(10)]
     [ColumnName(@"will_wait")]
-    public float Will_wait { get; set; }
+    public uint Will_wait { get; set; }
 }

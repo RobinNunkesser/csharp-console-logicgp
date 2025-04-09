@@ -33,7 +33,8 @@ public class DataManager
         var slotsNamesArray = gpTrainingData.GetFeaturesSlotNames();
 
 
-        var values = gpTrainingData.GetColumn<float[]>("Features")
+        var values = gpTrainingData
+            .GetColumn<float[]>(DefaultColumnNames.Features)
             .ToList();
 
 
