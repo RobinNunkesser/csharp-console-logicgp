@@ -13,7 +13,7 @@ public class MyCustomBinaryMapper
     private static void Fit<TSrc, TDst>(TSrc input, TDst output)
         where TSrc : class, new() where TDst : class, new()
     {
-        if (output is not BinaryClassificationOutputSchema schema) return;
+        if (output is not BinaryClassificationBinaryOutputSchema schema) return;
         schema.Score = 1.0f;
         schema.Probability = 1.0f;
         schema.PredictedLabel = 1;

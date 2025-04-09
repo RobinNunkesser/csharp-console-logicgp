@@ -2,7 +2,9 @@ using Microsoft.ML.Data;
 
 namespace Italbytz.Adapters.Algorithms.AI.Util.ML;
 
-public class MulticlassClassificationOutputSchema
+public class
+    TernaryClassificationMulticlassOutputSchema :
+    ICustomMappingMulticlassOutputSchema
 {
     public uint PredictedLabel { get; set; }
 

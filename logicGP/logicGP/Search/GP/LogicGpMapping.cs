@@ -22,8 +22,9 @@ public class LogicGpMapping(IIndividual chosenIndividual)
             return;
         var gen = chosenIndividual.Genotype;
         var dst = ((LogicGpGenotype)gen).Predict<TSrc, TDst>(arg1);
-        if (arg2 is BinaryClassificationOutputSchema binaryDestinationSchema &&
-            dst is BinaryClassificationOutputSchema binaryPrediction)
+        if (arg2 is ICustomMappingBinaryOutputSchema
+                binaryDestinationSchema &&
+            dst is ICustomMappingBinaryOutputSchema binaryPrediction)
         {
             binaryDestinationSchema.Probability =
                 binaryPrediction.Probability;
@@ -33,9 +34,9 @@ public class LogicGpMapping(IIndividual chosenIndividual)
                 binaryPrediction.PredictedLabel;
         }
         else if
-            (arg2 is MulticlassClassificationOutputSchema
+            (arg2 is ICustomMappingMulticlassOutputSchema
                  multiDestinationSchema &&
-             dst is MulticlassClassificationOutputSchema multiPrediction)
+             dst is ICustomMappingMulticlassOutputSchema multiPrediction)
         {
             multiDestinationSchema.Probability =
                 multiPrediction.Probability;

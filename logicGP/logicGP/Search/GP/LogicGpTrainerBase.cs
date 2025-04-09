@@ -71,13 +71,19 @@ public abstract class
             return mlContext.Transforms.CustomMapping(
                 mapping
                     .GetMapping<BinaryClassificationInputSchema,
-                        BinaryClassificationOutputSchema>(),
+                        BinaryClassificationBinaryOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 3)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        TernaryClassificationMulticlassOutputSchema>(),
                 null).Fit(input);
 
         return mlContext.Transforms.CustomMapping(
             mapping
                 .GetMapping<MulticlassClassificationInputSchema,
-                    MulticlassClassificationOutputSchema>(),
+                    QuaternaryClassificationMulticlassOutputSchema>(),
             null).Fit(input);
     }
 
@@ -96,7 +102,7 @@ public abstract class
             return mlContext.Transforms.CustomMapping(
                 mapping
                     .GetMapping<BinaryClassificationInputSchema,
-                        BinaryClassificationOutputSchema>(),
+                        BinaryClassificationBinaryOutputSchema>(),
                 null).GetOutputSchema(inputSchema);
 
         return mlContext.Transforms.CustomMapping(

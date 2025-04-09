@@ -1,5 +1,4 @@
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
-using logicGP.Tests.Data.Simulated;
 using Microsoft.ML;
 
 namespace logicGP.Tests.Unit.Search.GP;
@@ -12,7 +11,7 @@ public class MyCustomMulticlassEstimator : IEstimator<ITransformer>
         return mlContext.Transforms.CustomMapping(
             MyCustomMulticlassMapper
                 .GetMapping<BinaryClassificationInputSchema,
-                    MulticlassClassificationOutputSchema>(),
+                    TernaryClassificationMulticlassOutputSchema>(),
             null).Fit(input);
     }
 
@@ -27,7 +26,7 @@ public class MyCustomMulticlassEstimator : IEstimator<ITransformer>
         var outputSchema = mlContext.Transforms.CustomMapping(
             MyCustomMulticlassMapper
                 .GetMapping<MulticlassClassificationInputSchema,
-                    MulticlassClassificationOutputSchema>(),
+                    TernaryClassificationMulticlassOutputSchema>(),
             null).GetOutputSchema(inputSchema);
 
         return outputSchema;

@@ -1,5 +1,4 @@
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
-using logicGP.Tests.Data.Simulated;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -16,7 +15,7 @@ public class MyCustomBinaryEstimator : IEstimator<ITransformer>
         return mlContext.Transforms.CustomMapping(
             MyCustomBinaryMapper
                 .GetMapping<BinaryClassificationInputSchema,
-                    BinaryClassificationOutputSchema>(),
+                    BinaryClassificationBinaryOutputSchema>(),
             null).Fit(input);
     }
 
@@ -34,7 +33,7 @@ public class MyCustomBinaryEstimator : IEstimator<ITransformer>
         var outputSchema = mlContext.Transforms.CustomMapping(
             MyCustomBinaryMapper
                 .GetMapping<BinaryClassificationInputSchema,
-                    BinaryClassificationOutputSchema>(),
+                    BinaryClassificationBinaryOutputSchema>(),
             null).GetOutputSchema(inputSchema);
 
         return outputSchema;

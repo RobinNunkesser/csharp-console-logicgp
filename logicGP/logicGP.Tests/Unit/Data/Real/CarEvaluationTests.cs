@@ -5,7 +5,6 @@ using logicGP.Tests.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
-using Microsoft.ML.Transforms;
 
 namespace logicGP.Tests;
 
@@ -25,6 +24,7 @@ public class CarEvaluationTests : RealTests
     }
 
     // ToDo: Due to the restructuring of the code, one hot encoding is not supported at the moment.
+    [TestMethod]
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;
@@ -48,15 +48,75 @@ public class CarEvaluationTests : RealTests
         var metrics = mlContext.MulticlassClassification
             .Evaluate(testResults, trainer.Label);
 
-        Assert.IsTrue(metrics.MacroAccuracy > 0.4483);
-        Assert.IsTrue(metrics.MacroAccuracy < 0.4484);
+        Assert.IsTrue(metrics.MacroAccuracy > 0.38);
+        Assert.IsTrue(metrics.MacroAccuracy < 0.39);
     }
 
     protected override EstimatorChain<ITransformer?> GetPipeline(
         LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap)
     {
         var mlContext = new MLContext();
-        var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(
+
+        var buyingLookupData = new[]
+        {
+            new CategoryLookupMap { Value = 0f, Category = "low" },
+            new CategoryLookupMap { Value = 1f, Category = "med" },
+            new CategoryLookupMap { Value = 2f, Category = "high" },
+            new CategoryLookupMap { Value = 3f, Category = "vhigh" }
+        };
+        var buyingLookupIdvMap =
+            mlContext.Data.LoadFromEnumerable(buyingLookupData);
+
+        var maintLookupData = new[]
+        {
+            new CategoryLookupMap { Value = 0f, Category = "low" },
+            new CategoryLookupMap { Value = 1f, Category = "med" },
+            new CategoryLookupMap { Value = 2f, Category = "high" },
+            new CategoryLookupMap { Value = 3f, Category = "vhigh" }
+        };
+        var maintLookupIdvMap =
+            mlContext.Data.LoadFromEnumerable(maintLookupData);
+
+        var doorsLookupData = new[]
+        {
+            new CategoryLookupMap { Value = 0f, Category = "two" },
+            new CategoryLookupMap { Value = 1f, Category = "three" },
+            new CategoryLookupMap { Value = 2f, Category = "four" },
+            new CategoryLookupMap { Value = 3f, Category = "fiveormore" }
+        };
+        var doorsLookupIdvMap =
+            mlContext.Data.LoadFromEnumerable(doorsLookupData);
+
+        var personsLookupData = new[]
+        {
+            new CategoryLookupMap { Value = 0f, Category = "two" },
+            new CategoryLookupMap { Value = 1f, Category = "four" },
+            new CategoryLookupMap { Value = 2f, Category = "more" }
+        };
+        var personsLookupIdvMap =
+            mlContext.Data.LoadFromEnumerable(personsLookupData);
+
+        var lugBootLookupData = new[]
+        {
+            new CategoryLookupMap { Value = 0f, Category = "small" },
+            new CategoryLookupMap { Value = 1f, Category = "med" },
+            new CategoryLookupMap { Value = 2f, Category = "big" }
+        };
+        var lugBootLookupIdvMap =
+            mlContext.Data.LoadFromEnumerable(lugBootLookupData);
+
+        var safetyLookupData = new[]
+        {
+            new CategoryLookupMap { Value = 0f, Category = "low" },
+            new CategoryLookupMap { Value = 1f, Category = "med" },
+            new CategoryLookupMap { Value = 2f, Category = "high" }
+        };
+        var safetyLookupIdvMap =
+            mlContext.Data.LoadFromEnumerable(safetyLookupData);
+
+
+        // One hot encoding is not supported at the moment
+        var pipeline = /*mlContext.Transforms.Categorical.OneHotEncoding(
                 new[]
                 {
                     new InputOutputColumnPair(@"buying", @"buying"),
@@ -65,35 +125,36 @@ public class CarEvaluationTests : RealTests
                     new InputOutputColumnPair(@"persons", @"persons"),
                     new InputOutputColumnPair(@"lug_boot", @"lug_boot"),
                     new InputOutputColumnPair(@"safety", @"safety")
-                }, OneHotEncodingEstimator.OutputKind.Key)
-            .Append(mlContext.Transforms.Concatenate(@"Features", @"buying",
-                @"maint", @"doors", @"persons", @"lug_boot", @"safety"))
-            .Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",
-                @"class", keyData: lookupIdvMap))
-            .Append(trainer);
-
-        return pipeline;
-    }
-
-    protected EstimatorChain<ITransformer?> GetGeneratedPipeline(
-        LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap)
-    {
-        var mlContext = new MLContext();
-        var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(
-                new[]
-                {
-                    new InputOutputColumnPair(@"buying", @"buying"),
-                    new InputOutputColumnPair(@"maint", @"maint"),
-                    new InputOutputColumnPair(@"doors", @"doors"),
-                    new InputOutputColumnPair(@"persons", @"persons"),
-                    new InputOutputColumnPair(@"lug_boot", @"lug_boot"),
-                    new InputOutputColumnPair(@"safety", @"safety")
-                })
-            .Append(mlContext.Transforms.Concatenate(@"Features", @"buying",
-                @"maint", @"doors", @"persons", @"lug_boot", @"safety"))
-            .Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",
-                @"class", keyData: lookupIdvMap))
-            .Append(trainer);
+                })*/
+            mlContext.Transforms.Conversion.MapValue("buying",
+                    buyingLookupIdvMap, buyingLookupIdvMap.Schema["Category"],
+                    buyingLookupIdvMap.Schema[
+                        "Value"], "buying")
+                .Append(mlContext.Transforms.Conversion.MapValue("maint",
+                    maintLookupIdvMap, maintLookupIdvMap.Schema["Category"],
+                    maintLookupIdvMap.Schema[
+                        "Value"], "maint"))
+                .Append(mlContext.Transforms.Conversion.MapValue("doors",
+                    doorsLookupIdvMap, doorsLookupIdvMap.Schema["Category"],
+                    doorsLookupIdvMap.Schema[
+                        "Value"], "doors"))
+                .Append(mlContext.Transforms.Conversion.MapValue("persons",
+                    personsLookupIdvMap, personsLookupIdvMap.Schema["Category"],
+                    personsLookupIdvMap.Schema[
+                        "Value"], "persons"))
+                .Append(mlContext.Transforms.Conversion.MapValue("lug_boot",
+                    lugBootLookupIdvMap, lugBootLookupIdvMap.Schema["Category"],
+                    lugBootLookupIdvMap.Schema[
+                        "Value"], "lug_boot"))
+                .Append(mlContext.Transforms.Conversion.MapValue("safety",
+                    safetyLookupIdvMap, safetyLookupIdvMap.Schema["Category"],
+                    safetyLookupIdvMap.Schema[
+                        "Value"], "safety"))
+                .Append(mlContext.Transforms.Concatenate(@"Features", @"buying",
+                    @"maint", @"doors", @"persons", @"lug_boot", @"safety"))
+                .Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",
+                    @"class", keyData: lookupIdvMap))
+                .Append(trainer);
 
         return pipeline;
     }

@@ -173,7 +173,7 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
 
         if (_classes == 2)
         {
-            var prediction = new BinaryClassificationOutputSchema
+            var prediction = new BinaryClassificationBinaryOutputSchema
             {
                 Score = scores[1]
             };
@@ -189,10 +189,17 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         }
         else
         {
-            var prediction = new MulticlassClassificationOutputSchema
-            {
-                Score = new VBuffer<float>(scores.Length, scores)
-            };
+            ICustomMappingMulticlassOutputSchema prediction = null;
+            if (_classes == 3)
+                prediction = new TernaryClassificationMulticlassOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                };
+            if (_classes == 4)
+                prediction = new QuaternaryClassificationMulticlassOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                };
             var probabilities = new float[scores.Length];
             var sum = scores.Sum();
             for (var j = 0; j < scores.Length; j++)
