@@ -16,7 +16,7 @@ public abstract class
 
 
 {
-    private IIndividual _chosenIndividual;
+    private IIndividual? _chosenIndividual;
     public required string Label { get; set; }
     public required int MaxGenerations { get; set; } = 10000;
     public required int Classes { get; set; } = 2;
