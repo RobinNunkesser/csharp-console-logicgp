@@ -1,11 +1,10 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
-using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 
 /// <summary>
-/// ///     A class representing a trainer for the LogicGP algorithm.
+///     ///     A class representing a trainer for the LogicGP algorithm.
 ///     It is used to train the LogicGP algorithm for multiclass classification
 ///     problems.
 ///     The trainer uses the LogicGpFlrw algorithm and the micro accuracy metric.
@@ -21,14 +20,6 @@ public class LogicGpFlrwMicroMulticlassTrainer(
     DataManager data)
     : LogicGpTrainerBase<ITransformer>(algorithm, data)
 {
-    protected override ITransformer CreateTransformer(
-        IIndividual chosenIndividual,
-        DataManager dataManager)
-    {
-        return new LogicGpFlrwTransformer(
-            chosenIndividual, data);
-    }
-
     protected override void ParameterizeAlgorithm(
         LogicGpAlgorithm logicGpAlgorithm)
     {

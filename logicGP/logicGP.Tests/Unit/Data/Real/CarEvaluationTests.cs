@@ -42,6 +42,7 @@ public class CarEvaluationTests : RealTests
             new LookupMap<string>("good"),
             new LookupMap<string>("vgood")
         };
+        trainer.Classes = lookupData.Length;
         var mlContext = new MLContext();
         var testResults = TestFlRw(trainer, _data, lookupData, 10);
         var metrics = mlContext.MulticlassClassification

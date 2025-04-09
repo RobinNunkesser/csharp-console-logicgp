@@ -39,6 +39,7 @@ public class RestaurantTests : RealTests
             new LookupMap<uint>(0),
             new LookupMap<uint>(1)
         };
+        trainer.Classes = lookupData.Length;
         var mlContext = new MLContext();
         var testResults = TestFlRw(trainer, _data, lookupData, 10);
         var metrics = mlContext.BinaryClassification

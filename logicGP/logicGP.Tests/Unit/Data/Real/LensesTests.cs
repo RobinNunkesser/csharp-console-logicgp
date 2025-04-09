@@ -40,6 +40,7 @@ public class LensesTests : RealTests
             new LookupMap<uint>(2),
             new LookupMap<uint>(3)
         };
+        trainer.Classes = lookupData.Length;
         var mlContext = new MLContext();
         var testResults = TestFlRw(trainer, _data, lookupData, 10);
         var metrics = mlContext.MulticlassClassification

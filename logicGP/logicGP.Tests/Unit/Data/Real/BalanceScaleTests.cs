@@ -40,6 +40,7 @@ public class BalanceScaleTests : RealTests
             new LookupMap<string>("R"),
             new LookupMap<string>("L")
         };
+        trainer.Classes = lookupData.Length;
         var mlContext = new MLContext();
         var testResults = TestFlRw(trainer, _data, lookupData, 10);
         var metrics = mlContext.MulticlassClassification

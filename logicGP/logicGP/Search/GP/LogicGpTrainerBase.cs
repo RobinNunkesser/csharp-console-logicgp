@@ -19,6 +19,7 @@ public abstract class
     private IIndividual _chosenIndividual;
     public required string Label { get; set; }
     public required int MaxGenerations { get; set; } = 10000;
+    public required int Classes { get; set; } = 2;
 
     public required Dictionary<int, string> LabelKeyToValueDictionary
     {
@@ -64,9 +65,9 @@ public abstract class
         _chosenIndividual = bestSelection.Process(candidatePopulation)[0];
         Console.WriteLine($"Chosen individual: \n{_chosenIndividual}");
 
-        var classes = _chosenIndividual.Genotype.Predictions[0].Length;
+
         var mapping = new LogicGpMapping(_chosenIndividual);
-        if (classes == 2)
+        if (Classes == 2)
             return mlContext.Transforms.CustomMapping(
                 mapping
                     .GetMapping<BinaryClassificationInputSchema,
@@ -89,12 +90,22 @@ public abstract class
     /// <exception cref="NotImplementedException"></exception>
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
-        return inputSchema;
+        var mlContext = new MLContext();
+        var mapping = new LogicGpMapping(_chosenIndividual);
+        if (Classes == 2)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<BinaryClassificationInputSchema,
+                        BinaryClassificationOutputSchema>(),
+                null).GetOutputSchema(inputSchema);
+
+        return mlContext.Transforms.CustomMapping(
+            mapping
+                .GetMapping<MulticlassClassificationInputSchema,
+                    MulticlassClassificationInputSchema>(),
+            null).GetOutputSchema(inputSchema);
     }
 
-
-    protected abstract TTransformer CreateTransformer(
-        IIndividual chosenIndividual, DataManager dataManager);
 
     protected abstract void ParameterizeAlgorithm(
         LogicGpAlgorithm logicGpAlgorithm);

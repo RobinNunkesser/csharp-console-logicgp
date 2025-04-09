@@ -1,5 +1,4 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
-using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 using Microsoft.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
@@ -21,14 +20,6 @@ public class LogicGpGpasBinaryTrainer(
     DataManager data)
     : LogicGpTrainerBase<ITransformer>(algorithm, data)
 {
-    protected override ITransformer CreateTransformer(
-        IIndividual chosenIndividual,
-        DataManager dataManager)
-    {
-        return new LogicGpGpasTransformer(
-            chosenIndividual, data);
-    }
-
     protected override void ParameterizeAlgorithm(
         LogicGpAlgorithm logicGpAlgorithm)
     {
