@@ -945,6 +945,12 @@
         <None Update="Data\Real\Heart_Disease.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Data\Real\Heart_Disease._Binary.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\Real\Heart_Disease_Binary.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
