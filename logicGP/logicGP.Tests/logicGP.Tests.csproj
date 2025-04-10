@@ -954,6 +954,9 @@
         <None Update="Data\Real\Wine_Quality.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Data\Real\Breast_Cancer_Wisconsin_Diagnostic_.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
