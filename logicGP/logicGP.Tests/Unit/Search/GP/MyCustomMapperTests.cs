@@ -1,6 +1,6 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
-using logicGP.Tests.Data;
+using logicGP.Tests.Data.Real;
 using logicGP.Tests.Data.Simulated;
 using Microsoft.ML;
 using Microsoft.ML.Data;

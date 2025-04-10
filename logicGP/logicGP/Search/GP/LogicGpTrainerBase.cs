@@ -79,11 +79,16 @@ public abstract class
                     .GetMapping<MulticlassClassificationInputSchema,
                         TernaryClassificationMulticlassOutputSchema>(),
                 null).Fit(input);
-
+        if (Classes == 4)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        QuaternaryClassificationMulticlassOutputSchema>(),
+                null).Fit(input);
         return mlContext.Transforms.CustomMapping(
             mapping
                 .GetMapping<MulticlassClassificationInputSchema,
-                    QuaternaryClassificationMulticlassOutputSchema>(),
+                    QuinaryClassificationMulticlassOutputSchema>(),
             null).Fit(input);
     }
 

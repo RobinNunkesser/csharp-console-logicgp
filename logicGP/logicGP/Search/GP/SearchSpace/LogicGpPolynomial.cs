@@ -200,6 +200,11 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
                 {
                     Score = new VBuffer<float>(scores.Length, scores)
                 };
+            if (_classes == 5)
+                prediction = new QuinaryClassificationMulticlassOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                };
             var probabilities = new float[scores.Length];
             var sum = scores.Sum();
             for (var j = 0; j < scores.Length; j++)

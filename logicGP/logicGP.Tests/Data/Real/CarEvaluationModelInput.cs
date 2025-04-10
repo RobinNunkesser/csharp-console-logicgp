@@ -1,6 +1,6 @@
 using Microsoft.ML.Data;
 
-namespace logicGP.Tests.Data;
+namespace logicGP.Tests.Data.Real;
 
 public class CarEvaluationModelInput
 {
