@@ -189,22 +189,64 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         }
         else
         {
-            ICustomMappingMulticlassOutputSchema prediction = null;
-            if (_classes == 3)
-                prediction = new TernaryClassificationMulticlassOutputSchema
+            ICustomMappingMulticlassOutputSchema prediction = _classes switch
+            {
+                3 => new TernaryClassificationOutputSchema
                 {
                     Score = new VBuffer<float>(scores.Length, scores)
-                };
-            if (_classes == 4)
-                prediction = new QuaternaryClassificationMulticlassOutputSchema
+                },
+                4 => new QuaternaryClassificationOutputSchema
                 {
                     Score = new VBuffer<float>(scores.Length, scores)
-                };
-            if (_classes == 5)
-                prediction = new QuinaryClassificationMulticlassOutputSchema
+                },
+                5 => new QuinaryClassificationOutputSchema
                 {
                     Score = new VBuffer<float>(scores.Length, scores)
-                };
+                },
+                6 => new SenaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                7 => new SeptenaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                8 => new OctonaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                9 => new NonaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                10 => new DenaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                11 => new UndenaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                12 => new DuodenaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                13 => new TridenaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                14 => new TetradenaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+                15 => new PentadenaryClassificationOutputSchema
+                {
+                    Score = new VBuffer<float>(scores.Length, scores)
+                },
+
+                _ => throw new ArgumentOutOfRangeException(
+                    $"The number of classes {_classes} is not supported.")
+            };
             var probabilities = new float[scores.Length];
             var sum = scores.Sum();
             for (var j = 0; j < scores.Length; j++)

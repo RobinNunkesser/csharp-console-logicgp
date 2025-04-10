@@ -77,19 +77,82 @@ public abstract class
             return mlContext.Transforms.CustomMapping(
                 mapping
                     .GetMapping<MulticlassClassificationInputSchema,
-                        TernaryClassificationMulticlassOutputSchema>(),
+                        TernaryClassificationOutputSchema>(),
                 null).Fit(input);
         if (Classes == 4)
             return mlContext.Transforms.CustomMapping(
                 mapping
                     .GetMapping<MulticlassClassificationInputSchema,
-                        QuaternaryClassificationMulticlassOutputSchema>(),
+                        QuaternaryClassificationOutputSchema>(),
                 null).Fit(input);
-        return mlContext.Transforms.CustomMapping(
-            mapping
-                .GetMapping<MulticlassClassificationInputSchema,
-                    QuinaryClassificationMulticlassOutputSchema>(),
-            null).Fit(input);
+        if (Classes == 5)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        QuinaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 6)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        SenaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 7)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        SeptenaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 8)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        OctonaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 9)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        NonaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 10)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        DenaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 11)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        UndenaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 12)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        DuodenaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 13)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        TridenaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 14)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        TetradenaryClassificationOutputSchema>(),
+                null).Fit(input);
+        if (Classes == 15)
+            return mlContext.Transforms.CustomMapping(
+                mapping
+                    .GetMapping<MulticlassClassificationInputSchema,
+                        PentadenaryClassificationOutputSchema>(),
+                null).Fit(input);
+        throw new ArgumentOutOfRangeException(
+            $"The number of classes {Classes} is not supported.");
     }
 
     /// <summary>
