@@ -26,7 +26,7 @@ The project features unit tests as a starting point. The most important unit tes
 
 ### Real data sets
 
-Chosen data sets from the UC Irvine Machine Learning Repository
+Chosen data sets from the [UC Irvine Machine Learning Repository](https://archive.ics.uci.edu)
 
 |Data set| Code|
 | ------ | :---|
@@ -84,3 +84,38 @@ Data gets prepared for training with [data transformations](https://github.com/d
 Unfortunately, logicGP cannot operate on one hot encoded values presently. The direct use of the key-value-mapping is also not possible due to ML.NET hiding a lot of internal APIs. 
 
 The alternatives (examples may be found in the unit tests) are manual mappings with given key-value-mappings. 
+
+## Iris Example
+
+Let us consider the popular Iris data set for a step-by-step example. The steps are: 
+
+1. Transform your data to ```CSV```
+2. Use [AutoML](https://learn.microsoft.com/en-us/dotnet/machine-learning/reference/ml-net-cli-reference) or [Model Builder](https://learn.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/load-data-model-builder) to generate an ML.NET project.
+3. Write code for logicGP with the help of the generated input model and pipeline. 
+
+### ```CSV``` Data
+
+The [UC Irvine Machine Learning Repository](https://archive.ics.uci.edu) offers a Python package called ```ucimlrepo``` to download data sets in a standardized ```CSV``` format.
+
+```python
+from ucimlrepo import fetch_ucirepo 
+import ssl
+import pandas as pd
+
+ssl._create_default_https_context = ssl._create_unverified_context
+  
+# fetch dataset 
+iris = fetch_ucirepo(id=53) 
+  
+# data (as pandas dataframes) 
+X = iris.data.features 
+y = iris.data.targets 
+  
+# Combine X and y into a single DataFrame
+df = pd.concat([X, y], axis=1)
+
+# Export to CSV
+df.to_csv('Iris.csv', index=False)
+```
+
+The result for Iris is [Iris.csv](/logicGP/logicGP.Tests/Data/Real/Iris.csv). 
