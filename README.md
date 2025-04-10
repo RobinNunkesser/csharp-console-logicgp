@@ -32,6 +32,7 @@ Chosen data sets from the [UC Irvine Machine Learning Repository](https://archiv
 | ------ | :---|
 |[Iris](https://archive.ics.uci.edu/dataset/53/iris)|[IrisTests](/logicGP/logicGP.Tests/Unit/Data/Real/IrisTests.cs)|
 |[Heart Disease](https://archive.ics.uci.edu/dataset/45/heart+disease)|[HeartDiseaseTests](/logicGP/logicGP.Tests/Unit/Data/Real/HeartDiseaseTests.cs)|
+|[Wine Quality](https://archive.ics.uci.edu/dataset/186/wine+quality)|[WineQualityTests](/logicGP/logicGP.Tests/Unit/Data/Real/WineQualityTests.cs)|
 |[National Poll on Healthy Aging (NPHA)](https://archive.ics.uci.edu/dataset/936/national+poll+on+healthy+aging+(npha))|[NationalPollTests](/logicGP/logicGP.Tests/Unit/Data/Real/NationalPollTests.cs)|
 |[Car Evaluation](https://archive.ics.uci.edu/dataset/19/car+evaluation)|[CarEvaluationTests](/logicGP/logicGP.Tests/Unit/Data/Real/CarEvaluationTests.cs)|
 |[Balance Scale](https://archive.ics.uci.edu/dataset/12/balance+scale)|[BalanceScaleTests](/logicGP/logicGP.Tests/Unit/Data/Real/BalanceScaleTests.cs)|
