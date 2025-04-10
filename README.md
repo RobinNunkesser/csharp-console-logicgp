@@ -119,3 +119,118 @@ df.to_csv('Iris.csv', index=False)
 ```
 
 The result for Iris is [Iris.csv](/logicGP/logicGP.Tests/Data/Real/Iris.csv). 
+
+### Run AutoML
+
+It is sufficient to run AutoML for one second if we only need the generated code:
+
+```bash
+mlnet classification --dataset "Iris.csv" --label-col 4 --has-header true --train-time 1 --name "IrisModel"
+```
+
+We only need the class ```ModelInput``` from ```IrisModel.consumption.cs``` and the method ```BuildPipeline``` from ```IrisModel.training.cs```.
+
+### Write code for logicGP
+
+[IrisTests](/logicGP/logicGP.Tests/Unit/Data/Real/IrisTests.cs) demonstrates the additional code needed to analyze the data with logicGP. Note, the following remarks.
+
+### ```ModelInput```
+
+```ModelInput``` can often be taken without modification. A ```float``` label for the output should however by changed to ```uint``` if possible.
+
+### ```BuildPipeline```
+
+```BuildPipeline``` needs some modification. 
+
+#### No use of ```MapKeyToValue```
+
+Due to internal restrictions of ML.NET, we cannot use a step like
+
+```csharp
+.Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"))
+```
+
+if the step is present (it does not seem possible to transfer the used mapping to Predicted Label).
+
+#### Modified use of ```MapValueToKey```
+
+For the same reason, the step
+
+```csharp
+.Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"class",inputColumnName:@"class",addKeyValueAnnotationsAsText:false))
+```
+
+needs to be modified to use a custom mapping and - for the sake of simplicity - to map to a column called ```Label```. As a result, the unit test uses
+
+```csharp
+.Append(mlContext.Transforms.Conversion.MapValueToKey(@"Label",@"class", keyData: lookupIdvMap))
+```
+
+with 
+
+```csharp
+var lookupData = new[]
+{
+    new LookupMap<string>("Iris-setosa"),
+    new LookupMap<string>("Iris-versicolor"),
+    new LookupMap<string>("Iris-virginica")
+};
+var lookupIdvMap = mlContext.Data.LoadFromEnumerable(lookupData);
+```
+
+instead.
+
+#### No direct support for Continuous values
+
+Continuous values need to be binned for logicGP. The following example uses four bins:
+
+```csharp
+.Append(mlContext.Transforms.NormalizeBinning(new[]
+            {
+                new InputOutputColumnPair(@"sepal length", @"sepal length"),
+                new InputOutputColumnPair(@"sepal width", @"sepal width"),
+                new InputOutputColumnPair(@"petal length", @"petal length"),
+                new InputOutputColumnPair(@"petal width", @"petal width")
+            }, maximumBinCount: 4))
+```
+
+#### No support for One Hot Encoding
+
+One hot encoded categorical string values get transforms like
+
+```csharp
+mlContext.Transforms.Categorical.OneHotEncoding(
+            new[]
+            {
+                new InputOutputColumnPair(@"buying", @"buying"),
+                new InputOutputColumnPair(@"maint", @"maint"),
+                new InputOutputColumnPair(@"doors", @"doors"),
+                new InputOutputColumnPair(@"persons", @"persons"),
+                new InputOutputColumnPair(@"lug_boot", @"lug_boot"),
+                new InputOutputColumnPair(@"safety", @"safety")
+            })
+```
+
+They have to be transformed to manual mappings like
+
+```csharp
+mlContext.Transforms.Conversion.MapValue("buying",
+            buyingLookupIdvMap, buyingLookupIdvMap.Schema["Category"],
+            buyingLookupIdvMap.Schema["Value"], "buying")
+...            
+```                        
+
+which uses maps defined by
+
+```csharp
+var buyingLookupData = new[]
+        {
+            new CategoryLookupMap { Value = 0f, Category = "low" },
+            new CategoryLookupMap { Value = 1f, Category = "med" },
+            new CategoryLookupMap { Value = 2f, Category = "high" },
+            new CategoryLookupMap { Value = 3f, Category = "vhigh" }
+        };
+        var buyingLookupIdvMap =
+            mlContext.Data.LoadFromEnumerable(buyingLookupData);
+```            
+
