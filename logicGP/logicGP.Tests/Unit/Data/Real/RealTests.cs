@@ -8,35 +8,72 @@ namespace logicGP.Tests;
 
 public abstract class RealTests
 {
+    protected string? LogFile { get; set; } = null;
+    protected StreamWriter? LogWriter { get; set; }
+
+    private TransformerChain<ITransformer?>? Train<TLabel>(MLContext mlContext,
+        IEstimator<ITransformer> generalTrainer, IDataView trainData,
+        LookupMap<TLabel>[] lookupData, int generations = 100)
+    {
+        var lookupIdvMap = mlContext.Data.LoadFromEnumerable(lookupData);
+        if (generalTrainer is not LogicGpTrainerBase<ITransformer> trainer)
+            throw new ArgumentException(
+                "The trainer must be of type LogicGpTrainerBase<ITransformer>");
+        trainer.LabelKeyToValueDictionary =
+            LookupMap<TLabel>.KeyToValueMap(lookupData);
+        trainer.Label = "Label";
+        trainer.MaxGenerations = generations;
+        var pipeline = GetPipeline(trainer, lookupIdvMap);
+        return pipeline.Fit(trainData);
+    }
+
     protected IDataView TestFlRw<TLabel>(
         IEstimator<ITransformer> generalTrainer,
         IDataView trainData, IDataView testData,
         LookupMap<TLabel>[] lookupData, int generations = 100)
     {
         var mlContext = new MLContext();
-
-        // Convert to IDataView
-        var lookupIdvMap = mlContext.Data.LoadFromEnumerable(lookupData);
-
-        if (generalTrainer is not LogicGpTrainerBase<ITransformer> trainer)
-            throw new ArgumentException(
-                "The trainer must be of type LogicGpTrainerBase<ITransformer>");
-
-        trainer.LabelKeyToValueDictionary =
-            LookupMap<TLabel>.KeyToValueMap(lookupData);
-        trainer.Label = "Label";
-        // This is only for testing purposes, in production this should be set to a higher value (e.g. 10000)
-        trainer.MaxGenerations = generations;
-
-        var pipeline = GetPipeline(trainer, lookupIdvMap);
-        var mlModel = pipeline.Fit(trainData);
+        var mlModel = Train(mlContext, generalTrainer, trainData, lookupData,
+            generations);
         Assert.IsNotNull(mlModel);
-
         return mlModel.Transform(testData);
     }
 
+    public void SimulateFlRw<TLabel>(IEstimator<ITransformer> trainer,
+        IDataView data, LookupMap<TLabel>[] lookupData, int generations = 10000)
+    {
+        var seeds = new[] { 42, 23, 7, 3, 99, 1, 0, 8, 15, 16 };
+        foreach (var seed in seeds)
+        {
+            if (LogFile != null)
+            {
+                var logFolder = AppDomain.CurrentDomain.BaseDirectory;
+                var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                var path = Path.Combine(logFolder,
+                    $"{LogFile}_{seed}_{timeStamp}.log");
+                LogWriter = new StreamWriter(path);
+            }
 
-    protected abstract EstimatorChain<ITransformer> GetPipeline(
+            var mlContext = new MLContext(seed);
+            var trainTestSplit = mlContext.Data.TrainTestSplit(data, 0.2);
+            var trainData = trainTestSplit.TrainSet;
+            var mlModel = Train(mlContext, trainer, trainData, lookupData,
+                generations);
+            Assert.IsNotNull(mlModel);
+            var testResults = mlModel.Transform(trainTestSplit.TestSet);
+            LogWriter?.Write(((LogicGpTrainerBase<ITransformer>)trainer)
+                .ChosenIndividual?.ToString());
+            var metrics = new MLContext().MulticlassClassification
+                .Evaluate(testResults);
+            LogWriter?.WriteLine();
+            LogWriter?.WriteLine(
+                $"MacroAccuracy: {metrics.MacroAccuracy}");
+            LogWriter?.Close();
+        }
+    }
+
+
+    protected abstract EstimatorChain<ITransformer?> GetPipeline(
         LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap);
 
     protected double TestFlRw(IDataView data, string label,

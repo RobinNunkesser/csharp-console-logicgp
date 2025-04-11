@@ -16,7 +16,7 @@ public abstract class
 
 
 {
-    private IIndividual? _chosenIndividual;
+    public IIndividual? ChosenIndividual { get; set; }
     public required string Label { get; set; }
     public required int MaxGenerations { get; set; } = 10000;
     public required int Classes { get; set; } = 2;
@@ -62,97 +62,86 @@ public abstract class
         var candidatePopulation = new Population();
         foreach (var candidate in allCandidates)
             candidatePopulation.Add(candidate);
-        _chosenIndividual = bestSelection.Process(candidatePopulation)[0];
-        Console.WriteLine($"Chosen individual: \n{_chosenIndividual}");
+        ChosenIndividual = bestSelection.Process(candidatePopulation)[0];
+        Console.WriteLine($"Chosen individual: \n{ChosenIndividual}");
 
 
-        var mapping = new LogicGpMapping(_chosenIndividual);
-        if (Classes == 2)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<BinaryClassificationInputSchema,
-                        BinaryClassificationBinaryOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 3)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        TernaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 4)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        QuaternaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 5)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        QuinaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 6)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        SenaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 7)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        SeptenaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 8)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        OctonaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 9)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        NonaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 10)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        DenaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 11)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        UndenaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 12)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        DuodenaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 13)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        TridenaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 14)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        TetradenaryClassificationOutputSchema>(),
-                null).Fit(input);
-        if (Classes == 15)
-            return mlContext.Transforms.CustomMapping(
-                mapping
-                    .GetMapping<MulticlassClassificationInputSchema,
-                        PentadenaryClassificationOutputSchema>(),
-                null).Fit(input);
-        throw new ArgumentOutOfRangeException(
-            $"The number of classes {Classes} is not supported.");
+        var mapping = new LogicGpMapping(ChosenIndividual);
+        return Classes switch
+        {
+            2 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<BinaryClassificationInputSchema,
+                            BinaryClassificationBinaryOutputSchema>(), null)
+                .Fit(input),
+            3 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            TernaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            4 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            QuaternaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            5 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            QuinaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            6 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            SenaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            7 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            SeptenaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            8 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            OctonaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            9 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            NonaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            10 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            DenaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            11 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            UndenaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            12 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            DuodenaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            13 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            TridenaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            14 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            TetradenaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            15 => mlContext.Transforms.CustomMapping(
+                    mapping
+                        .GetMapping<MulticlassClassificationInputSchema,
+                            PentadenaryClassificationOutputSchema>(), null)
+                .Fit(input),
+            _ => throw new ArgumentOutOfRangeException(
+                $"The number of classes {Classes} is not supported.")
+        };
     }
 
     /// <summary>
@@ -165,7 +154,7 @@ public abstract class
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
         var mlContext = new MLContext();
-        var mapping = new LogicGpMapping(_chosenIndividual);
+        var mapping = new LogicGpMapping(ChosenIndividual);
         if (Classes == 2)
             return mlContext.Transforms.CustomMapping(
                 mapping

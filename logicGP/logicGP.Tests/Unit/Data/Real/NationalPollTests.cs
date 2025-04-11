@@ -13,8 +13,16 @@ public class NationalPollTests : RealTests
 {
     private readonly IDataView _data;
 
+    private readonly LookupMap<uint>[] _lookupData =
+    [
+        new(1),
+        new(2),
+        new(3)
+    ];
+
     public NationalPollTests()
     {
+        ThreadSafeRandomNetCore.Seed = 42;
         var mlContext = new MLContext();
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real", "national_poll_on_healthy_aging_npha.csv");
@@ -23,31 +31,41 @@ public class NationalPollTests : RealTests
             ',', true);
     }
 
-    [TestMethod]
-    public void TestFlRw()
+    [TestCleanup]
+    public void TearDown()
     {
-        ThreadSafeRandomNetCore.Seed = 42;
+        LogWriter?.Dispose();
+    }
 
+    [TestMethod]
+    public void SimulateFlRwMacro()
+    {
+        var trainer = GetFlRwMacroTrainer();
+        LogFile = $"log_{GetType().Name}";
+        SimulateFlRw(trainer, _data, _lookupData);
+    }
+
+    [TestMethod]
+    public void TestFlRwMacro()
+    {
+        var trainer = GetFlRwMacroTrainer();
+        var testResults = TestFlRw(trainer, _data, _data, _lookupData, 10);
+        var metrics = new MLContext().MulticlassClassification
+            .Evaluate(testResults, trainer.Label);
+
+        Assert.IsTrue(metrics.MacroAccuracy > 0.358);
+        Assert.IsTrue(metrics.MacroAccuracy < 0.359);
+    }
+
+    private LogicGpFlrwMacroMulticlassTrainer GetFlRwMacroTrainer()
+    {
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
         var trainer =
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
-
-        var lookupData = new[]
-        {
-            new LookupMap<uint>(1),
-            new LookupMap<uint>(2),
-            new LookupMap<uint>(3)
-        };
-        trainer.Classes = lookupData.Length;
-        var mlContext = new MLContext();
-        var testResults = TestFlRw(trainer, _data, _data, lookupData, 10);
-        var metrics = mlContext.MulticlassClassification
-            .Evaluate(testResults, trainer.Label);
-
-        Assert.IsTrue(metrics.MacroAccuracy > 0.358);
-        Assert.IsTrue(metrics.MacroAccuracy < 0.359);
+        trainer.Classes = _lookupData.Length;
+        return trainer;
     }
 
     protected override EstimatorChain<ITransformer?> GetPipeline(

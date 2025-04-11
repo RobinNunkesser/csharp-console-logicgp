@@ -60,7 +60,8 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         {
             var category = data[i];
             var index = _orderedCategories.IndexOf(category);
-            Predictions[i] = _bitSet[index];
+            Predictions[i] =
+                index > -1 && index < _bitSet.Length && _bitSet[index];
         }
     }
 
@@ -200,6 +201,6 @@ public class LogicGpLiteral<TCategory> : ILiteral<TCategory>
         var category =
             rawCategory.ToString(CultureInfo.InvariantCulture) as TCategory;
         var index = _orderedCategories.IndexOf(category);
-        return _bitSet[index];
+        return index > -1 && index < _bitSet.Length && _bitSet[index];
     }
 }
