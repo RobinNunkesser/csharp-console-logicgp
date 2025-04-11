@@ -41,7 +41,7 @@ public class RestaurantTests : RealTests
         };
         trainer.Classes = lookupData.Length;
         var mlContext = new MLContext();
-        var testResults = TestFlRw(trainer, _data, lookupData, 10);
+        var testResults = TestFlRw(trainer, _data, _data, lookupData, 10);
         var metrics = mlContext.BinaryClassification
             .Evaluate(testResults, trainer.Label);
 

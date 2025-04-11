@@ -10,7 +10,7 @@ public abstract class RealTests
 {
     protected IDataView TestFlRw<TLabel>(
         IEstimator<ITransformer> generalTrainer,
-        IDataView data,
+        IDataView trainData, IDataView testData,
         LookupMap<TLabel>[] lookupData, int generations = 100)
     {
         var mlContext = new MLContext();
@@ -29,10 +29,10 @@ public abstract class RealTests
         trainer.MaxGenerations = generations;
 
         var pipeline = GetPipeline(trainer, lookupIdvMap);
-        var mlModel = pipeline.Fit(data);
+        var mlModel = pipeline.Fit(trainData);
         Assert.IsNotNull(mlModel);
 
-        return mlModel.Transform(data);
+        return mlModel.Transform(testData);
     }
 
 
