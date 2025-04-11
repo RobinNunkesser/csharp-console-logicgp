@@ -205,10 +205,20 @@ public sealed class SNPSimulationTests
             var metrics = mlContext.BinaryClassification
                 .Evaluate(testResults);
             var acc = metrics.Accuracy.ToString(CultureInfo.InvariantCulture);
+            var f1 = metrics.F1Score.ToString(CultureInfo.InvariantCulture);
+            var auc =
+                metrics.AreaUnderPrecisionRecallCurve.ToString(CultureInfo
+                    .InvariantCulture);
+            var aucroc =
+                metrics.AreaUnderRocCurve.ToString(CultureInfo
+                    .InvariantCulture);
             writer.WriteLine(acc);
 
             writer.Flush();
             logWriter.WriteLine($"Accuracy: {acc}");
+            logWriter.WriteLine($"F1 Score: {f1}");
+            logWriter.WriteLine($"AreaUnderPrecisionRecallCurve: {auc}");
+            logWriter.WriteLine($"AreaUnderRocCurve: {aucroc}");
             logWriter.Flush();
         }
     }

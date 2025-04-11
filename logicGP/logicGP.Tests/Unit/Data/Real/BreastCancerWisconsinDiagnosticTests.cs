@@ -49,6 +49,12 @@ public class BreastCancerWisconsinDiagnosticTests : RealTests
 
         Assert.IsTrue(metrics.Accuracy > 0.77);
         Assert.IsTrue(metrics.Accuracy < 0.78);
+        Assert.IsTrue(metrics.F1Score > 0.79);
+        Assert.IsTrue(metrics.F1Score < 0.80);
+        Assert.IsTrue(metrics.AreaUnderRocCurve > 0.8);
+        Assert.IsTrue(metrics.AreaUnderRocCurve < 0.81);
+        Assert.IsTrue(metrics.AreaUnderPrecisionRecallCurve > 0.84);
+        Assert.IsTrue(metrics.AreaUnderPrecisionRecallCurve < 0.85);
     }
 
 
