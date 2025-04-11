@@ -23,7 +23,6 @@ public class CarEvaluationTests : RealTests
             ',', true);
     }
 
-    // ToDo: Due to the restructuring of the code, one hot encoding is not supported at the moment.
     [TestMethod]
     public void TestFlRw()
     {
@@ -114,18 +113,7 @@ public class CarEvaluationTests : RealTests
         var safetyLookupIdvMap =
             mlContext.Data.LoadFromEnumerable(safetyLookupData);
 
-
-        // One hot encoding is not supported at the moment
-        var pipeline = /*mlContext.Transforms.Categorical.OneHotEncoding(
-                new[]
-                {
-                    new InputOutputColumnPair(@"buying", @"buying"),
-                    new InputOutputColumnPair(@"maint", @"maint"),
-                    new InputOutputColumnPair(@"doors", @"doors"),
-                    new InputOutputColumnPair(@"persons", @"persons"),
-                    new InputOutputColumnPair(@"lug_boot", @"lug_boot"),
-                    new InputOutputColumnPair(@"safety", @"safety")
-                })*/
+        var pipeline =
             mlContext.Transforms.Conversion.MapValue("buying",
                     buyingLookupIdvMap, buyingLookupIdvMap.Schema["Category"],
                     buyingLookupIdvMap.Schema[
