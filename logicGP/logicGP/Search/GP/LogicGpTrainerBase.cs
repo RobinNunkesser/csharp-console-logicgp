@@ -72,72 +72,72 @@ public abstract class
             2 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<BinaryClassificationInputSchema,
-                            BinaryClassificationBinaryOutputSchema>(), null)
+                            BinaryClassificationOutputSchema>(), null)
                 .Fit(input),
             3 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            TernaryClassificationOutputSchema>(), null)
+                            TernaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             4 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            QuaternaryClassificationOutputSchema>(), null)
+                            QuaternaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             5 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            QuinaryClassificationOutputSchema>(), null)
+                            QuinaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             6 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            SenaryClassificationOutputSchema>(), null)
+                            SenaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             7 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            SeptenaryClassificationOutputSchema>(), null)
+                            SeptenaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             8 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            OctonaryClassificationOutputSchema>(), null)
+                            OctonaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             9 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            NonaryClassificationOutputSchema>(), null)
+                            NonaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             10 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            DenaryClassificationOutputSchema>(), null)
+                            DenaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             11 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            UndenaryClassificationOutputSchema>(), null)
+                            UndenaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             12 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            DuodenaryClassificationOutputSchema>(), null)
+                            DuodenaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             13 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            TridenaryClassificationOutputSchema>(), null)
+                            TridenaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             14 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            TetradenaryClassificationOutputSchema>(), null)
+                            TetradenaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             15 => mlContext.Transforms.CustomMapping(
                     mapping
                         .GetMapping<MulticlassClassificationInputSchema,
-                            PentadenaryClassificationOutputSchema>(), null)
+                            PentadenaryClassificationClassificationOutputSchema>(), null)
                 .Fit(input),
             _ => throw new ArgumentOutOfRangeException(
                 $"The number of classes {Classes} is not supported.")
@@ -159,7 +159,7 @@ public abstract class
             return mlContext.Transforms.CustomMapping(
                 mapping
                     .GetMapping<BinaryClassificationInputSchema,
-                        BinaryClassificationBinaryOutputSchema>(),
+                        BinaryClassificationOutputSchema>(),
                 null).GetOutputSchema(inputSchema);
 
         return mlContext.Transforms.CustomMapping(

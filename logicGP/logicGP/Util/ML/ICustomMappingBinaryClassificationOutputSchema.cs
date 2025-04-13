@@ -1,6 +1,6 @@
 namespace Italbytz.Adapters.Algorithms.AI.Util.ML;
 
-public interface ICustomMappingBinaryOutputSchema
+public interface ICustomMappingBinaryClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 

@@ -3,7 +3,7 @@ using Microsoft.ML.Data;
 namespace Italbytz.Adapters.Algorithms.AI.Util.ML;
 
 public class
-    BinaryClassificationBinaryOutputSchema : ICustomMappingBinaryOutputSchema
+    BinaryClassificationOutputSchema : ICustomMappingBinaryClassificationOutputSchema
 {
     [KeyType(2)] public uint PredictedLabel { get; set; }
 

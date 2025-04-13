@@ -15,7 +15,7 @@ public class MyCustomBinaryEstimator : IEstimator<ITransformer>
         return mlContext.Transforms.CustomMapping(
             MyCustomBinaryMapper
                 .GetMapping<BinaryClassificationInputSchema,
-                    BinaryClassificationBinaryOutputSchema>(),
+                    BinaryClassificationOutputSchema>(),
             null).Fit(input);
     }
 
@@ -33,7 +33,7 @@ public class MyCustomBinaryEstimator : IEstimator<ITransformer>
         var outputSchema = mlContext.Transforms.CustomMapping(
             MyCustomBinaryMapper
                 .GetMapping<BinaryClassificationInputSchema,
-                    BinaryClassificationBinaryOutputSchema>(),
+                    BinaryClassificationOutputSchema>(),
             null).GetOutputSchema(inputSchema);
 
         return outputSchema;

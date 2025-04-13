@@ -3,8 +3,8 @@ using Microsoft.ML.Data;
 namespace Italbytz.Adapters.Algorithms.AI.Util.ML;
 
 public class
-    TernaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    TernaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -14,8 +14,8 @@ public class
 }
 
 public class
-    QuaternaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    QuaternaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -25,8 +25,8 @@ public class
 }
 
 public class
-    QuinaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    QuinaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -36,8 +36,8 @@ public class
 }
 
 public class
-    SenaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    SenaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -47,8 +47,8 @@ public class
 }
 
 public class
-    SeptenaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    SeptenaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -58,8 +58,8 @@ public class
 }
 
 public class
-    OctonaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    OctonaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -69,8 +69,8 @@ public class
 }
 
 public class
-    NonaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    NonaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -80,8 +80,8 @@ public class
 }
 
 public class
-    DenaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    DenaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -91,8 +91,8 @@ public class
 }
 
 public class
-    UndenaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    UndenaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -102,8 +102,8 @@ public class
 }
 
 public class
-    DuodenaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    DuodenaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -113,8 +113,8 @@ public class
 }
 
 public class
-    TridenaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    TridenaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -124,8 +124,8 @@ public class
 }
 
 public class
-    TetradenaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    TetradenaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 
@@ -135,8 +135,8 @@ public class
 }
 
 public class
-    PentadenaryClassificationOutputSchema :
-    ICustomMappingMulticlassOutputSchema
+    PentadenaryClassificationClassificationOutputSchema :
+    ICustomMappingMulticlassClassificationOutputSchema
 {
     public uint PredictedLabel { get; set; }
 

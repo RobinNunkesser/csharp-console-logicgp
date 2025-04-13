@@ -11,7 +11,7 @@ public class MyCustomMulticlassEstimator : IEstimator<ITransformer>
         return mlContext.Transforms.CustomMapping(
             MyCustomMulticlassMapper
                 .GetMapping<BinaryClassificationInputSchema,
-                    TernaryClassificationOutputSchema>(),
+                    TernaryClassificationClassificationOutputSchema>(),
             null).Fit(input);
     }
 
@@ -26,7 +26,7 @@ public class MyCustomMulticlassEstimator : IEstimator<ITransformer>
         var outputSchema = mlContext.Transforms.CustomMapping(
             MyCustomMulticlassMapper
                 .GetMapping<MulticlassClassificationInputSchema,
-                    TernaryClassificationOutputSchema>(),
+                    TernaryClassificationClassificationOutputSchema>(),
             null).GetOutputSchema(inputSchema);
 
         return outputSchema;

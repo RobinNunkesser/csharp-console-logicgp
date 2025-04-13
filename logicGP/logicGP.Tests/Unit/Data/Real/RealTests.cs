@@ -1,3 +1,4 @@
+using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ public abstract class RealTests
 {
     protected string? LogFile { get; set; } = null;
     protected StreamWriter? LogWriter { get; set; }
+    protected StreamWriter? ResultWriter { get; set; }
 
     private TransformerChain<ITransformer?>? Train<TLabel>(MLContext mlContext,
         IEstimator<ITransformer> generalTrainer, IDataView trainData,
@@ -42,18 +44,21 @@ public abstract class RealTests
     public void SimulateFlRw<TLabel>(IEstimator<ITransformer> trainer,
         IDataView data, LookupMap<TLabel>[] lookupData, int generations = 10000)
     {
+        var logFolder = AppDomain.CurrentDomain.BaseDirectory;
+        var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+        if (LogFile != null)
+        {
+            var logPath = Path.Combine(logFolder,
+                $"{LogFile}_{timeStamp}.log");
+            LogWriter = new StreamWriter(logPath);
+            var resultPath = Path.Combine(logFolder,
+                $"{LogFile}_{timeStamp}.csv");
+            ResultWriter = new StreamWriter(resultPath);
+        }
+
         var seeds = new[] { 42, 23, 7, 3, 99, 1, 0, 8, 15, 16 };
         foreach (var seed in seeds)
         {
-            if (LogFile != null)
-            {
-                var logFolder = AppDomain.CurrentDomain.BaseDirectory;
-                var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                var path = Path.Combine(logFolder,
-                    $"{LogFile}_{seed}_{timeStamp}.log");
-                LogWriter = new StreamWriter(path);
-            }
-
             var mlContext = new MLContext(seed);
             var trainTestSplit = mlContext.Data.TrainTestSplit(data, 0.2);
             var trainData = trainTestSplit.TrainSet;
@@ -61,15 +66,22 @@ public abstract class RealTests
                 generations);
             Assert.IsNotNull(mlModel);
             var testResults = mlModel.Transform(trainTestSplit.TestSet);
+            LogWriter?.WriteLine(
+                $"Seed: {seed}, Generations: {generations}");
+            LogWriter?.WriteLine();
             LogWriter?.Write(((LogicGpTrainerBase<ITransformer>)trainer)
                 .ChosenIndividual?.ToString());
             var metrics = new MLContext().MulticlassClassification
                 .Evaluate(testResults);
             LogWriter?.WriteLine();
             LogWriter?.WriteLine(
-                $"MacroAccuracy: {metrics.MacroAccuracy}");
-            LogWriter?.Close();
+                $"MacroAccuracy: {metrics.MacroAccuracy.ToString(CultureInfo.InvariantCulture)}");
+            ResultWriter?.WriteLine(
+                metrics.MacroAccuracy.ToString(CultureInfo.InvariantCulture));
         }
+
+        LogWriter?.Close();
+        ResultWriter?.Close();
     }
 
 
