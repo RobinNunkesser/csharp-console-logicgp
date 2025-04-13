@@ -1,6 +1,6 @@
 using System.Globalization;
+using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
-using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Simulated;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;

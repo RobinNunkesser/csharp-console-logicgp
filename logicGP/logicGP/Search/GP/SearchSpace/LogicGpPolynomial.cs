@@ -1,7 +1,8 @@
 using System.Globalization;
 using System.Text;
+using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Util;
-using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using Italbytz.Ports.Algorithms.AI.Learning.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 using Microsoft.ML.Data;
 
@@ -189,64 +190,67 @@ public class LogicGpPolynomial<TCategory> : IPolynomial<TCategory>
         }
         else
         {
-            ICustomMappingMulticlassClassificationOutputSchema prediction = _classes switch
-            {
-                3 => new TernaryClassificationClassificationOutputSchema
+            ICustomMappingMulticlassClassificationOutputSchema prediction =
+                _classes switch
                 {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                4 => new QuaternaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                5 => new QuinaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                6 => new SenaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                7 => new SeptenaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                8 => new OctonaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                9 => new NonaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                10 => new DenaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                11 => new UndenaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                12 => new DuodenaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                13 => new TridenaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                14 => new TetradenaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
-                15 => new PentadenaryClassificationClassificationOutputSchema
-                {
-                    Score = new VBuffer<float>(scores.Length, scores)
-                },
+                    3 => new TernaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    4 => new QuaternaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    5 => new QuinaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    6 => new SenaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    7 => new SeptenaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    8 => new OctonaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    9 => new NonaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    10 => new DenaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    11 => new UndenaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    12 => new DuodenaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    13 => new TridenaryClassificationClassificationOutputSchema
+                    {
+                        Score = new VBuffer<float>(scores.Length, scores)
+                    },
+                    14 => new
+                        TetradenaryClassificationClassificationOutputSchema
+                        {
+                            Score = new VBuffer<float>(scores.Length, scores)
+                        },
+                    15 => new
+                        PentadenaryClassificationClassificationOutputSchema
+                        {
+                            Score = new VBuffer<float>(scores.Length, scores)
+                        },
 
-                _ => throw new ArgumentOutOfRangeException(
-                    $"The number of classes {_classes} is not supported.")
-            };
+                    _ => throw new ArgumentOutOfRangeException(
+                        $"The number of classes {_classes} is not supported.")
+                };
             var probabilities = new float[scores.Length];
             var sum = scores.Sum();
             for (var j = 0; j < scores.Length; j++)

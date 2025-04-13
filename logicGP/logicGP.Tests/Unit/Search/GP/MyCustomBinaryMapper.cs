@@ -1,4 +1,4 @@
-using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
 

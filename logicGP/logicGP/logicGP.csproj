@@ -9,17 +9,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Italbytz.Adapters.Algorithms.AI" Version="9.0.4"/>
-        <PackageReference Include="Italbytz.Ports.Algorithms.AI" Version="9.0.5"/>
+        <PackageReference Include="Italbytz.Adapters.Algorithms.AI" Version="9.1.2" />
+        <PackageReference Include="Italbytz.Ports.Algorithms.AI" Version="9.1.0"/>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1"/>
         <PackageReference Include="Microsoft.ML" Version="4.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Search\GP\Individuals\" />
-      <Folder Include="Search\GP\Initialization\" />
-      <Folder Include="Search\GP\PopulationManager\" />
-      <Folder Include="Search\GP\StoppingCriterion\" />
+        <Folder Include="Search\GP\Individuals\"/>
+        <Folder Include="Search\GP\Initialization\"/>
+        <Folder Include="Search\GP\PopulationManager\"/>
+        <Folder Include="Search\GP\StoppingCriterion\"/>
     </ItemGroup>
 
 </Project>

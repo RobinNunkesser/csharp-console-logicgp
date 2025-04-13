@@ -1,6 +1,6 @@
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
-using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using Italbytz.Ports.Algorithms.AI.Learning.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP;
@@ -24,7 +24,8 @@ public class LogicGpMapping(IIndividual chosenIndividual)
         var dst = ((LogicGpGenotype)gen).Predict<TSrc, TDst>(arg1);
         if (arg2 is ICustomMappingBinaryClassificationOutputSchema
                 binaryDestinationSchema &&
-            dst is ICustomMappingBinaryClassificationOutputSchema binaryPrediction)
+            dst is ICustomMappingBinaryClassificationOutputSchema
+                binaryPrediction)
         {
             binaryDestinationSchema.Probability =
                 binaryPrediction.Probability;
@@ -36,7 +37,8 @@ public class LogicGpMapping(IIndividual chosenIndividual)
         else if
             (arg2 is ICustomMappingMulticlassClassificationOutputSchema
                  multiDestinationSchema &&
-             dst is ICustomMappingMulticlassClassificationOutputSchema multiPrediction)
+             dst is ICustomMappingMulticlassClassificationOutputSchema
+                 multiPrediction)
         {
             multiDestinationSchema.Probability =
                 multiPrediction.Probability;
