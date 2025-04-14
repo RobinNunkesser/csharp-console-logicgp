@@ -1,11 +1,11 @@
 using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
 using logicGP.Tests.Data.Simulated;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using InputOutputColumnPair = Microsoft.ML.InputOutputColumnPair;
-using MLContext = Microsoft.ML.MLContext;
 
 namespace logicGP.Tests.Unit.Search.GP;
 
@@ -24,7 +24,7 @@ public class MyCustomMapperTests
     [TestMethod]
     public void CustomMulticlassMappingTrainerTest()
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var trainDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real", "balancescale.csv");
         var trainData =
@@ -65,7 +65,7 @@ public class MyCustomMapperTests
     [TestMethod]
     public void CustomBinaryMappingTrainerTest()
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var trainDataPath = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
             "Data/Simulated/Simulation1", "SNPglm_1.csv");

@@ -1,6 +1,7 @@
 using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
@@ -15,7 +16,7 @@ public class SolarflareTests : RealTests
 
     public SolarflareTests()
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real", "solarflare_1.csv");
         _data = mlContext.Data.LoadFromTextFile<SolarflareModelInput>(
@@ -46,7 +47,7 @@ public class SolarflareTests : RealTests
             new LookupMap<uint>(8)
         };
         trainer.Classes = lookupData.Length;
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var testResults = TestFlRw(trainer, _data, _data, lookupData, 10);
         var metrics = mlContext.MulticlassClassification
             .Evaluate(testResults, trainer.Label);
@@ -58,7 +59,7 @@ public class SolarflareTests : RealTests
     protected override EstimatorChain<ITransformer?> GetPipeline(
         LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
 
         var zurichLookupData = new[]
         {

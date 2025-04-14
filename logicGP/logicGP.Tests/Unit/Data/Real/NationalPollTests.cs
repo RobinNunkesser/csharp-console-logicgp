@@ -1,6 +1,7 @@
 using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
@@ -23,12 +24,14 @@ public class NationalPollTests : RealTests
     public NationalPollTests()
     {
         ThreadSafeRandomNetCore.Seed = 42;
-        var mlContext = new MLContext();
+        ThreadSafeMLContext.Seed = 42;
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real", "national_poll_on_healthy_aging_npha.csv");
         _data = mlContext.Data.LoadFromTextFile<NationalPollModelInput>(
             path,
             ',', true);
+        LogFile = $"log_{GetType().Name}";
     }
 
     [TestCleanup]
@@ -41,7 +44,6 @@ public class NationalPollTests : RealTests
     public void SimulateFlRwMacro()
     {
         var trainer = GetFlRwMacroTrainer();
-        LogFile = $"log_{GetType().Name}";
         SimulateFlRw(trainer, _data, _lookupData);
     }
 
@@ -50,7 +52,8 @@ public class NationalPollTests : RealTests
     {
         var trainer = GetFlRwMacroTrainer();
         var testResults = TestFlRw(trainer, _data, _data, _lookupData, 10);
-        var metrics = new MLContext().MulticlassClassification
+        var metrics = ThreadSafeMLContext.LocalMLContext
+            .MulticlassClassification
             .Evaluate(testResults, trainer.Label);
 
         Assert.IsTrue(metrics.MacroAccuracy > 0.358);
@@ -71,7 +74,7 @@ public class NationalPollTests : RealTests
     protected override EstimatorChain<ITransformer?> GetPipeline(
         LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var pipeline = mlContext.Transforms.ReplaceMissingValues(new[]
             {
                 new InputOutputColumnPair(@"Age", @"Age"),

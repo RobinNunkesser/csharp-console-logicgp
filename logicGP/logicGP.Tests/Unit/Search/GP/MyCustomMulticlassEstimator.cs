@@ -1,4 +1,5 @@
 using Italbytz.Adapters.Algorithms.AI.Learning.ML;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Microsoft.ML;
 
 namespace logicGP.Tests.Unit.Search.GP;
@@ -7,7 +8,7 @@ public class MyCustomMulticlassEstimator : IEstimator<ITransformer>
 {
     public ITransformer Fit(IDataView input)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         return mlContext.Transforms.CustomMapping(
             MyCustomMulticlassMapper
                 .GetMapping<BinaryClassificationInputSchema,
@@ -17,7 +18,7 @@ public class MyCustomMulticlassEstimator : IEstimator<ITransformer>
 
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
 
         /* var outputSchema = mlContext.MulticlassClassification.Trainers
              .SdcaMaximumEntropy().GetOutputSchema(inputSchema);

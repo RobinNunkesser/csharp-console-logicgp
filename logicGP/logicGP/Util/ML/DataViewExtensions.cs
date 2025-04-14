@@ -1,5 +1,8 @@
 using System.Collections.Immutable;
+using System.Data;
+using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -9,6 +12,59 @@ public static class DataViewExtensions
 {
     // Todo: Move to nuget
 
+    public static DataTable? ToDataTable(this IDataView? dataView)
+    {
+        DataTable? dt = null;
+        if (dataView == null) return dt;
+        dt = new DataTable();
+        var preview = dataView.Preview();
+        dt.Columns.AddRange(preview.Schema
+            .Select(x => new DataColumn(x.Name)).ToArray());
+        foreach (var row in preview.RowView)
+        {
+            var r = dt.NewRow();
+            foreach (var col in row.Values) r[col.Key] = col.Value;
+            dt.Rows.Add(r);
+        }
+
+        return dt;
+    }
+
+    public static void SaveAsCsv(
+        this IDataView dataView,
+        string filePath
+    )
+    {
+        using var dataStream = new FileStream(
+            filePath,
+            FileMode.Create, FileAccess.Write);
+        new MLContext().Data.SaveAsText(dataView, dataStream, ',',
+            schema: false);
+    }
+
+    public static void WriteToCsv(
+        this IDataView dataView,
+        string filePath
+    )
+    {
+        var dt = dataView.ToDataTable();
+
+        var sb = new StringBuilder();
+
+        Debug.Assert(dt != null, nameof(dt) + " != null");
+        var columnNames = dt.Columns.Cast<DataColumn>()
+            .Select(column => column.ColumnName);
+        sb.AppendLine(string.Join(",", columnNames));
+
+        foreach (DataRow row in dt.Rows)
+        {
+            IEnumerable<string> fields =
+                row.ItemArray.Select(field => field.ToString());
+            sb.AppendLine(string.Join(",", fields));
+        }
+
+        File.WriteAllText(filePath, sb.ToString());
+    }
 
     public static ImmutableArray<ReadOnlyMemory<char>> GetFeaturesSlotNames(
         this IDataView dataView,

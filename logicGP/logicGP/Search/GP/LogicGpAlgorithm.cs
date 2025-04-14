@@ -86,6 +86,7 @@ public class LogicGpAlgorithm(
         IIndividualList individuals,
         string labelColumnName = DefaultColumnNames.Label)
     {
+        var metrics = new Metrics();
         var labelColumn = DataViewExtensions
             .GetColumnAsString(validationData, labelColumnName)
             .ToList();
@@ -120,7 +121,7 @@ public class LogicGpAlgorithm(
                 [accuracy, fitnessValue[^1]];
         }
 
-        return new Metrics();
+        return metrics;
     }
 
     public IMetrics? Test(IDataView testData)

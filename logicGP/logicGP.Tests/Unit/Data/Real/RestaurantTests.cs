@@ -1,6 +1,7 @@
 using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
@@ -15,7 +16,7 @@ public class RestaurantTests : RealTests
 
     public RestaurantTests()
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real", "restaurant.csv");
         _data = mlContext.Data.LoadFromTextFile<RestaurantModelInput>(
@@ -40,7 +41,7 @@ public class RestaurantTests : RealTests
             new LookupMap<uint>(1)
         };
         trainer.Classes = lookupData.Length;
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var testResults = TestFlRw(trainer, _data, _data, lookupData, 10);
         var metrics = mlContext.BinaryClassification
             .Evaluate(testResults, trainer.Label);
@@ -58,7 +59,7 @@ public class RestaurantTests : RealTests
     protected override EstimatorChain<ITransformer?> GetPipeline(
         LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var pipeline = mlContext.Transforms.ReplaceMissingValues(new[]
             {
                 new InputOutputColumnPair(@"alternate", @"alternate"),

@@ -1,6 +1,7 @@
 using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Simulated;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
@@ -82,7 +83,7 @@ public sealed class SNPSimulationTests
             $"logicgpgpasacc_{timeStamp}.csv");
         using var writer = new StreamWriter(path);
         writer.WriteLine("\"x\"");
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
 

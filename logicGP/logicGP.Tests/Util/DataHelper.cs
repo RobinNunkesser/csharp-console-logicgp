@@ -1,3 +1,4 @@
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Microsoft.ML;
 
 namespace logicGP.Tests.Util;
@@ -6,7 +7,7 @@ public class DataHelper
 {
     public static void MakeTrainTestSets(IDataView dataView, string path)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var cvResults = mlContext.Data.CrossValidationSplit(dataView);
         var index = 0;
         foreach (var fold in cvResults)

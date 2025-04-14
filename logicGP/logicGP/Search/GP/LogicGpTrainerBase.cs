@@ -33,25 +33,36 @@ public abstract class
         var featureNames = input.GetFeaturesSlotNames();
         // Split data into k folds
         const int k = 5; // Number of folds
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var cvResults = mlContext.Data.CrossValidationSplit(input);
         var candidates = new IIndividualList[k];
         var foldIndex = 0;
 
         ParameterizeAlgorithm(algorithm);
-
+        var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         foreach (var fold in cvResults)
         {
-            var trainFeatures = fold.TrainSet
+            var trainSet = fold.TrainSet;
+            var testSet = fold.TestSet;
+            var dataFolder =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
+            if (!Directory.Exists(dataFolder))
+                Directory.CreateDirectory(dataFolder);
+
+            trainSet.SaveAsCsv(Path.Combine(dataFolder,
+                $"{timeStamp}_fold_{foldIndex}_train.csv"));
+            testSet.SaveAsCsv(Path.Combine(dataFolder,
+                $"{timeStamp}_fold_{foldIndex}_test.csv"));
+            var trainFeatures = trainSet
                 .GetColumn<float[]>(DefaultColumnNames.Features)
                 .ToList();
             // Training
             var individuals =
-                algorithm.Train(fold.TrainSet, foldIndex == 0, Label,
+                algorithm.Train(trainSet, foldIndex == 0, Label,
                     MaxGenerations);
             // Validating
             var validationMetrics =
-                algorithm.Validate(fold.TestSet, individuals, Label);
+                algorithm.Validate(testSet, individuals, Label);
             // Selecting
             var selection = new BestModelForEachSizeSelection();
             candidates[foldIndex++] = selection.Process(individuals);
@@ -167,7 +178,7 @@ public abstract class
     /// <exception cref="NotImplementedException"></exception>
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var mapping = new LogicGpMapping(ChosenIndividual);
         if (Classes == 2)
             return mlContext.Transforms.CustomMapping(

@@ -1,4 +1,5 @@
 using Italbytz.Adapters.Algorithms.AI.Learning.ML;
+using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -8,7 +9,7 @@ public class MyCustomBinaryEstimator : IEstimator<ITransformer>
 {
     public ITransformer Fit(IDataView input)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var labelColumn = input.Schema.GetColumnOrNull("Label");
         var labelColumnData = input
             .GetColumn<uint>("Label").ToList();
@@ -29,7 +30,7 @@ public class MyCustomBinaryEstimator : IEstimator<ITransformer>
     /// <exception cref="NotImplementedException"></exception>
     public SchemaShape GetOutputSchema(SchemaShape inputSchema)
     {
-        var mlContext = new MLContext();
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
         var outputSchema = mlContext.Transforms.CustomMapping(
             MyCustomBinaryMapper
                 .GetMapping<BinaryClassificationInputSchema,
