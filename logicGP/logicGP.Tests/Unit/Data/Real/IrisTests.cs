@@ -14,14 +14,39 @@ public class IrisTests : RealTests
 {
     private readonly IDataView _data;
 
+    private readonly LookupMap<string>[] _lookupData =
+    [
+        new("Iris-setosa"),
+        new("Iris-versicolor"),
+        new("Iris-virginica")
+    ];
+
     public IrisTests()
     {
+        ThreadSafeRandomNetCore.Seed = 42;
+        ThreadSafeMLContext.Seed = 42;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real", "Iris.csv");
         _data = mlContext.Data.LoadFromTextFile<IrisModelInput>(
             path,
             ',', true);
+        LogFile = $"log_{GetType().Name}";
+        SaveCvSplit(_data, GetType().Name);
+    }
+
+    [TestCleanup]
+    public void TearDown()
+    {
+        LogWriter?.Dispose();
+    }
+
+    [TestMethod]
+    public void SimulateFlRwMacro()
+    {
+        var trainer = GetFlRwMacroTrainer();
+        trainer.Classes = _lookupData.Length;
+        SimulateFlRw(trainer, _data, _lookupData);
     }
 
     [TestMethod]
@@ -35,15 +60,10 @@ public class IrisTests : RealTests
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
 
-        var lookupData = new[]
-        {
-            new LookupMap<string>("Iris-setosa"),
-            new LookupMap<string>("Iris-versicolor"),
-            new LookupMap<string>("Iris-virginica")
-        };
-        trainer.Classes = lookupData.Length;
+
+        trainer.Classes = _lookupData.Length;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
-        var testResults = TestFlRw(trainer, _data, _data, lookupData, 10);
+        var testResults = TestFlRw(trainer, _data, _data, _lookupData, 10);
         var metrics = mlContext.MulticlassClassification
             .Evaluate(testResults, trainer.Label);
 

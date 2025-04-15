@@ -3,6 +3,7 @@ using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -10,6 +11,7 @@ namespace logicGP.Tests;
 
 public abstract class RealTests
 {
+    protected object _lookupData;
     protected int[] Seeds = [42, 23, 7, 3, 99, 1, 0, 8, 15, 16];
     protected string? LogFile { get; set; } = null;
     protected StreamWriter? LogWriter { get; set; }
@@ -29,6 +31,40 @@ public abstract class RealTests
         trainer.MaxGenerations = generations;
         var pipeline = GetPipeline(trainer, lookupIdvMap);
         return pipeline.Fit(trainData);
+    }
+
+    protected void SaveCvSplit(
+        IDataView data, string fileName)
+    {
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
+        var cvResults = mlContext.Data.CrossValidationSplit(data);
+        var foldIndex = 0;
+
+        foreach (var fold in cvResults)
+        {
+            var trainSet = fold.TrainSet;
+            var testSet = fold.TestSet;
+            var dataFolder =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+            if (!Directory.Exists(dataFolder))
+                Directory.CreateDirectory(dataFolder);
+
+            trainSet.SaveAsCsv(Path.Combine(dataFolder,
+                $"{fileName}_fold_{foldIndex}_train.csv"));
+            testSet.SaveAsCsv(Path.Combine(dataFolder,
+                $"{fileName}_fold_{foldIndex}_test.csv"));
+            foldIndex++;
+        }
+    }
+
+    protected LogicGpFlrwMacroMulticlassTrainer GetFlRwMacroTrainer()
+    {
+        var services = new ServiceCollection().AddServices();
+        var serviceProvider = services.BuildServiceProvider();
+        var trainer =
+            serviceProvider
+                .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
+        return trainer;
     }
 
     protected IDataView TestFlRw<TLabel>(

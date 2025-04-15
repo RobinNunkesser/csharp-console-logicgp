@@ -39,20 +39,10 @@ public abstract class
         var foldIndex = 0;
 
         ParameterizeAlgorithm(algorithm);
-        var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         foreach (var fold in cvResults)
         {
             var trainSet = fold.TrainSet;
             var testSet = fold.TestSet;
-            var dataFolder =
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
-            if (!Directory.Exists(dataFolder))
-                Directory.CreateDirectory(dataFolder);
-
-            trainSet.SaveAsCsv(Path.Combine(dataFolder,
-                $"{timeStamp}_fold_{foldIndex}_train.csv"));
-            testSet.SaveAsCsv(Path.Combine(dataFolder,
-                $"{timeStamp}_fold_{foldIndex}_test.csv"));
             var trainFeatures = trainSet
                 .GetColumn<float[]>(DefaultColumnNames.Features)
                 .ToList();

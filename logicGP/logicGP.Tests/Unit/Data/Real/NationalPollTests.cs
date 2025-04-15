@@ -3,7 +3,6 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
@@ -32,6 +31,7 @@ public class NationalPollTests : RealTests
             path,
             ',', true);
         LogFile = $"log_{GetType().Name}";
+        SaveCvSplit(_data, GetType().Name);
     }
 
     [TestCleanup]
@@ -44,8 +44,10 @@ public class NationalPollTests : RealTests
     public void SimulateFlRwMacro()
     {
         var trainer = GetFlRwMacroTrainer();
+        trainer.Classes = _lookupData.Length;
         SimulateFlRw(trainer, _data, _lookupData);
     }
+
 
     [TestMethod]
     public void TestFlRwMacro()
@@ -60,16 +62,6 @@ public class NationalPollTests : RealTests
         Assert.IsTrue(metrics.MacroAccuracy < 0.359);
     }
 
-    private LogicGpFlrwMacroMulticlassTrainer GetFlRwMacroTrainer()
-    {
-        var services = new ServiceCollection().AddServices();
-        var serviceProvider = services.BuildServiceProvider();
-        var trainer =
-            serviceProvider
-                .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
-        trainer.Classes = _lookupData.Length;
-        return trainer;
-    }
 
     protected override EstimatorChain<ITransformer?> GetPipeline(
         LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap)

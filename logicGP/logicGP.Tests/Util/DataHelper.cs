@@ -33,13 +33,14 @@ public class DataHelper
         }
     }
 
-    public static void ParseMLRun(string filePath)
+    public static Dictionary<string, float> ParseMLRun(string filePath)
     {
         using var reader = new StreamReader(filePath);
         var bestMacroaccuracy = new Dictionary<string, float>();
         while (!reader.EndOfStream)
         {
-            var line = reader.ReadLine();
+            var line = reader.ReadLine()?.TrimStart();
+            if (line[0] != '|') continue;
             var elements = line.Split(' ',
                 StringSplitOptions.RemoveEmptyEntries |
                 StringSplitOptions.TrimEntries);
@@ -68,7 +69,6 @@ public class DataHelper
             }
         }
 
-        foreach (var entry in bestMacroaccuracy)
-            Console.WriteLine($"{entry.Key}: {entry.Value}");
+        return bestMacroaccuracy;
     }
 }
