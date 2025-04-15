@@ -87,8 +87,8 @@ public class LogicGpAlgorithm(
         string labelColumnName = DefaultColumnNames.Label)
     {
         var metrics = new Metrics();
-        var labelColumn = DataViewExtensions
-            .GetColumnAsString(validationData, labelColumnName)
+        var labelColumn = validationData
+            .GetColumnAsString(labelColumnName)
             .ToList();
         var labelDistribution = new float[data.Labels.Count];
         foreach (var label in labelColumn)
@@ -171,7 +171,7 @@ public class LogicGpAlgorithm(
         ((LogicGpPareto)fitnessFunction).Labels = data.Labels;
         gp.FitnessFunction = fitnessFunction;
         searchSpace.OutputColumn =
-            DataViewExtensions.GetColumnAsString(trainData, labelColumnName)
+            IDataViewExtensions.GetColumnAsString(trainData, labelColumnName)
                 .ToList();
         searchSpace.UsedWeighting = UsedWeighting;
         gp.SearchSpace = searchSpace;
@@ -196,7 +196,7 @@ public class LogicGpAlgorithm(
     {
         foreach (var literal in data.Literals)
             literal.GeneratePredictions(
-                DataViewExtensions.GetColumnAsString(newData, literal.Label)
+                IDataViewExtensions.GetColumnAsString(newData, literal.Label)
                     .ToList());
     }
 }

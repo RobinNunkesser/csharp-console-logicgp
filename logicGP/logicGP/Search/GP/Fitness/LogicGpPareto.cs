@@ -18,7 +18,7 @@ public class LogicGpPareto : IStaticMultiObjectiveFitnessFunction
         var predictions =
             ((LogicGpGenotype)individual.Genotype).PredictedClasses;
         var labels =
-            DataViewExtensions.GetColumnAsString(data, LabelColumnName)
+            data.GetColumnAsString(LabelColumnName)
                 .ToList();
         var objectives = new double[NumberOfObjectives];
         for (var i = 0; i < predictions.Length; i++)
