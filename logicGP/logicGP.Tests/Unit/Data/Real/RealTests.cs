@@ -197,7 +197,7 @@ public abstract class RealTests
         var testDataView = dataSet switch
         {
             DataHelper.DataSet.HeartDisease => mlContext.Data
-                .LoadFromTextFile<HeartDiseaseModelInput>(
+                .LoadFromTextFile<HeartDiseaseModelInputOriginal>(
                     testData,
                     ',', true),
             _ => throw new ArgumentOutOfRangeException(nameof(dataSet), dataSet,

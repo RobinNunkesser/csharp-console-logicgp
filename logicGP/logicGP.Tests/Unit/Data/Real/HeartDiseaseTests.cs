@@ -52,7 +52,7 @@ public class HeartDiseaseTests : RealTests
         var testData = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real/HeartDisease", "Heart_Disease.csv");
         const string labelColumn = "num";
-        const int trainingTime = 20;
+        const int trainingTime = 4;
         string[] trainers = ["LBFGS"];
         var macroAccuracy = SimulateMLNet(DataHelper.DataSet.HeartDisease,
             trainingData, testData,
