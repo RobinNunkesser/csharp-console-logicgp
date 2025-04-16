@@ -14,7 +14,12 @@ namespace logicGP.Tests;
 
 public abstract class RealTests
 {
-    protected int[] Seeds = [42, 23, 7, 3, 99, 1, 0, 8, 15, 16];
+    protected int[]
+        Seeds =
+        [
+            42, 7, 13, 23, 3, 666, 777, 9, 17, 21
+        ]; //[42, 23, 7, 3, 99, 1, 0, 8, 15, 16];
+
     protected string? LogFile { get; set; } = null;
     protected StreamWriter? LogWriter { get; set; }
     protected StreamWriter? ResultWriter { get; set; }

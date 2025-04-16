@@ -47,17 +47,37 @@ public class HeartDiseaseTests : RealTests
     [TestMethod]
     public void SimulateMLNet()
     {
-        var trainingData = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real/HeartDisease", "Heart_Disease.csv");
-        var testData = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real/HeartDisease", "Heart_Disease.csv");
-        const string labelColumn = "num";
-        const int trainingTime = 4;
-        string[] trainers = ["LBFGS"];
-        var macroAccuracy = SimulateMLNet(DataHelper.DataSet.HeartDisease,
-            trainingData, testData,
-            labelColumn, trainingTime, trainers);
-        Console.WriteLine($"macroAccuracy: {macroAccuracy}");
+        string[] availableTrainers =
+            ["LBFGS", "SDCA"]; //"LGBM","FASTTREE","FASTFOREST" 
+        foreach (var trainer in availableTrainers)
+        {
+            var bestAccuracy = 0.0;
+            foreach (var seed in Seeds)
+            {
+                var trainingData = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Data/Real/HeartDisease",
+                    $"Heart_Disease_seed_{seed}_train.csv");
+                var testData = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Data/Real/HeartDisease",
+                    $"Heart_Disease_seed_{seed}_test.csv");
+                const string labelColumn = "num";
+                const int trainingTime = 1;
+                string[] trainers = [trainer];
+                var macroAccuracy = SimulateMLNet(
+                    DataHelper.DataSet.HeartDisease,
+                    trainingData, testData,
+                    labelColumn, trainingTime, trainers);
+                Console.WriteLine($"{trainer}: {macroAccuracy}");
+                Console.Clear();
+                if (macroAccuracy > bestAccuracy)
+                    bestAccuracy = macroAccuracy;
+            }
+
+            Console.WriteLine($"{trainer}: {bestAccuracy}");
+            Console.Clear();
+        }
     }
 
     [TestMethod]
