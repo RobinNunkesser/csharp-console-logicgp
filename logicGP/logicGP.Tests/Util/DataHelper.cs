@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using logicGP.Tests.Util.ML;
 using logicGP.Tests.Util.ML.ModelBuilder.Configuration;
 using Microsoft.ML;
 
@@ -14,16 +15,36 @@ public class DataHelper
         HeartDisease,
         Iris,
         WineQuality,
-        BreastCancer,
-        AdultIncome,
-        CreditCardFraud,
-        BanknoteAuthentication
+        BreastCancer
     }
 
     public static string GenerateModelBuilderConfig(DataSet dataSet,
         string filePath, string labelColumn, int trainingTime,
         string[] trainers)
     {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Converters =
+            {
+                new JsonStringEnumConverter()
+            }
+        };
+        var jsonColumnProperties = dataSet switch
+        {
+            DataSet.BalanceScale => ColumnPropertiesHelper.BalanceScale,
+            DataSet.HeartDisease => ColumnPropertiesHelper.HeartDisease,
+            DataSet.Iris => ColumnPropertiesHelper.Iris,
+            DataSet.WineQuality => ColumnPropertiesHelper.WineQuality,
+            DataSet.BreastCancer => ColumnPropertiesHelper.BreastCancer,
+            _ => throw new ArgumentOutOfRangeException(nameof(dataSet), dataSet,
+                null)
+        };
+
+        var columnProperties =
+            JsonSerializer.Deserialize<ColumnPropertiesV5[]>(
+                jsonColumnProperties, options);
+
         var dataSource = new TabularFileDataSourceV3
         {
             EscapeCharacter = '\\',
@@ -32,7 +53,8 @@ public class DataHelper
             FilePath = filePath,
             Delimiter = ",",
             DecimalMarker = '.',
-            HasHeader = true
+            HasHeader = true,
+            ColumnProperties = columnProperties
         };
         var environment = new LocalEnvironmentV1
         {
@@ -45,9 +67,9 @@ public class DataHelper
             TrainingTime = trainingTime,
             LabelColumn = labelColumn,
             AvailableTrainers = trainers,
-            ValidationOption = new CrossValidationOptionV0
+            ValidationOption = new TrainValidationSplitOptionV0
             {
-                NumberOfFolds = 10
+                SplitRatio = 0.1f
             }
         };
         var config = new TrainingConfiguration
@@ -56,14 +78,6 @@ public class DataHelper
             DataSource = dataSource,
             Environment = environment,
             TrainingOption = trainingOption
-        };
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            Converters =
-            {
-                new JsonStringEnumConverter()
-            }
         };
         return JsonSerializer.Serialize(config, options);
     }

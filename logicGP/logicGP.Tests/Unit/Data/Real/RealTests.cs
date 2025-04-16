@@ -1,8 +1,11 @@
+using System.Diagnostics;
 using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using logicGP.Tests.Data.Real;
+using logicGP.Tests.Util;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -160,4 +163,103 @@ public abstract class RealTests
 
     protected abstract EstimatorChain<ITransformer?> GetPipeline(
         LogicGpTrainerBase<ITransformer> trainer, IDataView lookupIdvMap);
+
+    private void ParseMLRunLog(string filePath)
+    {
+        var bestMacroaccuracy = new Dictionary<string, float>();
+        var accuracies = DataHelper.ParseMLRun(filePath);
+        UpdateAndFilterAccuracies(accuracies, bestMacroaccuracy);
+
+        PrintAccuracies(bestMacroaccuracy);
+    }
+
+    public double SimulateMLNet(DataHelper.DataSet dataSet, string trainingData,
+        string testData,
+        string labelColumn, int trainingTime,
+        string[] trainers)
+    {
+        // Configure a Model Builder configuration
+        var config =
+            DataHelper.GenerateModelBuilderConfig(dataSet, trainingData,
+                labelColumn, trainingTime, trainers);
+        Assert.IsNotNull(config);
+        // Save the configuration
+        var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            "config.mbconfig");
+        File.WriteAllText(configPath, config);
+        // Run AutoML
+        RunAutoMLForConfig();
+        var modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            "config.mlnet");
+        var mlContext = ThreadSafeMLContext.LocalMLContext;
+        var mlModel = mlContext.Model.Load(modelPath, out _);
+
+        var testDataView = dataSet switch
+        {
+            DataHelper.DataSet.HeartDisease => mlContext.Data
+                .LoadFromTextFile<HeartDiseaseModelInput>(
+                    testData,
+                    ',', true),
+            _ => throw new ArgumentOutOfRangeException(nameof(dataSet), dataSet,
+                null)
+        };
+        var testResult = mlModel.Transform(testDataView);
+        var metrics = mlContext.MulticlassClassification
+            .Evaluate(testResult, labelColumn);
+        return metrics.MacroAccuracy;
+    }
+
+    private void RunAutoMLForConfig()
+    {
+        var mlnet = new Process();
+        mlnet.StartInfo.FileName = "mlnet";
+        mlnet.StartInfo.WorkingDirectory =
+            AppDomain.CurrentDomain.BaseDirectory;
+        mlnet.StartInfo.Arguments = "train --training-config config.mbconfig";
+        mlnet.Start();
+        mlnet.WaitForExit();
+    }
+
+    private void PrintAccuracies(Dictionary<string, float> bestMacroaccuracy)
+    {
+        foreach (var entry in bestMacroaccuracy)
+            Console.WriteLine(
+                $"{entry.Key}: {entry.Value.ToString(CultureInfo.InvariantCulture)}");
+
+        Console.WriteLine(
+            (bestMacroaccuracy["FastTreeOva"] * 100).ToString(CultureInfo
+                .InvariantCulture));
+        Console.WriteLine(
+            (bestMacroaccuracy["FastForestOva"] * 100).ToString(CultureInfo
+                .InvariantCulture));
+        Console.WriteLine(
+            (bestMacroaccuracy["LbfgsMaximumEntropyMulti"] * 100).ToString(
+                CultureInfo.InvariantCulture));
+        Console.WriteLine(
+            (bestMacroaccuracy["SdcaLogisticRegressionOva"] * 100).ToString(
+                CultureInfo.InvariantCulture));
+        Console.WriteLine(
+            (bestMacroaccuracy["SdcaMaximumEntropyMulti"] * 100).ToString(
+                CultureInfo.InvariantCulture));
+        Console.WriteLine(
+            (bestMacroaccuracy["LbfgsLogisticRegressionOva"] * 100).ToString(
+                CultureInfo.InvariantCulture));
+    }
+
+    private void UpdateAndFilterAccuracies(Dictionary<string, float> accuracies,
+        Dictionary<string, float> bestMacroaccuracy)
+    {
+        foreach (var accuracy in accuracies.Where(accuracy =>
+                     !bestMacroaccuracy.ContainsKey(accuracy.Key) ||
+                     bestMacroaccuracy[accuracy.Key] < accuracy.Value))
+        {
+            if (!accuracy.Key.Equals("FastTreeOva") &&
+                !accuracy.Key.Equals("LbfgsMaximumEntropyMulti") &&
+                !accuracy.Key.Equals("FastForestOva") &&
+                !accuracy.Key.Equals("SdcaLogisticRegressionOva") &&
+                !accuracy.Key.Equals("LbfgsLogisticRegressionOva") &&
+                !accuracy.Key.Equals("SdcaMaximumEntropyMulti")) continue;
+            bestMacroaccuracy[accuracy.Key] = accuracy.Value;
+        }
+    }
 }

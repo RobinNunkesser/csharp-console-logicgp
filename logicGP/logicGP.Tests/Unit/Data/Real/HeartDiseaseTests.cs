@@ -3,6 +3,7 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
+using logicGP.Tests.Util;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -41,6 +42,22 @@ public class HeartDiseaseTests : RealTests
     public void TearDown()
     {
         LogWriter?.Dispose();
+    }
+
+    [TestMethod]
+    public void SimulateMLNet()
+    {
+        var trainingData = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            "Data/Real/HeartDisease", "Heart_Disease.csv");
+        var testData = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            "Data/Real/HeartDisease", "Heart_Disease.csv");
+        const string labelColumn = "num";
+        const int trainingTime = 20;
+        string[] trainers = ["LBFGS"];
+        var macroAccuracy = SimulateMLNet(DataHelper.DataSet.HeartDisease,
+            trainingData, testData,
+            labelColumn, trainingTime, trainers);
+        Console.WriteLine($"macroAccuracy: {macroAccuracy}");
     }
 
     [TestMethod]
