@@ -26,7 +26,8 @@ public class NationalPollTests : RealTests
         ThreadSafeMLContext.Seed = 42;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "national_poll_on_healthy_aging_npha.csv");
+            "Data/Real/NationalPoll",
+            "national_poll_on_healthy_aging_npha.csv");
         _data = mlContext.Data.LoadFromTextFile<NationalPollModelInput>(
             path,
             ',', true);
@@ -43,8 +44,7 @@ public class NationalPollTests : RealTests
     [TestMethod]
     public void SimulateFlRwMacro()
     {
-        var trainer = GetFlRwMacroTrainer();
-        trainer.Classes = _lookupData.Length;
+        var trainer = GetFlRwMacroTrainer(_lookupData.Length);
         SimulateFlRw(trainer, _data, _lookupData);
     }
 
@@ -52,7 +52,7 @@ public class NationalPollTests : RealTests
     [TestMethod]
     public void TestFlRwMacro()
     {
-        var trainer = GetFlRwMacroTrainer();
+        var trainer = GetFlRwMacroTrainer(_lookupData.Length);
         var testResults = TestFlRw(trainer, _data, _data, _lookupData, 10);
         var metrics = ThreadSafeMLContext.LocalMLContext
             .MulticlassClassification

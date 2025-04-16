@@ -32,6 +32,27 @@ public abstract class RealTests
         return pipeline.Fit(trainData);
     }
 
+    protected void SaveTrainTestSplit(
+        IDataView data, string fileName)
+    {
+        foreach (var mlSeed in Seeds)
+        {
+            var mlContext = new MLContext(mlSeed);
+            var trainTestSplit = mlContext.Data.TrainTestSplit(data, 0.2);
+            var trainSet = trainTestSplit.TrainSet;
+            var testSet = trainTestSplit.TestSet;
+            var dataFolder =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+            if (!Directory.Exists(dataFolder))
+                Directory.CreateDirectory(dataFolder);
+
+            trainSet.SaveAsCsv(Path.Combine(dataFolder,
+                $"{fileName}_seed_{mlSeed}_train.csv"));
+            testSet.SaveAsCsv(Path.Combine(dataFolder,
+                $"{fileName}_seed_{mlSeed}_test.csv"));
+        }
+    }
+
     protected void SaveCvSplit(
         IDataView data, string fileName)
     {
@@ -56,13 +77,14 @@ public abstract class RealTests
         }
     }
 
-    protected LogicGpFlrwMacroMulticlassTrainer GetFlRwMacroTrainer()
+    protected LogicGpFlrwMacroMulticlassTrainer GetFlRwMacroTrainer(int classes)
     {
         var services = new ServiceCollection().AddServices();
         var serviceProvider = services.BuildServiceProvider();
         var trainer =
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
+        trainer.Classes = classes;
         return trainer;
     }
 
@@ -96,30 +118,25 @@ public abstract class RealTests
             ResultWriter = new StreamWriter(resultPath);
         }
 
-        foreach (var seed in Seeds)
+        foreach (var mlSeed in Seeds)
+        foreach (var randomSeed in Seeds)
         {
-            // Same CV-split, different randomization in GP for every run
-            var mlContext =
-                ThreadSafeMLContext.LocalMLContext; //new MLContext(seed);
-            ThreadSafeRandomNetCore.Seed = seed;
-            //var trainTestSplit = mlContext.Data.TrainTestSplit(data, 0.2);
+            var mlContext = new MLContext(mlSeed);
+            ThreadSafeRandomNetCore.Seed = randomSeed;
+            var trainTestSplit = mlContext.Data.TrainTestSplit(data, 0.2);
 
-            var trainData = data; //trainTestSplit.TrainSet;
-            var testData = data; //trainTestSplit.TestSet;
-            if (LogFile != null)
-            {
-                //trainData.SaveAsCsv($"{LogFile}_seed_{seed}_train.csv");
-                //testData.SaveAsCsv($"{LogFile}_seed_{seed}_test.csv");
-            }
+            var trainData = trainTestSplit.TrainSet;
+            var testData = trainTestSplit.TestSet;
 
             var mlModel = Train(mlContext, trainer, trainData, lookupData,
                 generations);
             Assert.IsNotNull(mlModel);
             var chosenIndividual =
-                ((LogicGpTrainerBase<ITransformer>)trainer).ChosenIndividual;
+                ((LogicGpTrainerBase<ITransformer>)trainer)
+                .ChosenIndividual;
             var testResults = mlModel.Transform(testData);
             LogWriter?.WriteLine(
-                $"Seed: {seed}, Generations: {generations}");
+                $"ML seed: {mlSeed}, Random seed: {randomSeed}, Generations: {generations}");
             LogWriter?.WriteLine();
             LogWriter?.Write(chosenIndividual.ToString());
             var metrics = new MLContext().MulticlassClassification
@@ -127,11 +144,14 @@ public abstract class RealTests
             LogWriter?.WriteLine();
             LogWriter?.WriteLine(
                 $"MacroAccuracy: {metrics.MacroAccuracy.ToString(CultureInfo.InvariantCulture)}");
-            /*ResultWriter?.WriteLine(
-                metrics.MacroAccuracy.ToString(CultureInfo.InvariantCulture));*/
             ResultWriter?.WriteLine(
-                chosenIndividual.LatestKnownFitness[0].ToString(
-                    CultureInfo.InvariantCulture));
+                metrics.MacroAccuracy.ToString(CultureInfo
+                    .InvariantCulture));
+            LogWriter?.Flush();
+            ResultWriter?.Flush();
+            /*ResultWriter?.WriteLine(
+                    chosenIndividual.LatestKnownFitness[0].ToString(
+                        CultureInfo.InvariantCulture));*/
         }
 
         LogWriter?.Close();

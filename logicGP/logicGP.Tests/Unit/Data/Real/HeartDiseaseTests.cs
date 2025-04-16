@@ -29,12 +29,12 @@ public class HeartDiseaseTests : RealTests
         ThreadSafeMLContext.Seed = 42;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "Heart_Disease.csv");
+            "Data/Real/HeartDisease", "Heart_Disease.csv");
         _data = mlContext.Data.LoadFromTextFile<HeartDiseaseModelInput>(
             path,
             ',', true);
         LogFile = $"log_{GetType().Name}";
-        SaveCvSplit(_data, GetType().Name);
+        SaveTrainTestSplit(_data, GetType().Name);
     }
 
     [TestCleanup]
@@ -46,8 +46,7 @@ public class HeartDiseaseTests : RealTests
     [TestMethod]
     public void SimulateFlRwMacro()
     {
-        var trainer = GetFlRwMacroTrainer();
-        trainer.Classes = _lookupData.Length;
+        var trainer = GetFlRwMacroTrainer(_lookupData.Length);
         SimulateFlRw(trainer, _data, _lookupData);
     }
 

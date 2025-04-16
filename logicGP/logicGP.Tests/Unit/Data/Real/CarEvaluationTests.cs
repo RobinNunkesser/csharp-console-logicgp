@@ -18,7 +18,7 @@ public class CarEvaluationTests : RealTests
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "car_evaluation_strings.csv");
+            "Data/Real/CarEvaluation", "car_evaluation_strings.csv");
         _data = mlContext.Data.LoadFromTextFile<CarEvaluationModelInput>(
             path,
             ',', true);

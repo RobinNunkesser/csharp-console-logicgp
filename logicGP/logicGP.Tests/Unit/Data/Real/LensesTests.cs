@@ -18,7 +18,7 @@ public class LensesTests : RealTests
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "lenses.csv");
+            "Data/Real/Lenses", "lenses.csv");
         _data = mlContext.Data.LoadFromTextFile<LensesModelInput>(
             path,
             ',', true);

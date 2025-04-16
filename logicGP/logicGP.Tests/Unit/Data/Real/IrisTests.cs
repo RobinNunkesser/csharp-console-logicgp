@@ -27,7 +27,7 @@ public class IrisTests : RealTests
         ThreadSafeMLContext.Seed = 42;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "Iris.csv");
+            "Data/Real/Iris", "Iris.csv");
         _data = mlContext.Data.LoadFromTextFile<IrisModelInput>(
             path,
             ',', true);
@@ -44,8 +44,7 @@ public class IrisTests : RealTests
     [TestMethod]
     public void SimulateFlRwMacro()
     {
-        var trainer = GetFlRwMacroTrainer();
-        trainer.Classes = _lookupData.Length;
+        var trainer = GetFlRwMacroTrainer(_lookupData.Length);
         SimulateFlRw(trainer, _data, _lookupData);
     }
 

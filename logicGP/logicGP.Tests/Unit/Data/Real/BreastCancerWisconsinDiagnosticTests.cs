@@ -18,7 +18,8 @@ public class BreastCancerWisconsinDiagnosticTests : RealTests
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "Breast_Cancer_Wisconsin_Diagnostic_.csv");
+            "Data/Real/BreastCancerWisconsinDiagnostic",
+            "Breast_Cancer_Wisconsin_Diagnostic_.csv");
         _data = mlContext.Data
             .LoadFromTextFile<BreastCancerWisconsinDiagnosticModelInput>(
                 path,

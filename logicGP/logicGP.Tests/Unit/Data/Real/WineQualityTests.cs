@@ -18,7 +18,7 @@ public class WineQualityTests : RealTests
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "Wine_Quality.csv");
+            "Data/Real/WineQuality", "Wine_Quality.csv");
         _data = mlContext.Data.LoadFromTextFile<WineQualityModelInput>(
             path,
             ',', true);

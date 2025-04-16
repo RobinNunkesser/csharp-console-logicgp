@@ -18,7 +18,7 @@ public class RestaurantTests : RealTests
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "restaurant.csv");
+            "Data/Real/Restaurant", "restaurant.csv");
         _data = mlContext.Data.LoadFromTextFile<RestaurantModelInput>(
             path,
             ',', true);

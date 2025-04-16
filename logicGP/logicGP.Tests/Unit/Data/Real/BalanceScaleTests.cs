@@ -18,7 +18,7 @@ public class BalanceScaleTests : RealTests
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "balancescale.csv");
+            "Data/Real/BalanceScale", "balancescale.csv");
         _data = mlContext.Data.LoadFromTextFile<BalanceScaleModelInput>(
             path,
             ',', true);

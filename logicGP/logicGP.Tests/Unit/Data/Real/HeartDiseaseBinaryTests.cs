@@ -18,7 +18,7 @@ public class HeartDiseaseBinaryTests : RealTests
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "Heart_Disease_Binary.csv");
+            "Data/Real/HeartDisease", "Heart_Disease_Binary.csv");
         _data = mlContext.Data.LoadFromTextFile<HeartDiseaseModelInput>(
             path,
             ',', true);

@@ -18,7 +18,7 @@ public class SolarflareTests : RealTests
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "Data/Real", "solarflare_1.csv");
+            "Data/Real/Solarflare", "solarflare_1.csv");
         _data = mlContext.Data.LoadFromTextFile<SolarflareModelInput>(
             path,
             ',', true);
