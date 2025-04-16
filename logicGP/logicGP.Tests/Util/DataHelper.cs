@@ -1,4 +1,7 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using logicGP.Tests.Util.ML.ModelBuilder.Configuration;
 using Microsoft.ML;
 
 namespace logicGP.Tests.Util;
@@ -17,9 +20,52 @@ public class DataHelper
         BanknoteAuthentication
     }
 
-    public static string GenerateModelBuilderConfig(DataSet dataSet)
+    public static string GenerateModelBuilderConfig(DataSet dataSet,
+        string filePath, string labelColumn, int trainingTime,
+        string[] trainers)
     {
-        return "";
+        var dataSource = new TabularFileDataSourceV3
+        {
+            EscapeCharacter = '\\',
+            ReadMultiLines = false,
+            AllowQuoting = false,
+            FilePath = filePath,
+            Delimiter = ",",
+            DecimalMarker = '.',
+            HasHeader = true
+        };
+        var environment = new LocalEnvironmentV1
+        {
+            Type = "LocalCPU",
+            EnvironmentType = EnvironmentType.LocalCPU
+        };
+        var trainingOption = new ClassificationTrainingOptionV2
+        {
+            Subsampling = false,
+            TrainingTime = trainingTime,
+            LabelColumn = labelColumn,
+            AvailableTrainers = trainers,
+            ValidationOption = new CrossValidationOptionV0
+            {
+                NumberOfFolds = 10
+            }
+        };
+        var config = new TrainingConfiguration
+        {
+            Scenario = ScenarioType.Classification,
+            DataSource = dataSource,
+            Environment = environment,
+            TrainingOption = trainingOption
+        };
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Converters =
+            {
+                new JsonStringEnumConverter()
+            }
+        };
+        return JsonSerializer.Serialize(config, options);
     }
 
     public static void MakeTrainTestSets(IDataView dataView, string path)

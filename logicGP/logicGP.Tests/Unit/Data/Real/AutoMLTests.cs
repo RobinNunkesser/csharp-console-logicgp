@@ -18,9 +18,15 @@ public class AutoMLTests
     [TestMethod]
     public void SimulateHeartDiseaseMLNet()
     {
+        var filePath = "file";
+        var labelColumn = "label";
+        var trainingTime = 20;
+        string[] trainers = ["trainera", "trainerb"];
         var config =
             DataHelper.GenerateModelBuilderConfig(DataHelper.DataSet
-                .HeartDisease);
+                .HeartDisease, filePath, labelColumn, trainingTime, trainers);
+        Assert.IsNotNull(config);
+        Console.WriteLine(config);
     }
 
     private void PrintAccuracies(Dictionary<string, float> bestMacroaccuracy)
