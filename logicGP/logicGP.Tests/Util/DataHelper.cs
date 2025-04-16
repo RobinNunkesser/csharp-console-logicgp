@@ -1,3 +1,4 @@
+using System.Text;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Microsoft.ML;
 
@@ -5,6 +6,38 @@ namespace logicGP.Tests.Util;
 
 public class DataHelper
 {
+    public enum DataSet
+    {
+        BalanceScale,
+        HeartDisease,
+        Iris,
+        WineQuality,
+        BreastCancer,
+        AdultIncome,
+        CreditCardFraud,
+        BanknoteAuthentication
+    }
+
+    private const string dataSetPreamble = """
+                                           {
+                                           "Scenario": "Classification",
+                                           "DataSource": {
+                                             "Version": 3,
+                                             "EscapeCharacter": "\"",
+                                             "ReadMultiLines": false,
+                                             "AllowQuoting": false,
+                                             "Type": "TabularFile",
+                                             "FilePath": 
+                                           """;
+
+    public static void GenerateModelBuilderConfig(DataSet dataSet,
+        string path)
+    {
+        var sb = new StringBuilder();
+        sb.Append(dataSetPreamble);
+        File.WriteAllText(path, sb.ToString());
+    }
+
     public static void MakeTrainTestSets(IDataView dataView, string path)
     {
         var mlContext = ThreadSafeMLContext.LocalMLContext;
