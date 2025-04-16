@@ -1,4 +1,3 @@
-using System.Text;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using Microsoft.ML;
 
@@ -18,24 +17,9 @@ public class DataHelper
         BanknoteAuthentication
     }
 
-    private const string dataSetPreamble = """
-                                           {
-                                           "Scenario": "Classification",
-                                           "DataSource": {
-                                             "Version": 3,
-                                             "EscapeCharacter": "\"",
-                                             "ReadMultiLines": false,
-                                             "AllowQuoting": false,
-                                             "Type": "TabularFile",
-                                             "FilePath": 
-                                           """;
-
-    public static void GenerateModelBuilderConfig(DataSet dataSet,
-        string path)
+    public static string GenerateModelBuilderConfig(DataSet dataSet)
     {
-        var sb = new StringBuilder();
-        sb.Append(dataSetPreamble);
-        File.WriteAllText(path, sb.ToString());
+        return "";
     }
 
     public static void MakeTrainTestSets(IDataView dataView, string path)
