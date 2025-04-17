@@ -48,9 +48,11 @@ public class HeartDiseaseTests : RealTests
     public void SimulateMLNet()
     {
         LogWriter = new StreamWriter(LogFile);
-        // LGBM is not available (on macOS-ARM?)
+        // LGBM is not available (at least on macOS-ARM and linux-x86)
         string[] availableTrainers =
-            ["LBFGS", "FASTFOREST", "SDCA", "FASTTREE", "LGBM"];
+        [
+            "LBFGS", "FASTFOREST", "SDCA", "FASTTREE"
+        ];
         foreach (var trainer in availableTrainers)
         {
             var bestAccuracy = 0.0;

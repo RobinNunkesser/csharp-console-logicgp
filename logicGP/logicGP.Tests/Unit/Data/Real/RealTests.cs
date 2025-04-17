@@ -189,11 +189,19 @@ public abstract class RealTests
                 labelColumn, trainingTime, trainers);
         Assert.IsNotNull(config);
         // Save the configuration
+        var modelFileName = trainingData
+            .Substring(trainingData.LastIndexOf('/') + 1)
+            .Replace("train.csv", "");
+        modelFileName = $"{modelFileName}{trainers[0]}";
         var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "config.mbconfig");
+            $"{modelFileName}.mbconfig");
         File.WriteAllText(configPath, config);
         // Run AutoML
-        RunAutoMLForConfig();
+        RunAutoMLForConfig(modelFileName);
+        CleanUp();
+
+        return 0.0f;
+        // ToDo: For unknown reasons, ML.NET crashes when loading and evaluating the model happens directly after training
         var modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "config.mlnet");
         var mlContext = new MLContext();
@@ -225,7 +233,17 @@ public abstract class RealTests
         return 0.0;
     }
 
-    private void RunAutoMLForConfig()
+    private void CleanUp()
+    {
+        var directory = AppDomain.CurrentDomain.BaseDirectory;
+        var projectFiles = Directory.GetFiles(directory, "*.cs");
+        foreach (var file in projectFiles) File.Delete(file);
+        projectFiles = Directory.GetFiles(directory, "*.csproj");
+        foreach (var file in projectFiles) File.Delete(file);
+    }
+
+
+    private void RunAutoMLForConfig(string modelFileName)
     {
         var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         var mlnet = new Process();
@@ -235,7 +253,7 @@ public abstract class RealTests
         //mlnet.StartInfo.Arguments = $"train --training-config config.mbconfig --log-file-path {timeStamp}.log";
         //mlnet.StartInfo.Arguments = "train --training-config config.mbconfig";
         mlnet.StartInfo.Arguments =
-            "train --training-config config.mbconfig -v q";
+            $"train --training-config {modelFileName}.mbconfig -v q";
         mlnet.Start();
         mlnet.WaitForExit();
     }
