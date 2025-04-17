@@ -50,6 +50,7 @@ public class NationalPollTests : RealTests
 
 
     [TestMethod]
+    [TestCategory("FixedSeed")]
     public void TestFlRwMacro()
     {
         var trainer = GetFlRwMacroTrainer(_lookupData.Length);

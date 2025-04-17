@@ -49,6 +49,7 @@ public class IrisTests : RealTests
     }
 
     [TestMethod]
+    [TestCategory("FixedSeed")]
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;

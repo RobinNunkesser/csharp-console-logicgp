@@ -12,5 +12,5 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
-      - run: dotnet tool install --global mlnet-linux-x64 && cd logicGP/logicGP.Tests && dotnet test --filter "FullyQualifiedName=logicGP.Tests.Unit.Data.Real.HeartDiseaseTests.SimulateMLNet" --logger "console;verbosity=detailed"
+      - run: dotnet tool install --global mlnet-linux-x64 && cd logicGP/logicGP.Tests && dotnet test --filter "TestCategory=FixedSeed"
 

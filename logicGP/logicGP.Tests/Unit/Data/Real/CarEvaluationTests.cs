@@ -25,6 +25,7 @@ public class CarEvaluationTests : RealTests
     }
 
     [TestMethod]
+    [TestCategory("FixedSeed")]
     public void TestFlRw()
     {
         ThreadSafeRandomNetCore.Seed = 42;
