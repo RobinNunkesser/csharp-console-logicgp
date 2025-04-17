@@ -3,7 +3,51 @@ namespace logicGP.Tests.Util.ML;
 public static class ColumnPropertiesHelper
 {
     public static string BalanceScale = "";
-    public static string Iris = "";
+
+    public static string Iris = """
+                                [
+                                  {
+                                    "ColumnName": "sepal length",
+                                    "ColumnPurpose": "Feature",
+                                    "ColumnDataFormat": "Single",
+                                    "IsCategorical": false,
+                                    "Type": "Column",
+                                    "Version": 5
+                                  },
+                                  {
+                                    "ColumnName": "sepal width",
+                                    "ColumnPurpose": "Feature",
+                                    "ColumnDataFormat": "Single",
+                                    "IsCategorical": false,
+                                    "Type": "Column",
+                                    "Version": 5
+                                  },
+                                  {
+                                    "ColumnName": "petal length",
+                                    "ColumnPurpose": "Feature",
+                                    "ColumnDataFormat": "Single",
+                                    "IsCategorical": false,
+                                    "Type": "Column",
+                                    "Version": 5
+                                  },
+                                  {
+                                    "ColumnName": "petal width",
+                                    "ColumnPurpose": "Feature",
+                                    "ColumnDataFormat": "Single",
+                                    "IsCategorical": false,
+                                    "Type": "Column",
+                                    "Version": 5
+                                  },
+                                  {
+                                    "ColumnName": "class",
+                                    "ColumnPurpose": "Label",
+                                    "ColumnDataFormat": "String",
+                                    "IsCategorical": true,
+                                    "Type": "Column",
+                                    "Version": 5
+                                  }
+                                ]
+                                """;
 
     public static string HeartDisease = """
                                         [

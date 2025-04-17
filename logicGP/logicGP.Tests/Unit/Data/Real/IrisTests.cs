@@ -3,6 +3,7 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
+using logicGP.Tests.Util;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -46,6 +47,14 @@ public class IrisTests : RealTests
     {
         var trainer = GetFlRwMacroTrainer(_lookupData.Length);
         SimulateFlRw(trainer, _data, _lookupData);
+    }
+
+    [TestMethod]
+    public void SimulateMLNet()
+    {
+        SimulateMLNetOnAllTrainers(DataHelper.DataSet.Iris,
+            "Data/Real/Iris", "Iris",
+            "class", 1);
     }
 
     [TestMethod]

@@ -61,6 +61,45 @@ public abstract class RealTests
         }
     }
 
+    protected void SimulateMLNetOnAllTrainers(DataHelper.DataSet dataSet,
+        string relativeDataPath,
+        string filePrefix, string labelColumn, int trainingTime)
+    {
+        LogWriter = new StreamWriter(LogFile);
+        // LGBM is not available (at least on macOS-ARM and linux-x86)
+        string[] availableTrainers =
+        [
+            "LBFGS", "FASTFOREST", "SDCA", "FASTTREE"
+        ];
+        foreach (var trainer in availableTrainers)
+        {
+            var bestAccuracy = 0.0;
+            foreach (var seed in Seeds)
+            {
+                var trainingData = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    relativeDataPath,
+                    $"{filePrefix}_seed_{seed}_train.csv");
+                var testData = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    relativeDataPath,
+                    $"{filePrefix}_seed_{seed}_test.csv");
+                string[] trainers = [trainer];
+                var macroAccuracy = SimulateMLNet(
+                    dataSet,
+                    trainingData, testData,
+                    labelColumn, trainingTime, trainers);
+                Console.WriteLine($"{trainer}: {macroAccuracy}");
+                Console.Clear();
+                if (macroAccuracy > bestAccuracy)
+                    bestAccuracy = macroAccuracy;
+            }
+
+            Console.WriteLine($"{trainer}: {bestAccuracy}");
+            Console.Clear();
+        }
+    }
+
     protected void SaveCvSplit(
         IDataView data, string fileName)
     {
@@ -178,7 +217,8 @@ public abstract class RealTests
         PrintAccuracies(bestMacroaccuracy);
     }
 
-    public double SimulateMLNet(DataHelper.DataSet dataSet, string trainingData,
+    protected double SimulateMLNet(DataHelper.DataSet dataSet,
+        string trainingData,
         string testData,
         string labelColumn, int trainingTime,
         string[] trainers)
@@ -210,6 +250,10 @@ public abstract class RealTests
             {
                 DataHelper.DataSet.HeartDisease => mlContext.Data
                     .LoadFromTextFile<HeartDiseaseModelInputOriginal>(
+                        testData,
+                        ',', true),
+                DataHelper.DataSet.Iris => mlContext.Data
+                    .LoadFromTextFile<IrisModelInput>(
                         testData,
                         ',', true),
                 _ => throw new ArgumentOutOfRangeException(nameof(dataSet),
