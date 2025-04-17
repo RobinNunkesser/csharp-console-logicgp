@@ -32,7 +32,7 @@ public class IrisTests : RealTests
             path,
             ',', true);
         LogFile = $"log_{GetType().Name}";
-        SaveCvSplit(_data, GetType().Name);
+        //SaveCvSplit(_data, GetType().Name);
     }
 
     [TestCleanup]

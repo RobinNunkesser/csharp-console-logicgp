@@ -199,11 +199,8 @@ public abstract class RealTests
         // Run AutoML
         RunAutoMLForConfig(modelFileName);
         CleanUp();
-
-        return 0.0f;
-        // ToDo: For unknown reasons, ML.NET crashes when loading and evaluating the model happens directly after training
         var modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-            "config.mlnet");
+            $"{modelFileName}.mlnet");
         var mlContext = new MLContext();
         try
         {

@@ -35,7 +35,7 @@ public class HeartDiseaseTests : RealTests
             path,
             ',', true);
         LogFile = $"log_{GetType().Name}";
-        SaveTrainTestSplit(_data, GetType().Name);
+        //SaveTrainTestSplit(_data, GetType().Name);
     }
 
     [TestCleanup]
