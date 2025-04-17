@@ -47,8 +47,10 @@ public class HeartDiseaseTests : RealTests
     [TestMethod]
     public void SimulateMLNet()
     {
+        LogWriter = new StreamWriter(LogFile);
+        // LGBM is not available (on macOS-ARM?)
         string[] availableTrainers =
-            ["LBFGS", "SDCA"]; //"LGBM","FASTTREE","FASTFOREST" 
+            ["LBFGS", "FASTFOREST", "SDCA", "FASTTREE", "LGBM"];
         foreach (var trainer in availableTrainers)
         {
             var bestAccuracy = 0.0;
@@ -63,7 +65,7 @@ public class HeartDiseaseTests : RealTests
                     "Data/Real/HeartDisease",
                     $"Heart_Disease_seed_{seed}_test.csv");
                 const string labelColumn = "num";
-                const int trainingTime = 1;
+                const int trainingTime = 20;
                 string[] trainers = [trainer];
                 var macroAccuracy = SimulateMLNet(
                     DataHelper.DataSet.HeartDisease,

@@ -196,31 +196,46 @@ public abstract class RealTests
         RunAutoMLForConfig();
         var modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "config.mlnet");
-        var mlContext = ThreadSafeMLContext.LocalMLContext;
-        var mlModel = mlContext.Model.Load(modelPath, out _);
-
-        var testDataView = dataSet switch
+        var mlContext = new MLContext();
+        try
         {
-            DataHelper.DataSet.HeartDisease => mlContext.Data
-                .LoadFromTextFile<HeartDiseaseModelInputOriginal>(
-                    testData,
-                    ',', true),
-            _ => throw new ArgumentOutOfRangeException(nameof(dataSet), dataSet,
-                null)
-        };
-        var testResult = mlModel.Transform(testDataView);
-        var metrics = mlContext.MulticlassClassification
-            .Evaluate(testResult, labelColumn);
-        return metrics.MacroAccuracy;
+            var mlModel = mlContext.Model.Load(modelPath, out _);
+
+            var testDataView = dataSet switch
+            {
+                DataHelper.DataSet.HeartDisease => mlContext.Data
+                    .LoadFromTextFile<HeartDiseaseModelInputOriginal>(
+                        testData,
+                        ',', true),
+                _ => throw new ArgumentOutOfRangeException(nameof(dataSet),
+                    dataSet,
+                    null)
+            };
+            var testResult = mlModel.Transform(testDataView);
+            var metrics = mlContext.MulticlassClassification
+                .Evaluate(testResult, labelColumn);
+            return metrics.MacroAccuracy;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(
+                $"Error loading model for data set {trainingData} and trainer {trainers[0]}.");
+        }
+
+        return 0.0;
     }
 
     private void RunAutoMLForConfig()
     {
+        var timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         var mlnet = new Process();
         mlnet.StartInfo.FileName = "mlnet";
         mlnet.StartInfo.WorkingDirectory =
             AppDomain.CurrentDomain.BaseDirectory;
-        mlnet.StartInfo.Arguments = "train --training-config config.mbconfig";
+        //mlnet.StartInfo.Arguments = $"train --training-config config.mbconfig --log-file-path {timeStamp}.log";
+        //mlnet.StartInfo.Arguments = "train --training-config config.mbconfig";
+        mlnet.StartInfo.Arguments =
+            "train --training-config config.mbconfig -v q";
         mlnet.Start();
         mlnet.WaitForExit();
     }
