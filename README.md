@@ -40,6 +40,31 @@ Chosen data sets from the [UC Irvine Machine Learning Repository](https://archiv
 |[Solar Flare](https://archive.ics.uci.edu/dataset/89/solar+flare)|[SolarflareTests](/logicGP/logicGP.Tests/Unit/Data/Real/SolarflareTests.cs)|
 |[Lenses](https://archive.ics.uci.edu/dataset/58/lenses)|[LensesTests](/logicGP/logicGP.Tests/Unit/Data/Real/LensesTests.cs)|
 
+#### Iris
+
+Example Model found by logicGP-FLCW-Macro on the IRIS data set with $100\%$ MacroAccuracy. The values correspond to a binning of the continuous values to four bins {0,0.34,0.67,1}.
+
+| $w_0$ | $w_1$ | $w_2$ | Condition                                   |
+| ----- | ----- | ----- | ------------------------------------------- |
+|  1.00 |  0.00 |  0.00 | None below fulfilled                        |
+|  0.00 |  2.31 |  1.39 | (petal width ∈ {0.67}) |
+|  0.00 |  5.56 |  0.00 | (sepal width ∈ {0,0.34})(petal width ∈ {0.34}) |
+|  0.00 |  0.00 |  7.00 | (petal length ∈ {1}) |
+|  0.00 |  0.00 |  7.00 | (petal width ∈ {1}) |
+
+#### Heart Disease
+
+Example Model found by logicGP-FLCW-Macro on the IRIS data set with $49.29\%$ MacroAccuracy on the test data. The values correspond to a binning of the continuous values to four bins {0,0.34,0.67,1}.
+
+| $w_0$ | $w_1$ | $w_2$ | $w_3$ | $w_4$ | Condition                                   |
+| ----- | ----- | ----- | ----- | ----- | ------------------------------------------- |
+|  0.52 |  0.17 |  0.14 |  0.11 |  0.06 | None below fulfilled                        |
+|  0.46 |  2.32 |  1.85 |  1.47 |  1.18 | (ca ∈ {0.33333334}) |
+|  3.18 |  1.31 |  0.34 |  0.41 |  0.20 | (ca ∈ {0,0.33333334}) |
+|  0.36 |  1.15 |  2.14 |  2.44 |  3.56 | (thalach ∈ {0,0.6666667})(ca ∈ {0.33333334,1}) |
+|  0.82 |  1.17 |  2.99 |  0.65 |  1.68 | (age ∈ {0,0.6666667,1}) |
+|  1.71 |  0.56 |  0.46 |  2.01 |  0.38 | (age ∈ {0,0.33333334,1}) |
+
 #### National Poll on Healthy Aging (NPHA)
 
 Example Model found by logicGP-FLCW-Macro on the NPHA data set with $47.33\%$ MacroAccuracy.
