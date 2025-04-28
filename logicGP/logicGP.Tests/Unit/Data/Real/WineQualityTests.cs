@@ -3,6 +3,7 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
+using logicGP.Tests.Util;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -14,14 +15,53 @@ public class WineQualityTests : RealTests
 {
     private readonly IDataView _data;
 
+    private readonly LookupMap<uint>[] _lookupData =
+    [
+        //new LookupMap<uint>(0),
+        //new LookupMap<uint>(1),
+        //new LookupMap<uint>(2),
+        new(3),
+        new(4),
+        new(5),
+        new(6),
+        new(7),
+        new(8),
+        new(9)
+        //new LookupMap<uint>(10)
+    ];
+
     public WineQualityTests()
     {
+        ThreadSafeRandomNetCore.Seed = 42;
+        ThreadSafeMLContext.Seed = 42;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real/WineQuality", "Wine_Quality.csv");
         _data = mlContext.Data.LoadFromTextFile<WineQualityModelInput>(
             path,
             ',', true);
+        LogFile = $"log_{GetType().Name}";
+    }
+
+    [TestCleanup]
+    public void TearDown()
+    {
+        LogWriter?.Dispose();
+    }
+
+    [TestMethod]
+    public void SimulateFlRwMacro()
+    {
+        var trainer = GetFlRwMacroTrainer(_lookupData.Length);
+        SimulateFlRw(trainer, _data, _lookupData);
+    }
+
+    [TestMethod]
+    public void SimulateMLNet()
+    {
+        SimulateMLNetOnAllTrainers(DataHelper.DataSet.WineQuality,
+            "Data/Real/WineQuality", "Wine_Quality",
+            "quality", 20);
     }
 
     [TestMethod]
@@ -36,23 +76,9 @@ public class WineQualityTests : RealTests
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
 
-        var lookupData = new[]
-        {
-            //new LookupMap<uint>(0),
-            //new LookupMap<uint>(1),
-            //new LookupMap<uint>(2),
-            new LookupMap<uint>(3),
-            new LookupMap<uint>(4),
-            new LookupMap<uint>(5),
-            new LookupMap<uint>(6),
-            new LookupMap<uint>(7),
-            new LookupMap<uint>(8),
-            new LookupMap<uint>(9)
-            //new LookupMap<uint>(10)
-        };
-        trainer.Classes = lookupData.Length;
+        trainer.Classes = _lookupData.Length;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
-        var testResults = TestFlRw(trainer, _data, _data, lookupData, 10);
+        var testResults = TestFlRw(trainer, _data, _data, _lookupData, 10);
         var metrics = mlContext.MulticlassClassification
             .Evaluate(testResults, trainer.Label);
 

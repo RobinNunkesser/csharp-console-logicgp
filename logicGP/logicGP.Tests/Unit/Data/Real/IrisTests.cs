@@ -54,7 +54,7 @@ public class IrisTests : RealTests
     {
         SimulateMLNetOnAllTrainers(DataHelper.DataSet.Iris,
             "Data/Real/Iris", "Iris",
-            "class", 1);
+            "class", 20);
     }
 
     [TestMethod]

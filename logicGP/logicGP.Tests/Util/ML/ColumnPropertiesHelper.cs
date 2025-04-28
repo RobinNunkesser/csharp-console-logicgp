@@ -166,6 +166,106 @@ public static class ColumnPropertiesHelper
                                         ]
                                         """;
 
-    public static string WineQuality { get; set; }
+    public static string WineQuality { get; set; } = """
+        [
+          {
+            "ColumnName": "fixed_acidity",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "volatile_acidity",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "citric_acid",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "residual_sugar",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "chlorides",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "free_sulfur_dioxide",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "total_sulfur_dioxide",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "density",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "pH",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "sulphates",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "alcohol",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "quality",
+            "ColumnPurpose": "Label",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": true,
+            "Type": "Column",
+            "Version": 5
+          }
+        ]
+        """;
+
     public static string BreastCancer { get; set; }
 }

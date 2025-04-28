@@ -256,6 +256,10 @@ public abstract class RealTests
                     .LoadFromTextFile<IrisModelInput>(
                         testData,
                         ',', true),
+                DataHelper.DataSet.WineQuality => mlContext.Data
+                    .LoadFromTextFile<WineQualityModelInputOriginal>(
+                        testData,
+                        ',', true),
                 _ => throw new ArgumentOutOfRangeException(nameof(dataSet),
                     dataSet,
                     null)
