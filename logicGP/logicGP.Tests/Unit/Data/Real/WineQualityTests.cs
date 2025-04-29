@@ -61,7 +61,7 @@ public class WineQualityTests : RealTests
     {
         SimulateMLNetOnAllTrainers(DataHelper.DataSet.WineQuality,
             "Data/Real/WineQuality", "Wine_Quality",
-            "quality", 20);
+            "quality", 20,true);
     }
 
     [TestMethod]

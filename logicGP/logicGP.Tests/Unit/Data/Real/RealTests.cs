@@ -6,6 +6,7 @@ using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
 using logicGP.Tests.Util;
+using logicGP.Tests.Util.ML;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -63,7 +64,8 @@ public abstract class RealTests
 
     protected void SimulateMLNetOnAllTrainers(DataHelper.DataSet dataSet,
         string relativeDataPath,
-        string filePrefix, string labelColumn, int trainingTime)
+        string filePrefix, string labelColumn, int trainingTime,
+        bool isMulticlass)
     {
         LogWriter = new StreamWriter(LogFile);
         // LGBM is not available (at least on macOS-ARM and linux-x86)
@@ -73,7 +75,11 @@ public abstract class RealTests
         ];
         foreach (var trainer in availableTrainers)
         {
-            var bestAccuracy = 0.0;
+            var bestMacroAccuracy = 0.0;
+            var bestMicroAccuracy = 0.0;
+            var bestF1Score = 0.0;
+            var bestAUC = 0.0;
+            var bestAUPRC = 0.0;
             foreach (var seed in Seeds)
             {
                 var trainingData = Path.Combine(
@@ -85,17 +91,27 @@ public abstract class RealTests
                     relativeDataPath,
                     $"{filePrefix}_seed_{seed}_test.csv");
                 string[] trainers = [trainer];
-                var macroAccuracy = SimulateMLNet(
+                var metrics = SimulateMLNet(
                     dataSet,
                     trainingData, testData,
-                    labelColumn, trainingTime, trainers);
-                Console.WriteLine($"{trainer}: {macroAccuracy}");
-                Console.Clear();
-                if (macroAccuracy > bestAccuracy)
-                    bestAccuracy = macroAccuracy;
+                    labelColumn, trainingTime, trainers, isMulticlass);
+                if (metrics.MacroAccuracy > bestMacroAccuracy)
+                    bestMacroAccuracy = metrics.MacroAccuracy;
+                if (metrics.Accuracy > bestMicroAccuracy)
+                    bestMicroAccuracy = metrics.Accuracy;
+                if (metrics.F1Score > bestF1Score)
+                    bestF1Score = metrics.F1Score;
+                if (metrics.AreaUnderRocCurve > bestAUC)
+                    bestAUC = metrics.AreaUnderRocCurve;
+                if (metrics.AreaUnderPrecisionRecallCurve > bestAUPRC)
+                    bestAUPRC = metrics.AreaUnderPrecisionRecallCurve;
             }
 
-            Console.WriteLine($"{trainer}: {bestAccuracy}");
+            Console.WriteLine($"{trainer} MacroAccuracy: {bestMacroAccuracy}");
+            Console.WriteLine($"{trainer} MicroAccuracy: {bestMicroAccuracy}");
+            Console.WriteLine($"{trainer} F1Score: {bestF1Score}");
+            Console.WriteLine($"{trainer} AUC: {bestAUC}");
+            Console.WriteLine($"{trainer} AUPRC: {bestAUPRC}");
             Console.Clear();
         }
     }
@@ -131,6 +147,17 @@ public abstract class RealTests
         var trainer =
             serviceProvider
                 .GetRequiredService<LogicGpFlrwMacroMulticlassTrainer>();
+        trainer.Classes = classes;
+        return trainer;
+    }
+
+    protected LogicGpFlrwMicroMulticlassTrainer GetFlRwMicroTrainer(int classes)
+    {
+        var services = new ServiceCollection().AddServices();
+        var serviceProvider = services.BuildServiceProvider();
+        var trainer =
+            serviceProvider
+                .GetRequiredService<LogicGpFlrwMicroMulticlassTrainer>();
         trainer.Classes = classes;
         return trainer;
     }
@@ -186,14 +213,35 @@ public abstract class RealTests
                 $"ML seed: {mlSeed}, Random seed: {randomSeed}, Generations: {generations}");
             LogWriter?.WriteLine();
             LogWriter?.Write(chosenIndividual.ToString());
-            var metrics = new MLContext().MulticlassClassification
-                .Evaluate(testResults);
+            // ToDO: lookupData größe 2 -> Binär
             LogWriter?.WriteLine();
-            LogWriter?.WriteLine(
-                $"MacroAccuracy: {metrics.MacroAccuracy.ToString(CultureInfo.InvariantCulture)}");
-            ResultWriter?.WriteLine(
-                metrics.MacroAccuracy.ToString(CultureInfo
-                    .InvariantCulture));
+            if (lookupData.Length > 2)
+            {
+                var metrics = new MLContext().MulticlassClassification
+                    .Evaluate(testResults);
+                LogWriter?.WriteLine(
+                    $"MacroAccuracy: {metrics.MacroAccuracy.ToString(CultureInfo.InvariantCulture)}");
+                ResultWriter?.WriteLine(
+                    metrics.MacroAccuracy.ToString(CultureInfo
+                        .InvariantCulture));
+            }
+            else
+            {
+                var metrics = new MLContext().BinaryClassification
+                    .Evaluate(testResults);
+                LogWriter?.WriteLine(
+                    $"Accuracy: {metrics.Accuracy.ToString(CultureInfo.InvariantCulture)}");
+                LogWriter?.WriteLine(
+                    $"AUC: {metrics.AreaUnderRocCurve.ToString(CultureInfo.InvariantCulture)}");
+                LogWriter?.WriteLine(
+                    $"F1Score: {metrics.F1Score.ToString(CultureInfo.InvariantCulture)}");
+                LogWriter?.WriteLine(
+                    $"AUPRC: {metrics.AreaUnderPrecisionRecallCurve.ToString(CultureInfo.InvariantCulture)}");
+                ResultWriter?.WriteLine(
+                    $"{metrics.Accuracy.ToString(CultureInfo.InvariantCulture)},{metrics.AreaUnderRocCurve.ToString(CultureInfo.InvariantCulture)},{metrics.F1Score.ToString(CultureInfo.InvariantCulture)},{metrics.F1Score.ToString(CultureInfo.InvariantCulture)},{metrics.AreaUnderPrecisionRecallCurve.ToString(CultureInfo.InvariantCulture)}"
+                );
+            }
+
             LogWriter?.Flush();
             ResultWriter?.Flush();
             /*ResultWriter?.WriteLine(
@@ -217,11 +265,11 @@ public abstract class RealTests
         PrintAccuracies(bestMacroaccuracy);
     }
 
-    protected double SimulateMLNet(DataHelper.DataSet dataSet,
+    protected Metrics SimulateMLNet(DataHelper.DataSet dataSet,
         string trainingData,
         string testData,
         string labelColumn, int trainingTime,
-        string[] trainers)
+        string[] trainers, bool isMulticlass)
     {
         // Configure a Model Builder configuration
         var config =
@@ -260,14 +308,49 @@ public abstract class RealTests
                     .LoadFromTextFile<WineQualityModelInputOriginal>(
                         testData,
                         ',', true),
+                DataHelper.DataSet.BreastCancerWisconsinDiagnostic => mlContext
+                    .Data
+                    .LoadFromTextFile<
+                        BreastCancerWisconsinDiagnosticModelInput>(
+                        testData,
+                        ',', true),
                 _ => throw new ArgumentOutOfRangeException(nameof(dataSet),
                     dataSet,
                     null)
             };
             var testResult = mlModel.Transform(testDataView);
-            var metrics = mlContext.MulticlassClassification
-                .Evaluate(testResult, labelColumn);
-            return metrics.MacroAccuracy;
+            try
+            {
+                var metrics = mlContext.BinaryClassification
+                    .Evaluate(testResult, labelColumn);
+                return new Metrics
+                {
+                    IsBinaryClassification = true,
+                    Accuracy = metrics.Accuracy,
+                    AreaUnderRocCurve = metrics.AreaUnderRocCurve,
+                    F1Score = metrics.F1Score,
+                    AreaUnderPrecisionRecallCurve =
+                        metrics.AreaUnderPrecisionRecallCurve
+                };
+            }
+            catch (Exception e1)
+            {
+                try
+                {
+                    var metrics = mlContext.MulticlassClassification
+                        .Evaluate(testResult, labelColumn);
+                    return new Metrics
+                    {
+                        IsMulticlassClassification = true,
+                        MacroAccuracy = metrics.MacroAccuracy
+                    };
+                }
+                catch (Exception e2)
+                {
+                    Console.WriteLine(
+                        $"Neither binary nor multiclass metrics available for {trainingData} and trainer {trainers[0]}.");
+                }
+            }
         }
         catch (Exception e)
         {
@@ -275,7 +358,13 @@ public abstract class RealTests
                 $"Error loading model for data set {trainingData} and trainer {trainers[0]}.");
         }
 
-        return 0.0;
+        return new Metrics
+        {
+            IsBinaryClassification = !isMulticlass,
+            IsMulticlassClassification = isMulticlass,
+            MacroAccuracy = 0.0f,
+            Accuracy = 0.0f
+        };
     }
 
     private void CleanUp()

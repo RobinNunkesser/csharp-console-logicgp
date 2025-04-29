@@ -4,6 +4,259 @@ public static class ColumnPropertiesHelper
 {
     public static string BalanceScale = "";
 
+    public static string BreastCancerWisconsinDiagnostic = """
+        [
+          {
+            "ColumnName": "radius1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "texture1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "perimeter1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "area1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "smoothness1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "compactness1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "concavity1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "concave_points1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "symmetry1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "fractal_dimension1",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "radius2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "texture2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "perimeter2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "area2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "smoothness2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "compactness2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "concavity2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "concave_points2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "symmetry2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "fractal_dimension2",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "radius3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "texture3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "perimeter3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "area3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "smoothness3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "compactness3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "concavity3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "concave_points3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "symmetry3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "fractal_dimension3",
+            "ColumnPurpose": "Feature",
+            "ColumnDataFormat": "Single",
+            "IsCategorical": false,
+            "Type": "Column",
+            "Version": 5
+          },
+          {
+            "ColumnName": "Diagnosis",
+            "ColumnPurpose": "Label",
+            "ColumnDataFormat": "String",
+            "IsCategorical": true,
+            "Type": "Column",
+            "Version": 5
+          }
+        ]
+        """;
+
     public static string Iris = """
                                 [
                                   {
@@ -266,6 +519,4 @@ public static class ColumnPropertiesHelper
           }
         ]
         """;
-
-    public static string BreastCancer { get; set; }
 }

@@ -3,6 +3,7 @@ using Italbytz.Adapters.Algorithms.AI.Search.GP;
 using Italbytz.Adapters.Algorithms.AI.Util;
 using Italbytz.Adapters.Algorithms.AI.Util.ML;
 using logicGP.Tests.Data.Real;
+using logicGP.Tests.Util;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -14,8 +15,16 @@ public class BreastCancerWisconsinDiagnosticTests : RealTests
 {
     private readonly IDataView _data;
 
+    private readonly LookupMap<string>[] _lookupData =
+    [
+        new("M"),
+        new("B")
+    ];
+
     public BreastCancerWisconsinDiagnosticTests()
     {
+        ThreadSafeRandomNetCore.Seed = 42;
+        ThreadSafeMLContext.Seed = 42;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
             "Data/Real/BreastCancerWisconsinDiagnostic",
@@ -24,6 +33,30 @@ public class BreastCancerWisconsinDiagnosticTests : RealTests
             .LoadFromTextFile<BreastCancerWisconsinDiagnosticModelInput>(
                 path,
                 ',', true);
+        LogFile = $"log_{GetType().Name}";
+    }
+
+    [TestCleanup]
+    public void TearDown()
+    {
+        LogWriter?.Dispose();
+    }
+
+    [TestMethod]
+    public void SimulateMLNet()
+    {
+        SimulateMLNetOnAllTrainers(
+            DataHelper.DataSet.BreastCancerWisconsinDiagnostic,
+            "Data/Real/BreastCancerWisconsinDiagnostic",
+            "Breast_Cancer_Wisconsin_Diagnostic_",
+            "Diagnosis", 20, false);
+    }
+
+    [TestMethod]
+    public void SimulateFlRwMicro()
+    {
+        var trainer = GetFlRwMicroTrainer(_lookupData.Length);
+        SimulateFlRw(trainer, _data, _lookupData);
     }
 
     [TestMethod]
@@ -38,14 +71,9 @@ public class BreastCancerWisconsinDiagnosticTests : RealTests
             serviceProvider
                 .GetRequiredService<LogicGpGpasBinaryTrainer>();
 
-        var lookupData = new[]
-        {
-            new LookupMap<string>("M"),
-            new LookupMap<string>("B")
-        };
-        trainer.Classes = lookupData.Length;
+        trainer.Classes = _lookupData.Length;
         var mlContext = ThreadSafeMLContext.LocalMLContext;
-        var testResults = TestFlRw(trainer, _data, _data, lookupData, 10);
+        var testResults = TestFlRw(trainer, _data, _data, _lookupData, 10);
         var metrics = mlContext.BinaryClassification
             .Evaluate(testResults, trainer.Label);
 

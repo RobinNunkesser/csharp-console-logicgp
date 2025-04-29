@@ -49,7 +49,7 @@ public class HeartDiseaseTests : RealTests
     {
         SimulateMLNetOnAllTrainers(DataHelper.DataSet.HeartDisease,
             "Data/Real/HeartDisease", "Heart_Disease",
-            "num", 20);
+            "num", 20, true);
     }
 
     [TestMethod]

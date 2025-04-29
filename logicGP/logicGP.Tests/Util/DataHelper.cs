@@ -15,7 +15,7 @@ public class DataHelper
         HeartDisease,
         Iris,
         WineQuality,
-        BreastCancer
+        BreastCancerWisconsinDiagnostic
     }
 
     public static string GenerateModelBuilderConfig(DataSet dataSet,
@@ -36,7 +36,8 @@ public class DataHelper
             DataSet.HeartDisease => ColumnPropertiesHelper.HeartDisease,
             DataSet.Iris => ColumnPropertiesHelper.Iris,
             DataSet.WineQuality => ColumnPropertiesHelper.WineQuality,
-            DataSet.BreastCancer => ColumnPropertiesHelper.BreastCancer,
+            DataSet.BreastCancerWisconsinDiagnostic => ColumnPropertiesHelper
+                .BreastCancerWisconsinDiagnostic,
             _ => throw new ArgumentOutOfRangeException(nameof(dataSet), dataSet,
                 null)
         };
