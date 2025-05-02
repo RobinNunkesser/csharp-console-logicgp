@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Text;
-using Italbytz.Adapters.Algorithms.AI.Learning.ML;
+using Italbytz.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 
 namespace Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;

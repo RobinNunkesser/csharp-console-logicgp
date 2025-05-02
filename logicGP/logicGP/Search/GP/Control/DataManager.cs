@@ -2,7 +2,7 @@ using System.Globalization;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.SearchSpace;
 using Italbytz.Adapters.Algorithms.AI.Util;
-using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using Italbytz.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.SearchSpace;
 using Microsoft.ML;
 using Microsoft.ML.Data;

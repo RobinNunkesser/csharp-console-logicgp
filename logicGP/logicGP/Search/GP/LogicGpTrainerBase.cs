@@ -1,9 +1,8 @@
-using Italbytz.Adapters.Algorithms.AI.Learning.ML;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Control;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Fitness;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Individuals;
 using Italbytz.Adapters.Algorithms.AI.Search.GP.Selection;
-using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using Italbytz.ML;
 using Italbytz.Ports.Algorithms.AI.Search.GP.Individuals;
 using Microsoft.ML;
 using Microsoft.ML.Data;

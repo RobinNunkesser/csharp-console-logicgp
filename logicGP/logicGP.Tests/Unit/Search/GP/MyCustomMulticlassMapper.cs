@@ -1,4 +1,4 @@
-using Italbytz.Adapters.Algorithms.AI.Learning.ML;
+using Italbytz.ML;
 using Microsoft.ML.Data;
 
 namespace logicGP.Tests.Unit.Search.GP;

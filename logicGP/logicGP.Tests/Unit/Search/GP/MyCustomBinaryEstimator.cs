@@ -1,5 +1,4 @@
-using Italbytz.Adapters.Algorithms.AI.Learning.ML;
-using Italbytz.Adapters.Algorithms.AI.Util.ML;
+using Italbytz.ML;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 
