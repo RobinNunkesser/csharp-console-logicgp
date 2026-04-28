@@ -2,9 +2,22 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <LangVersion>12</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Italbytz.AI.ML.LogicGp.Benchmark.Cli</RootNamespace>
+        <AssemblyName>Italbytz.AI.ML.LogicGp.Benchmark.Cli</AssemblyName>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Text.Json" Version="9.0.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../../../../../packages/dotnet/nuget-ai/src/Italbytz.AI.ML.LogicGp/Italbytz.AI.ML.LogicGp.csproj" />
+        <ProjectReference Include="../../../../../packages/dotnet/nuget-ai/src/Italbytz.AI.ML.Core/Italbytz.AI.ML.Core.csproj" />
+        <ProjectReference Include="../../../../../packages/dotnet/nuget-ai/src/Italbytz.AI.ML.UciDatasets/Italbytz.AI.ML.UciDatasets.csproj" />
+    </ItemGroup>
 
 </Project>
